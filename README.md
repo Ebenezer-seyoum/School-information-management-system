@@ -1,1 +1,1 @@
-# School-information-management-system
+# School-management-system
