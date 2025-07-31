@@ -1,5 +1,5 @@
 <?php
-include "header.php";
+include('Home/header.php');
 ?>
 
 <section class="login_signup_option">
@@ -126,7 +126,7 @@ include "header.php";
                                 </ul>
                             </li>                      
                         </ul>
-                        <img src="images/banner/map_shape.png" alt="" class="contact__info_shpae">
+                        <img src="Home/Assets/images/banner/map_shape.png" alt="" class="contact__info_shpae">
                     </div>
                 </div>
             </div>
@@ -181,5 +181,5 @@ include "header.php";
 
 
 <?php
-include "footer.php";
+include "Home/footer.php";
 ?>

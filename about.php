@@ -1,5 +1,5 @@
 <?php
-include "header.php";
+include('Home/header.php');
 ?>
     <!--==================
         Slider
@@ -12,7 +12,7 @@ include "header.php";
 
                 <div class="slider-overlay"></div>
                 <!-- SLIDE'S MAIN BACKGROUND IMAGE -->
-                <img src="images/banner/banner_2.jpg" alt="Sky" class="rev-slidebg"  data-bgposition="center center" data-bgfit="cover" data-bgrepeat="no-repeat" data-bgparallax="10" class="rev-slidebg" data-no-retina>
+                <img src="Home/Assets/images/banner/banner_2.jpg" alt="Sky" class="rev-slidebg"  data-bgposition="center center" data-bgfit="cover" data-bgrepeat="no-repeat" data-bgparallax="10" class="rev-slidebg" data-no-retina>
                     <!-- LAYER NR. 1 -->
                     <div class="tp-caption font-lora sfb tp-resizeme letter-space-5 h-p" 
                         data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" 
@@ -122,7 +122,7 @@ include "header.php";
                 <li data-index="rs-1708" data-transition="fade" data-slotamount="7" data-hideafterloop="0" data-hideslideonmobile="off"  data-easein="default" data-easeout="default" data-masterspeed="1000"  data-rotate="0"  data-saveperformance="off"  data-title="Slide" data-param1="" data-param2="" data-param3="" data-param4="" data-param5="" data-param6="" data-param7="" data-param8="" data-param9="" data-param10="" data-description="">
                     <div class="slider-overlay"></div>
                     <!-- SLIDE'S MAIN BACKGROUND IMAGE -->
-                    <img src="images/banner/banner_1.jpg" alt="Sky" class="rev-slidebg"  data-bgposition="center center" data-bgfit="cover" data-bgrepeat="no-repeat" data-bgparallax="10" class="rev-slidebg" data-no-retina>
+                    <img src="Home/Assets/images/banner/banner_1.jpg" alt="Sky" class="rev-slidebg"  data-bgposition="center center" data-bgfit="cover" data-bgrepeat="no-repeat" data-bgparallax="10" class="rev-slidebg" data-no-retina>
                     <!-- BEGIN BASIC TEXT LAYER -->
                     <!-- LAYER NR. 1 -->
                     <div class="tp-caption font-lora sfb tp-resizeme letter-space-5 h-p" 
@@ -399,7 +399,7 @@ include "header.php";
                     <figure>
                         <div class="member-img">
                             <div class="teachars_pro">
-                                <img src="images/team/team_1.jpg" alt="member img" class="img-fluid">
+                                <img src="Home/Assets/images/team/team_1.jpg" alt="member img" class="img-fluid">
                             </div>
                         </div>
                         <figcaption>
@@ -417,7 +417,7 @@ include "header.php";
                     <figure>
                         <div class="member-img">
                             <div class="teachars_pro">
-                                <img src="images/team/team_2.jpg" alt="member img" class="img-fluid">
+                                <img src="Home/Assets/images/team/team_2.jpg" alt="member img" class="img-fluid">
                             </div>
                         </div>
                         <figcaption>
@@ -435,7 +435,7 @@ include "header.php";
                     <figure>
                         <div class="member-img">
                             <div class="teachars_pro">
-                                <img src="images/team/team_3.jpg" alt="member img" class="img-fluid">
+                                <img src="Home/Assets/images/team/team_3.jpg" alt="member img" class="img-fluid">
                             </div>
                         </div>
                         <figcaption>
@@ -453,7 +453,7 @@ include "header.php";
                     <figure>
                         <div class="member-img">
                             <div class="teachars_pro">
-                                <img src="images/team/team_4.jpg" alt="member img" class="img-fluid">
+                                <img src="Home/Assets/images/team/team_4.jpg" alt="member img" class="img-fluid">
                             </div>
                         </div>
                         <figcaption>
@@ -470,7 +470,7 @@ include "header.php";
                     <figure>
                         <div class="member-img">
                             <div class="teachars_pro">
-                                <img src="images/team/team_5.jpg" alt="member img" class="img-fluid">
+                                <img src="Home/Assets/images/team/team_5.jpg" alt="member img" class="img-fluid">
                             </div>
                         </div>
                         <figcaption>
@@ -487,7 +487,7 @@ include "header.php";
                     <figure>
                         <div class="member-img">
                             <div class="teachars_pro">
-                                <img src="images/team/team_6.jpg" alt="member img" class="img-fluid">
+                                <img src="Home/Assets/images/team/team_6.jpg" alt="member img" class="img-fluid">
                             </div>
                         </div>
                         <figcaption>
@@ -577,5 +577,5 @@ include "header.php";
 </section> -->
 <!-- End Team Group -->
 <?php
-include "footer.php";
+include "Home/footer.php";
 ?>
