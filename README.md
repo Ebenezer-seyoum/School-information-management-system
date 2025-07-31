@@ -1,1 +1,1 @@
-# School-management-system
+school management systemm
