@@ -8,7 +8,7 @@
             <div class="row">
                 <div class="col-12 col-md-6 col-lg-4">
                     <div class="footer_single_col footer_intro">
-                        <img src="images/logo2.png" alt="" class="f_logo">
+                        <img src="Home/Assets/images/logo2.png" alt="" class="f_logo">
                         <p>Ante amet vitae vulputate odio nulla vel pretium pulvinar aenean. Rhoncus eget adipiscing etiam arcu. Ultricies justo ipsum nec amet.</p>
                     </div>
                 </div>
@@ -61,8 +61,8 @@
         </div>
     </div>
     <div class="shapes_bg">
-        <img src="images/shapes/testimonial_2_shpe_1.png" alt="" class="shape_3">        
-        <img src="images/shapes/footer_2.png" alt="" class="shape_1">
+        <img src="Home/Assets/images/shapes/testimonial_2_shpe_1.png" alt="" class="shape_3">        
+        <img src="Home/Assets/images/shapes/footer_2.png" alt="" class="shape_1">
     </div>    
 </footer><!-- End Footer -->
 
@@ -95,7 +95,7 @@
         <a id="toggle-switcher" class="switch-button" title="Change Styles"><span class="fa fa-cog fa-spin"></span></a>
         <div class="switched-options">
             <div class="config-title">
-                <a class="navbar-brand" href="index-3.php"><img src="images/logo.png" alt="logo"></a>
+                <a class="navbar-brand" href="index-3.php"><img src="Home/Assets/images/logo.png" alt="logo"></a>
                 <p>Education Template</p>
                 
             </div>
