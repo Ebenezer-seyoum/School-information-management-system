@@ -1,4 +1,4 @@
-<?php include "judgeHeader.php"; ?>
+<?php include "studentsHeader.php"; ?>
 <div class="container">
   <div class="page-inner">
     <div class="row g-4"> 

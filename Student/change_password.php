@@ -1,5 +1,5 @@
 <?php 
-include('judgeHeader.php'); 
+include('studentsHeader.php'); 
 ?>
 <!-- page header -->
 <div class="container">

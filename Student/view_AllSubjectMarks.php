@@ -1,6 +1,6 @@
 
 <?php
-include('judgeHeader.php');
+include('studentsHeader.php');
 use \PHPMailer\PHPMailer\PHPMailer;
 require_once '../phpMailer/PHPMailer.php';   // Main PHPMailer class
 require_once '../phpMailer/SMTP.php';        // SMTP handling class
