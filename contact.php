@@ -1,64 +1,185 @@
 <?php
-include ("header.php");
+include "header.php";
 ?>
 
-<div class="site-section ftco-subscribe-1 site-blocks-cover pb-4" style="background-image: url('images/bg_1.jpg')">
-        <div class="container">
-          <div class="row align-items-end">
-            <div class="col-lg-7">
-              <h2 class="mb-0">Contact</h2>
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing.</p>
+<section class="login_signup_option">
+    <div class="l-modal is-hidden--off-flow js-modal-shopify">
+        <div class="l-modal__shadow js-modal-hide"></div>
+        <div class="login_popup login_modal_body">
+            <div class="Popup_title d-flex justify-content-between">
+                <h2 class="hidden">&nbsp;</h2>
+                <!-- Nav tabs -->
+                <div class="row">
+                    <div class="col-12 col-lg-12 col-md-12 col-lg-12 login_option_btn">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#login" role="tab">Login</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#panel2" role="tab">Register</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-12 col-lg-12 col-md-12 col-lg-12">
+                        <!-- Tab panels -->
+                        <div class="tab-content card">
+                            <!--Login-->
+                            <div class="tab-pane fade in show active" id="login" role="tabpanel">
+                                <form action="#">
+                                    <div class="row">
+                                        <div class="col-12 col-lg-12 col-md-12 col-lg-12">
+                                            <div class="form-group">
+                                                <label class="control-label">Email</label>
+                                                <input type="email" class="form-control" placeholder="Username">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-12 col-md-12 col-lg-12">
+                                            <div class="form-group">
+                                                <label class="control-label">Password</label>
+                                                <input type="password" class="form-control" placeholder="Password">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 col-lg-12 col-md-12 col-lg-12 d-flex justify-content-between login_option">
+                                            <a href="forgot-password.html" title="" class="forget_pass">Forget Password ?</a>
+                                            <button type="submit" class="btn btn-default login_btn">Login</button>
+                                        </div> 
+                                        <div class="col-12 col-lg-12 col-md-12 col-lg-12">
+                                            <div class="social_login">
+                                                <div class="social_items">
+                                                    <button class="google_login google">Login Google</button>
+                                                    <button class="google_login facebook">Login Facebook</button>
+                                                    <button class="google_login twitter">Login Twitter</button>
+                                                    <button class="google_login linkdin">Login Linkdin</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <!--/.Panel 1-->
+                            <!--Panel 2-->
+                            <div class="tab-pane fade" id="panel2" role="tabpanel">
+                                <form action="#" class="register">
+                                    <div class="row">
+                                        <div class="col-12 col-lg-12 col-md-12 col-lg-12">
+                                            <div class="form-group">
+                                                <label  class="control-label">Name</label>
+                                                <input type="text" class="form-control" placeholder="Username">
+                                            </div>
+                                        </div>                                        
+                                        <div class="col-12 col-lg-12 col-md-12 col-lg-12">
+                                            <div class="form-group">
+                                                <label  class="control-label">Email</label>
+                                                <input type="email" class="form-control" placeholder="Email">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-12 col-md-12 col-lg-12">
+                                            <div class="form-group">
+                                                <label  class="control-label">Password</label>
+                                                <input type="password" class="form-control" placeholder="Password">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 col-lg-12 col-md-12 col-lg-12 d-flex justify-content-between login_option">
+                                            <button type="submit" class="btn btn-default login_btn">Register</button>
+                                        </div> 
+                                    </div>
+                                </form>
+                            </div><!--/.Panel 2-->
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div> 
-    
-
-    <div class="custom-breadcrumns border-bottom">
-      <div class="container">
-        <a href="index.html">Home</a>
-        <span class="mx-3 icon-keyboard_arrow_right"></span>
-        <span class="current">Contact</span>
-      </div>
     </div>
+</section>  <!-- End Login Signup Option -->
 
-    <div class="site-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 form-group">
-                    <label for="fname">First Name</label>
-                    <input type="text" id="fname" class="form-control form-control-lg">
-                </div>
-                <div class="col-md-6 form-group">
-                    <label for="lname">Last Name</label>
-                    <input type="text" id="lname" class="form-control form-control-lg">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 form-group">
-                    <label for="eaddress">Email Address</label>
-                    <input type="text" id="eaddress" class="form-control form-control-lg">
-                </div>
-                <div class="col-md-6 form-group">
-                    <label for="tel">Tel. Number</label>
-                    <input type="text" id="tel" class="form-control form-control-lg">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 form-group">
-                    <label for="message">Message</label>
-                    <textarea name="" id="message" cols="30" rows="10" class="form-control"></textarea>
-                </div>
-            </div>
 
-            <div class="row">
-                <div class="col-12">
-                    <input type="submit" value="Send Message" class="btn btn-primary btn-lg px-5">
+
+
+<section class="contact_info_wrapper">
+     <div class="container">  
+        <div class="row">  
+            <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+                <div class="contact_info">
+                    <h3 class="title">Contact Details</h3>
+                    <p>You need to be sure there isn't anything embarrassing hidden in the repeat predefined chunks as nessing hidden in the repeat predefined chunks as necessary, making this the first true generator on the Internet.</p>
+                    <div class="event_location_info">                  
+                        <ul class="list-unstyled">
+                            <li>
+                                <h4 class="info_title">Address : </h4>
+                                <ul class="list-unstyled">
+                                    <li>945 Somerset Street </li>
+                                    <li>Spartanburg, SC 29301</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <h4 class="info_title">Phone Numbers :</h4>
+                                <ul class="list-unstyled">
+                                    <li>+000 251 215 1235</li>
+                                    <li>+000 320 542 6532</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <h4 class="info_title">Our E-mails :</h4>
+                                <ul class="list-unstyled">
+                                    <li>support@eduwais.com</li>                                    
+                                </ul>
+                            </li>                      
+                        </ul>
+                        <img src="images/banner/map_shape.png" alt="" class="contact__info_shpae">
+                    </div>
                 </div>
             </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+                <div class="contact_form_wrapper">
+                    <h3 class="title">Get In Touch</h3>
+                    <div class="leave_comment">
+                        <div class="contact_form">
+                            <form action="#">
+                                <div class="row">
+                                    <div class="col-12 col-sm-12 col-md-6 form-group">
+                                       <input type="text" class="form-control" id="name"  placeholder="Your Name">
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-md-6 form-group">
+                                        <input type="email" class="form-control" id="email" placeholder="Your E-mail">
+                                    </div>                                    
+                                    <div class="col-12 col-sm-12 col-md-12 form-group">
+                                        <input type="text" class="form-control" id="subject" placeholder="Pick Your Subject">
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-md-12 form-group">
+                                        <textarea class="form-control" id="comment" placeholder="Your Comment Wite Here ..."></textarea>
+                                    </div>
+                                     <div class="col-12 col-sm-12 col-md-12 submit-btn">
+                                        <button type="submit" class="text-center">Send Massage</button>
+                                    </div>
+                                </div>
+                            </form>   
+                        </div>
+                    </div> 
+                </div>
+           </div>
         </div>
     </div>
+</section> <!-- Contact Info Wrappper-->
+
+
+
+<section class="contact_map">
+    <div class="container-fluid">  
+        <div class="row">                  
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 mr-auto p-0">
+                <h2 class="disabled">Google Map</h2>
+                <div class="google_map">
+                    <div class="gmap">
+                        <div id="map"></div>
+                    </div><!-- Ends: .gmap -->                    
+                </div>
+           </div>
+        </div>
+    </div>
+</section> <!-- Ends: Google Map Area -->  
+
 
 <?php
-include ("footer.php");
+include "footer.php";
 ?>
