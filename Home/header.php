@@ -88,7 +88,7 @@
                                 <!-- <li class="nav-item"><a href="index-5.html" class="nav-link">Home Version 04</a></li> -->
                             <!-- </ul> -->
                         </li>
-                        <li class="nav-item"><a href="about.php" class="nav-link">About</a></li>
+                        <li class="nav-item"><a href="about.php" class="nav-link active">About</a></li>
                         <!-- <li class="nav-item"><a href="course.html" class="nav-link">Courses</a>
                             <ul class="navbar-nav nav mx-auto">
                                 <li class="nav-item"><a href="course.html" class="nav-link">Courses</a></li>
@@ -132,7 +132,7 @@
                                 <li class="nav-item"><a href="forgot-password.html" class="nav-link">Forgot Password</a></li>
                             </ul>                            
                         </li>      -->
-                        <li class="nav-item"><a href="contact.php" class="nav-link">Contact</a></li>
+                        <li class="nav-item"><a href="contact.php" class="nav-link active">Contact</a></li>
                     </ul>
                 </div>
                 <div class="mr-auto search_area ">
