@@ -404,7 +404,7 @@ include  "Home/header.php";
                         </div>
                         <figcaption>
                             <div class="member-name">
-                                <h4><a href="#" title="">Jonson Park</a></h4>
+                                <h4><a href="#" title="">Fikru</a></h4>
                                 <span>Professor</span>
                             </div>                            
                         </figcaption>

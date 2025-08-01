@@ -57,8 +57,8 @@
                     <div class="info_wrapper">
                         <div class="contact_info">                   
         					<ul class="list-unstyled">
-                                <li><i class="flaticon-phone-receiver"></i>+000-2356-222</li>
-                                <li><i class="flaticon-mail-black-envelope-symbol"></i>contact@yourdomain.com</li>
+                                <li><i class="flaticon-phone-receiver"></i>+251935225763</li>
+                                <li><i class="flaticon-mail-black-envelope-symbol"></i>balelaschool24@bs.edu.et</li>
         					</ul>                    
                         </div>
                         <div class="login_info">
@@ -66,7 +66,7 @@
                                 <li class="nav-item"><a href="#" class="nav-link sign-in js-modal-show"><i class="flaticon-user-male-black-shape-with-plus-sign"></i>Sign Up</a></li>
                                 <li class="nav-item"><a href="#" class="nav-link join_now js-modal-show"><i class="flaticon-padlock"></i>Lon In</a></li>
                             </ul>
-                            <!-- <a href="#" title="" class="apply_btn">Apply Now</a> -->
+                            <a href="#" title="" class="apply_btn">Login</a>
                         </div>
                     </div>
                 </div>

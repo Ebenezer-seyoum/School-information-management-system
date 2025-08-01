@@ -108,21 +108,21 @@ include('Home/header.php');
                             <li>
                                 <h4 class="info_title">Address : </h4>
                                 <ul class="list-unstyled">
-                                    <li>945 Somerset Street </li>
-                                    <li>Spartanburg, SC 29301</li>
+                                    <li>Semeni Sidenama Zone </li>
+                                    <li>Bilate Zurya Balela.</li>
                                 </ul>
                             </li>
                             <li>
                                 <h4 class="info_title">Phone Numbers :</h4>
                                 <ul class="list-unstyled">
-                                    <li>+000 251 215 1235</li>
-                                    <li>+000 320 542 6532</li>
+                                    <li>+251935225763</li>
+                                    <li>+251906805154</li>
                                 </ul>
                             </li>
                             <li>
                                 <h4 class="info_title">Our E-mails :</h4>
                                 <ul class="list-unstyled">
-                                    <li>support@eduwais.com</li>                                    
+                                    <li>balelaschool24@bs.edu.et</li>                                    
                                 </ul>
                             </li>                      
                         </ul>
