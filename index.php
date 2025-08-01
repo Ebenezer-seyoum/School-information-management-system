@@ -278,14 +278,14 @@ include  "Home/header.php";
                                             <button type="submit" class="btn btn-default login_btn">Login</button>
                                         </div> 
                                         <div class="col-12 col-lg-12 col-md-12 col-lg-12">
-                                            <div class="social_login">
-                                                <div class="social_items">
-                                                    <button class="google_login google">Login Google</button>
-                                                    <button class="google_login facebook">Login Facebook</button>
-                                                    <button class="google_login twitter">Login Twitter</button>
-                                                    <button class="google_login linkdin">Login Linkdin</button>
-                                                </div>
-                                            </div>
+                                            <!-- <div class="social_login"> -->
+                                                <!-- <div class="social_items"> -->
+                                                    <!-- <button class="google_login google">Login Google</button> -->
+                                                    <!-- <button class="google_login facebook">Login Facebook</button> -->
+                                                    <!-- <button class="google_login twitter">Login Twitter</button> -->
+                                                    <!-- <button class="google_login linkdin">Login Linkdin</button> -->
+                                                <!-- </div> -->
+                                            <!-- </div> -->
                                         </div>
                                     </div>
                                 </form>
