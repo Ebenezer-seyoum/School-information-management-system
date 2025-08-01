@@ -577,5 +577,5 @@ include "Home/header.php";
 </section> -->
 <!-- End Team Group -->
 <?php
-include "footer.php";
+include "Home/footer.php";
 ?>
