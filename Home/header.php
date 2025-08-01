@@ -8,12 +8,12 @@
     <meta name="author" content="Ecology Theme">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eduwise - Education HTML5 Template</title>
-    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="Home/Assets/images/favicon.ico" type="image/x-icon">
     <!-- Goole Font -->
-    <link href="https://fonts.googleapis.com/Home/Assets/css?family=Rubik:400,500,700" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/Home/Assets/css?family=Poppins:300,400,500,600,700" rel="stylesheet"> 
-    <link href="https://fonts.googleapis.com/Home/Assets/css?family=Roboto:400,500,700,900" rel="stylesheet">
-    <!-- Bootstrap CSS -->
+    <link href="https://fonts.googleapis.com/css?family=Rubik:400,500,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700,900" rel="stylesheet">
+   
     <link rel="stylesheet" href="Home/Assets/css/assets/bootstrap.min.css">
     <!-- Font awsome CSS -->
     <link rel="stylesheet" href="Home/Assets/css/assets/font-awesome.min.css">    
