@@ -8,30 +8,30 @@
     <meta name="author" content="Ecology Theme">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eduwise - Education HTML5 Template</title>
-    <link rel="shortcut icon" href="Home/Assets/images/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
     <!-- Goole Font -->
-    <link href="https://fonts.googleapis.com/css?family=Rubik:400,500,700" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet"> 
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/Home/Assets/css?family=Rubik:400,500,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/Home/Assets/css?family=Poppins:300,400,500,600,700" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/Home/Assets/css?family=Roboto:400,500,700,900" rel="stylesheet">
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="Home/Assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="Home/Assets/css/assets/bootstrap.min.css">
     <!-- Font awsome CSS -->
-    <link rel="stylesheet" href="Home/Assets/css/font-awesome.min.css">    
-    <link rel="stylesheet" href="Home/Assets/css/flaticon.css">
-    <link rel="stylesheet" href="Home/Assets/css/magnific-popup.css">    
+    <link rel="stylesheet" href="Home/Assets/css/assets/font-awesome.min.css">    
+    <link rel="stylesheet" href="Home/Assets/css/assets/flaticon.css">
+    <link rel="stylesheet" href="Home/Assets/css/assets/magnific-popup.css">    
     <!-- owl carousel -->
-    <link rel="stylesheet" href="Home/Assets/css/owl.carousel.css">
-    <link rel="stylesheet" href="Home/Assets/css/owl.theme.css">     
-    <link rel="stylesheet" href="Home/Assets/css/animate.css"> 
+    <link rel="stylesheet" href="Home/Assets/css/assets/owl.carousel.css">
+    <link rel="stylesheet" href="Home/Assets/css/assets/owl.theme.css">     
+    <link rel="stylesheet" href="Home/Assets/css/assets/animate.css"> 
     <!-- Slick Carousel -->
-    <link rel="stylesheet" href="Home/Assets/css/slick.css">  
+    <link rel="stylesheet" href="css/assets/slick.css">  
 
     <!-- Revolution Slider -->
-    <link rel="stylesheet" href="Home/Assets/css/layers.css">
-    <link rel="stylesheet" href="Home/Assets/css/navigation.css">
-    <link rel="stylesheet" href="Home/Assets/css/settings.css">    
+    <link rel="stylesheet" href="Home/Assets/css/assets/revolution/layers.css">
+    <link rel="stylesheet" href="Home/Assets/css/assets/revolution/navigation.css">
+    <link rel="stylesheet" href="Home/Assets/css/assets/revolution/settings.css">    
     <!-- Mean Menu-->
-    <link rel="stylesheet" href="Home/Assets/css/meanmenu.css">
+    <link rel="stylesheet" href="Home/Assets/css/assets/meanmenu.css">
     <!-- main style-->
     <link rel="stylesheet" href="Home/Assets/css/style.css">
     <link rel="stylesheet" href="Home/Assets/css/responsive.css">
@@ -45,11 +45,10 @@
 </head>
 <body>
 <header class="header_tow">
-<!-- Preloader 
+<!-- Preloader -->
 <div id="preloader">
     <div id="status">&nbsp;</div>
-</div>   
--->
+</div>    
     <div class="header_top">
         <div class="container">
             <div class="row">
@@ -57,8 +56,8 @@
                     <div class="info_wrapper">
                         <div class="contact_info">                   
         					<ul class="list-unstyled">
-                                <li><i class="flaticon-phone-receiver"></i>+251935225763</li>
-                                <li><i class="flaticon-mail-black-envelope-symbol"></i>balelaschool24@bs.edu.et</li>
+                                <li><i class="flaticon-phone-receiver"></i>+000-2356-222</li>
+                                <li><i class="flaticon-mail-black-envelope-symbol"></i>contact@yourdomain.com</li>
         					</ul>                    
                         </div>
                         <div class="login_info">
@@ -66,7 +65,7 @@
                                 <li class="nav-item"><a href="#" class="nav-link sign-in js-modal-show"><i class="flaticon-user-male-black-shape-with-plus-sign"></i>Sign Up</a></li>
                                 <li class="nav-item"><a href="#" class="nav-link join_now js-modal-show"><i class="flaticon-padlock"></i>Lon In</a></li>
                             </ul>
-                            <a href="#" title="" class="apply_btn">Login</a>
+                            <!-- <a href="#" title="" class="apply_btn">Apply Now</a> -->
                         </div>
                     </div>
                 </div>
@@ -77,7 +76,7 @@
     <div class="edu_nav">
         <div class="container">
             <nav class="navbar navbar-expand-md navbar-light bg-faded">
-                <a class="navbar-brand" href="index.php"><img src="Home/Assets/images/logo2.png" alt="logo"></a>
+                <a class="navbar-brand" href="index.php"><img src="images/logo2.png" alt="logo"></a>
                 <div class="collapse navbar-collapse main-menu" id="navbarSupportedContent">
                     <ul class="navbar-nav nav lavalamp ml-auto menu">
                         <li class="nav-item"><a href="index.php" class="nav-link active">Home</a>
@@ -88,7 +87,7 @@
                                 <!-- <li class="nav-item"><a href="index-5.html" class="nav-link">Home Version 04</a></li> -->
                             <!-- </ul> -->
                         </li>
-                        <li class="nav-item"><a href="about.php" class="nav-link active">About</a></li>
+                        <li class="nav-item"><a href="about.php" class="nav-link">About</a></li>
                         <!-- <li class="nav-item"><a href="course.html" class="nav-link">Courses</a>
                             <ul class="navbar-nav nav mx-auto">
                                 <li class="nav-item"><a href="course.html" class="nav-link">Courses</a></li>
@@ -132,7 +131,7 @@
                                 <li class="nav-item"><a href="forgot-password.html" class="nav-link">Forgot Password</a></li>
                             </ul>                            
                         </li>      -->
-                        <li class="nav-item"><a href="contact.php" class="nav-link active">Contact</a></li>
+                        <li class="nav-item"><a href="contact.php" class="nav-link">Contact</a></li>
                     </ul>
                 </div>
                 <div class="mr-auto search_area ">

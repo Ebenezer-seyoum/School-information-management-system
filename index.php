@@ -1,5 +1,5 @@
 <?php
-include  "Home/header.php";
+include "Home/header.php";
 ?>
     <!--==================
         Slider
@@ -278,14 +278,14 @@ include  "Home/header.php";
                                             <button type="submit" class="btn btn-default login_btn">Login</button>
                                         </div> 
                                         <div class="col-12 col-lg-12 col-md-12 col-lg-12">
-                                            <!-- <div class="social_login"> -->
-                                                <!-- <div class="social_items"> -->
-                                                    <!-- <button class="google_login google">Login Google</button> -->
-                                                    <!-- <button class="google_login facebook">Login Facebook</button> -->
-                                                    <!-- <button class="google_login twitter">Login Twitter</button> -->
-                                                    <!-- <button class="google_login linkdin">Login Linkdin</button> -->
-                                                <!-- </div> -->
-                                            <!-- </div> -->
+                                            <div class="social_login">
+                                                <div class="social_items">
+                                                    <button class="google_login google">Login Google</button>
+                                                    <button class="google_login facebook">Login Facebook</button>
+                                                    <button class="google_login twitter">Login Twitter</button>
+                                                    <button class="google_login linkdin">Login Linkdin</button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </form>
@@ -404,7 +404,7 @@ include  "Home/header.php";
                         </div>
                         <figcaption>
                             <div class="member-name">
-                                <h4><a href="#" title="">Fikru</a></h4>
+                                <h4><a href="#" title="">Jonson Park</a></h4>
                                 <span>Professor</span>
                             </div>                            
                         </figcaption>
@@ -577,5 +577,5 @@ include  "Home/header.php";
 </section> -->
 <!-- End Team Group -->
 <?php
-include "Home/footer.php";
+include "footer.php";
 ?>
