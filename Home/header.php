@@ -1,152 +1,102 @@
-<!doctype html>
+
+<!-- 
+////////////////////////////////////////////////////////////////
+
+Author: Free-Template.co
+Author URL: http://free-template.co.
+License: https://creativecommons.org/licenses/by/3.0/
+License URL: https://creativecommons.org/licenses/by/3.0/
+Site License URL: https://free-template.co/template-license/
+  
+Website:  https://free-template.co
+Facebook: https://www.facebook.com/FreeDashTemplate.co
+Twitter:  https://twitter.com/Free_Templateco
+RSS Feed: https://feeds.feedburner.com/Free-templateco
+
+////////////////////////////////////////////////////////////////
+-->
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <!-- Required meta tags -->
-    <meta charset="UTF-8">
-    <meta name="description" content="">
-    <meta name="keywords" content="HTML,CSS,XML,JavaScript">
-    <meta name="author" content="Ecology Theme">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eduwise - Education HTML5 Template</title>
-    <link rel="shortcut icon" href="Home/Assets/images/favicon.ico" type="image/x-icon">
-    <!-- Goole Font -->
-    <link href="https://fonts.googleapis.com/css?family=Rubik:400,500,700" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet"> 
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700,900" rel="stylesheet">
-   
-    <link rel="stylesheet" href="Home/Assets/css/assets/bootstrap.min.css">
-    <!-- Font awsome CSS -->
-    <link rel="stylesheet" href="Home/Assets/css/assets/font-awesome.min.css">    
-    <link rel="stylesheet" href="Home/Assets/css/assets/flaticon.css">
-    <link rel="stylesheet" href="Home/Assets/css/assets/magnific-popup.css">    
-    <!-- owl carousel -->
-    <link rel="stylesheet" href="Home/Assets/css/assets/owl.carousel.css">
-    <link rel="stylesheet" href="Home/Assets/css/assets/owl.theme.css">     
-    <link rel="stylesheet" href="Home/Assets/css/assets/animate.css"> 
-    <!-- Slick Carousel -->
-    <link rel="stylesheet" href="css/assets/slick.css">  
+  <title>CardBoard &mdash; Free Website Template by Free-Template.co</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Revolution Slider -->
-    <link rel="stylesheet" href="Home/Assets/css/assets/revolution/layers.css">
-    <link rel="stylesheet" href="Home/Assets/css/assets/revolution/navigation.css">
-    <link rel="stylesheet" href="Home/Assets/css/assets/revolution/settings.css">    
-    <!-- Mean Menu-->
-    <link rel="stylesheet" href="Home/Assets/css/assets/meanmenu.css">
-    <!-- main style-->
-    <link rel="stylesheet" href="Home/Assets/css/style.css">
-    <link rel="stylesheet" href="Home/Assets/css/responsive.css">
-    <link rel="stylesheet" href="Home/Assets/css/demo.css">
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
+  <meta name="description" content="" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="Free-Template.co" />
+
+  <link rel="shortcut icon" href="ftco-32x32.png">
+
+  <link href="https://fonts.googleapis.com/css?family=DM+Serif+Display:400,400i|Roboto+Mono&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="Home/css/animate.css">
+  <link rel="stylesheet" href="Home/css/owl.carousel.min.css">
+  <link rel="stylesheet" href="Home/css/jquery.fancybox.min.css">
+
+
+  <link rel="stylesheet" href="Home/fonts/ionicons/css/ionicons.min.css">
+  <link rel="stylesheet" href="Home/fonts/fontawesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="Home/fonts/flaticon/font/flaticon.css">
+  <link rel="stylesheet" href="Home/css/aos.css">
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.css">
+
+  <!-- Theme Style -->
+  <link rel="stylesheet" href="Home/css/style.css">
+
 </head>
+
 <body>
-<header class="header_tow">
-<!-- Preloader -->
-<div id="preloader">
-    <div id="status">&nbsp;</div>
-</div>    
-    <div class="header_top">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 col-sm-12 col-lg-12">
-                    <div class="info_wrapper">
-                        <div class="contact_info">                   
-        					<ul class="list-unstyled">
-                                <li><i class="flaticon-phone-receiver"></i>+000-2356-222</li>
-                                <li><i class="flaticon-mail-black-envelope-symbol"></i>contact@yourdomain.com</li>
-        					</ul>                    
-                        </div>
-                        <div class="login_info">
-                             <ul class="d-flex">
-                                <li class="nav-item"><a href="#" class="nav-link sign-in js-modal-show"><i class="flaticon-user-male-black-shape-with-plus-sign"></i>Sign Up</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link join_now js-modal-show"><i class="flaticon-padlock"></i>Lon In</a></li>
-                            </ul>
-                            <!-- <a href="#" title="" class="apply_btn">Apply Now</a> -->
-                        </div>
-                    </div>
-                </div>
-            </div>
+
+  <header role="banner">
+    <nav class="navbar navbar-expand-lg  bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand " href="index.php">CardBoard</a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample05"
+          aria-controls="navbarsExample05" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+   
+        <div class="collapse navbar-collapse" id="navbarsExample05">
+          <ul class="navbar-nav pl-md-5 ml-auto">
+            <li class="nav-item">
+              <a class="nav-link active" href="index.php">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="about.php">About</a>
+            </li>
+<!--             
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="services.html" id="dropdown04" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">Services</a>
+              <div class="dropdown-menu" aria-labelledby="dropdown04">
+                <a class="dropdown-item" href="#">Branding</a>
+                <a class="dropdown-item" href="#">Web Design</a>
+                <a class="dropdown-item" href="#">App Design</a>
+                <a class="dropdown-item" href="#">Start Up</a>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="portfolio.html">Projects</a>
+            </li> -->
+            <li class="nav-item">
+              <a class="nav-link" href="contact.php">Contact</a>
+            </li>
+          </ul>
+
+          <div class="navbar-nav ml-auto">
+            <form method="post" class="search-form">
+              <span class="icon ion ion-search"></span>
+              <input type="text" class="form-control" placeholder="Search...">
+            </form>
+          </div>
+
         </div>
-    </div>
-
-    <div class="edu_nav">
-        <div class="container">
-            <nav class="navbar navbar-expand-md navbar-light bg-faded">
-                <a class="navbar-brand" href="index.php"><img src="images/logo2.png" alt="logo"></a>
-                <div class="collapse navbar-collapse main-menu" id="navbarSupportedContent">
-                    <ul class="navbar-nav nav lavalamp ml-auto menu">
-                        <li class="nav-item"><a href="index.php" class="nav-link active">Home</a>
-                            <!-- <ul class="navbar-nav nav mx-auto"> -->
-                                <!-- <li class="nav-item"><a href="index-2.html" class="nav-link">Home Version 01</a></li> -->
-                                <!-- <li class="nav-item"><a href="index-3.html" class="nav-link">Home Version 02</a></li> -->
-                                <!-- <li class="nav-item"><a href="index-4.html" class="nav-link">Home Version 03</a></li> -->
-                                <!-- <li class="nav-item"><a href="index-5.html" class="nav-link">Home Version 04</a></li> -->
-                            <!-- </ul> -->
-                        </li>
-                        <li class="nav-item"><a href="about.php" class="nav-link">About</a></li>
-                        <!-- <li class="nav-item"><a href="course.html" class="nav-link">Courses</a>
-                            <ul class="navbar-nav nav mx-auto">
-                                <li class="nav-item"><a href="course.html" class="nav-link">Courses</a></li>
-                                <li class="nav-item"><a href="course-details.html" class="nav-link">Courses Details</a></li>
-                            </ul> 
-                        </li> -->
-<!--                         
-                        <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a>
-                            <ul class="navbar-nav nav mx-auto">
-                                <li class="nav-item"><a href="blog.html" class="nav-link">Blog List</a></li> 
-                                <li class="nav-item"><a href="blog-2.html" class="nav-link">Blog Grid One</a></li> 
-                                <li class="nav-item"><a href="blog-3.html" class="nav-link">Blog Grid Two</a></li>
-                                <li class="nav-item"><a href="blog-details.html" class="nav-link">Blog Details</a></li>
-                            </ul> 
-                        </li> -->
-                        <!-- <li class="nav-item"><a href="#" class="nav-link">Pages</a>
-                            <ul class="navbar-nav nav mx-auto">
-                                <li class="nav-item"><a href="#" class="nav-link dropdown_icon">Courses</a>
-                                    <ul class="navbar-nav nav mx-auto">
-                                        <li class="nav-item"><a href="course.html" class="nav-link">Courses</a></li>
-                                        <li class="nav-item"><a href="course-details.html" class="nav-link">Courses Details</a></li>
-                                    </ul>    
-                                </li>                                 
-                                <li class="nav-item"><a href="#" class="nav-link dropdown_icon">Events</a>
-                                    <ul class="navbar-nav nav mx-auto">
-                                        <li class="nav-item"><a href="event.html" class="nav-link">Event</a></li>
-                                        <li class="nav-item"><a href="event-details.html" class="nav-link">Event Details</a></li>
-                                    </ul>    
-                                </li>                                
-                                <li class="nav-item"><a href="#" class="nav-link dropdown_icon">Blog</a>
-                                    <ul class="navbar-nav nav mx-auto">
-                                        <li class="nav-item"><a href="blog.html" class="nav-link">Blog List</a></li> 
-                                        <li class="nav-item"><a href="blog-2.html" class="nav-link">Blog Grid One</a></li> 
-                                        <li class="nav-item"><a href="blog-3.html" class="nav-link">Blog Grid Two</a></li>
-                                        <li class="nav-item"><a href="blog-details.html" class="nav-link">Blog Details</a></li>
-                                    </ul>    
-                                </li> 
-                                <li class="nav-item"><a href="become-a-teacher.html" class="nav-link">Become A Teacher</a></li>
-                                <li class="nav-item"><a href="teacher-profile.html" class="nav-link">Teachers Profile</a></li>
-                                <li class="nav-item"><a href="team.html" class="nav-link">Teachers Page</a></li>
-                                <li class="nav-item"><a href="forgot-password.html" class="nav-link">Forgot Password</a></li>
-                            </ul>                            
-                        </li>      -->
-                        <li class="nav-item"><a href="contact.php" class="nav-link">Contact</a></li>
-                    </ul>
-                </div>
-                <div class="mr-auto search_area ">
-                    <ul class="navbar-nav mx-auto">
-                        <li class="nav-item"><i class="search_btn flaticon-magnifier"></i>
-                            <div id="search">
-                                <button type="button" class="close">×</button>
-                                 <form>
-                                     <input type="search" value="" placeholder="Search here...."  required/>
-                                 </form>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </nav><!-- END NAVBAR -->
-        </div> 
-    </div>
-
+      </div>
+    </nav>
+  </header>
+  <!-- END header -->

@@ -1,122 +1,95 @@
 
+  <div class="bg-primary py-5">
+    <div class="container text-center">
+      <div class="row justify-content-center">
+        <div class="col-lg-7">
+          <h3 class="text-white mb-2 font-weight-normal" data-aos="fade-right" data-aos-delay="">Let's do more together</h3>
+          <p class="text-white mb-4" data-aos="fade-right" data-aos-delay="100">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+            
+          <p class="mb-0" data-aos="fade-right" data-aos-delay="200"><a href="contact.html" class="btn btn-outline-white px-4 py-3">Get In Touch!</a></p>
+        </div>
+      </div>
 
+    </div>
+  </div>
 
-<!-- Footer -->  
-<footer class="footer_2">
+  
+
+  <footer class="site-footer" role="contentinfo">
     <div class="container">
-        <div class="footer_top">
-            <div class="row">
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="footer_single_col footer_intro">
-                        <img src="Home/Assets/images/logo2.png" alt="" class="f_logo">
-                        <p>Ante amet vitae vulputate odio nulla vel pretium pulvinar aenean. Rhoncus eget adipiscing etiam arcu. Ultricies justo ipsum nec amet.</p>
-                    </div>
-                </div>
-                <div class="col-12 col-md-6 col-lg-2">
-                    <div class="footer_single_col">
-                        <h3>Useful Links</h3>
-                        <ul class="location_info quick_inf0">
-                            <li><a href="#">Leadereship</a></li>
-                            <li><a href="#">Company</a></li>
-                            <li><a href="#">Diversity</a></li>
-                            <li><a href="#">Jobs</a></li>
-                            <li><a href="#">Press</a></li>
-                        </ul>                         
-                    </div>
-                </div>
-                <div class="col-12 col-md-6 col-lg-2">
-                    <div class="footer_single_col information">
-                        <h3>information</h3>
-                        <ul class="quick_inf0">
-                            <li><a href="#">Leadereship</a></li>
-                            <li><a href="#">Company</a></li>
-                            <li><a href="#">Diversity</a></li>
-                            <li><a href="#">Jobs</a></li>
-                            <li><a href="#">Press</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="footer_single_col contact">
-                        <h3>Contact Us</h3>
-                        <p>Ante amet vitae vulputate odio nulla vel pretium aenean.</p>
-                        <div class="contact_info">
-                            <span>+000 124 325</span> 
-                            <span class="email">info@yourdomain.com</span>
-                        </div>
-                        <ul class="social_items d-flex list-unstyled">
-                            <li><a href="#"><i class="fab fa-facebook-f fb-icon"></i></a></li>
-                            <li><a href="#"><i class="fab fa-twitter twitt-icon"></i></a></li>
-                            <li><a href="#"><i class="fab fa-linkedin-in link-icon"></i></a></li>
-                            <li><a href="#"><i class="fab fa-instagram ins-icon"></i></a></li>
-                        </ul>
-                    </div>
-                </div>
-                 <div class="col-12 col-md-12 col-lg-12">
-                    <div class="copyright">
-                        <a target="_blank" href="https://www.templateshub.net">Templates Hub</a>
-                    </div>
-                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="shapes_bg">
-        <img src="Home/Assets/images/shapes/testimonial_2_shpe_1.png" alt="" class="shape_3">        
-        <img src="Home/Assets/images/shapes/footer_2.png" alt="" class="shape_1">
-    </div>    
-</footer><!-- End Footer -->
+      <div class="row mb-5">
+        <div class="col-md-4 mb-5">
+          <h3 class="mb-4">About Craft</h3>
+          <p class="mb-5">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Alias nihil numquam aspernatur
+            inventore sint eligendi nostrum!</p>
+          <ul class="list-unstyled footer-link d-flex footer-social">
+            <li><a href="#" class="p-2"><span class="fa fa-twitter"></span></a></li>
+            <li><a href="#" class="p-2"><span class="fa fa-facebook"></span></a></li>
+            <li><a href="#" class="p-2"><span class="fa fa-linkedin"></span></a></li>
+            <li><a href="#" class="p-2"><span class="fa fa-instagram"></span></a></li>
+          </ul>
 
-<section id="scroll-top" class="scroll-top">
-    <h2 class="disabled">Scroll to top</h2>
-    <div class="to-top pos-rtive">
-        <a href="#"><i class = "flaticon-right-arrow"></i></a>
-    </div>
-</section>
-
-    <!-- JavaScript -->
-    <script src="Home/Assets/js/jquery-3.2.1.min.js"></script>
-    <script src="Home/Assets/js/popper.min.js"></script>
-    <script src="Home/Assets/js/bootstrap.min.js"></script>
-    <!-- Revolution Slider -->
-    <script src="Home/Assets/js/jquery.magnific-popup.min.js"></script>     
-    <script src="Home/Assets/js/owl.carousel.min.js"></script>   
-    <script src="Home/Assets/js/slick.min.js"></script>   
-    <script src="Home/Assets/js/jquery.meanmenu.min.js"></script>   
-    <script src="Home/Assets/js/wow.min.js"></script> 
-    <!-- Counter Script -->
-    <script src="Home/Assets/js/waypoints.min.js"></script>
-    <script src="Home/Assets/js/jquery.counterup.min.js"></script>
-    
-    <!-- =========================================================
-         STYLE SWITCHER | ONLY FOR DEMO NOT INCLUDED IN MAIN FILES
-    ============================================================== -->
-    <script type="text/javascript" src="js/demo.js"></script>
-    <div class="demo-style-switch" id="switch-style">
-        <a id="toggle-switcher" class="switch-button" title="Change Styles"><span class="fa fa-cog fa-spin"></span></a>
-        <div class="switched-options">
-            <div class="config-title">
-                <a class="navbar-brand" href="index-3.php"><img src="Home/Assets/images/logo.png" alt="logo"></a>
-                <p>Education Template</p>
-                
-            </div>
-            <div class="demos">
-                <div><a href="index-2.php" data-toggle="tooltip" data-placement="top" title="Home Style One"><img class="main-image img-fluid" src="demo/index_1.png" alt=""/></a></div>
-                <div><a href="index-3.php" data-toggle="tooltip" data-placement="top" title="Home Style Two"><img class="main-image img-fluid" src="demo/index_2.png" alt=""/></a></div>
-                <div><a href="index-4.php" data-toggle="tooltip" data-placement="top" title="Home Style Three"><img class="main-image img-fluid" src="demo/index_3.png" alt=""/></a></div>
-                <ul class="list-unstyled clearfix">
-                    <li><a href="about.php" data-toggle="tooltip" data-placement="top" title="About Page"><img src="demo/about.png" alt="" class="img-fluid"></a></li>
-                    <li><a href="blog.php" data-toggle="tooltip" data-placement="top" title="Blog Page"><img src="demo/blog.png" alt="" class="img-fluid"></a></li>
-                    <li><a href="blog-details.php" data-toggle="tooltip" data-placement="top" title="Blog Details Page"><img src="demo/blog_details.png" alt="" class="img-fluid"></a></li>
-                    <li><a href="event.php" data-toggle="tooltip" data-placement="top" title="Event Page"><img src="demo/event.png" alt="" class="img-fluid"></a></li>
-                    <li><a href="event-details.php" data-toggle="tooltip" data-placement="top" title="Event Deiails"><img src="demo/event_details.png" alt="" class="img-fluid"></a></li>
-                    <li><a href="teacher-profile.php" data-toggle="tooltip" data-placement="top" title="Teacher Profile"><img src="demo/teacher_pro.png" alt="" class="img-fluid"></a></li>
-                    <li><a href="course.php" data-toggle="tooltip" data-placement="top" title="Courses Page"><img src="demo/course.png" alt="" class="img-fluid"></a></li>
-                    <li><a href="course-details.php" data-toggle="tooltip" data-placement="top" title="Courses Details"><img src="demo/course_details.png" alt="" class="img-fluid"></a></li>
-                    <li><a href="team.php" data-toggle="tooltip" data-placement="top" title="Team Page"><img src="demo/team.png" alt="" class="img-fluid"></a></li>
-                    <li><a href="contact.php" data-toggle="tooltip" data-placement="top" title="Contact Page"><img src="demo/contact.png" alt="" class="img-fluid"></a></li>
-                </ul>
-            </div>
         </div>
+        <div class="col-md-5 mb-5 pl-md-5">
+          <div class="mb-5">
+            <h3 class="mb-4">Contact Info</h3>
+            <ul class="list-unstyled footer-link quick-contact">
+              <li class="d-block">
+                <span class="d-block caption">Address:</span>
+                <span class="caption-text">34 Street Name, City Name Here, United States</span>
+              </li>
+              <li class="d-block">
+                <span class="d-block caption">Telephone:</span><span class="caption-text">+1 242 4942 290</span>
+              </li>
+              <li class="d-block">
+                <span class="d-block caption">Email:</span><span class="caption-text">info@yourdomain.com</span>
+              </li>
+            </ul>
+          </div>
+
+          
+        </div>
+        <div class="col-md-3 mb-5">
+          <h3 class="mb-4">Quick Links</h3>
+          <ul class="list-unstyled footer-link">
+            <li><a href="#">About</a></li>
+            <li><a href="#">Terms of Use</a></li>
+            <li><a href="#">Disclaimers</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3">
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 text-md-center text-left">
+          <!-- Link back to Free-Template.co can't be removed. Template is licensed under CC BY 3.0. -->
+              <p class="copyright"><small>&copy;
+                  <script>document.write(new Date().getFullYear());</script> Cardboard. All Rights Reserved. Design by <a
+                    href="https://free-template.co" target="_blank">Free-Template.co</a></small></p>
+        </div>
+      </div>
     </div>
+  </footer>
+  <!-- END footer -->
+
+  <!-- loader -->
+  <div id="loader" class="show fullscreen"><svg class="circular" width="48px" height="48px">
+      <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
+      <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10"
+        stroke="#ffc107" /></svg></div>
+
+  <script src="Home/js/jquery-3.2.1.min.js"></script>
+  <script src="Home/js/jquery-migrate-3.0.1.min.js"></script>
+  <script src="Home/js/popper.min.js"></script>
+  <script src="Home/js/bootstrap.min.js"></script>
+  <script src="Home/js/owl.carousel.min.js"></script>
+  <script src="Home/js/jquery.waypoints.min.js"></script>
+  <script src="Home/js/jquery.fancybox.min.js"></script>
+  <script src="Home/js/jquery.stellar.min.js"></script>
+  <script src="Home/js/aos.js"></script>
+  <script src="Home/js/main.js"></script>
 </body>
-</php>
+
+</html>

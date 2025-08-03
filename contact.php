@@ -1,185 +1,177 @@
 <?php
 include('Home/header.php');
 ?>
+  <div class="slider-item overlay" data-stellar-background-ratio="0.5"
+    style="background-image: url('Home/images/balelaHome.jpg');">
+    <div class="container">
+      <div class="row slider-text align-items-center justify-content-center text-center">
+        <div class="col-lg-12 col-sm-12">
+          <h1 class="mb-4" data-aos="fade-up" data-aos-delay="">Contact Us</h1>
+          <p class="custom-breadcrumbs" data-aos="fade-up" data-aos-delay="100"><a href="index.html">Home</a> <span class="mx-3">/</span> Contact</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<section class="login_signup_option">
-    <div class="l-modal is-hidden--off-flow js-modal-shopify">
-        <div class="l-modal__shadow js-modal-hide"></div>
-        <div class="login_popup login_modal_body">
-            <div class="Popup_title d-flex justify-content-between">
-                <h2 class="hidden">&nbsp;</h2>
-                <!-- Nav tabs -->
-                <div class="row">
-                    <div class="col-12 col-lg-12 col-md-12 col-lg-12 login_option_btn">
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#login" role="tab">Login</a></li>
-                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#panel2" role="tab">Register</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-12 col-lg-12 col-md-12 col-lg-12">
-                        <!-- Tab panels -->
-                        <div class="tab-content card">
-                            <!--Login-->
-                            <div class="tab-pane fade in show active" id="login" role="tabpanel">
-                                <form action="#">
-                                    <div class="row">
-                                        <div class="col-12 col-lg-12 col-md-12 col-lg-12">
-                                            <div class="form-group">
-                                                <label class="control-label">Email</label>
-                                                <input type="email" class="form-control" placeholder="Username">
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-lg-12 col-md-12 col-lg-12">
-                                            <div class="form-group">
-                                                <label class="control-label">Password</label>
-                                                <input type="password" class="form-control" placeholder="Password">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-12 col-lg-12 col-md-12 col-lg-12 d-flex justify-content-between login_option">
-                                            <a href="forgot-password.html" title="" class="forget_pass">Forget Password ?</a>
-                                            <button type="submit" class="btn btn-default login_btn">Login</button>
-                                        </div> 
-                                        <div class="col-12 col-lg-12 col-md-12 col-lg-12">
-                                            <div class="social_login">
-                                                <div class="social_items">
-                                                    <button class="google_login google">Login Google</button>
-                                                    <button class="google_login facebook">Login Facebook</button>
-                                                    <button class="google_login twitter">Login Twitter</button>
-                                                    <button class="google_login linkdin">Login Linkdin</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <!--/.Panel 1-->
-                            <!--Panel 2-->
-                            <div class="tab-pane fade" id="panel2" role="tabpanel">
-                                <form action="#" class="register">
-                                    <div class="row">
-                                        <div class="col-12 col-lg-12 col-md-12 col-lg-12">
-                                            <div class="form-group">
-                                                <label  class="control-label">Name</label>
-                                                <input type="text" class="form-control" placeholder="Username">
-                                            </div>
-                                        </div>                                        
-                                        <div class="col-12 col-lg-12 col-md-12 col-lg-12">
-                                            <div class="form-group">
-                                                <label  class="control-label">Email</label>
-                                                <input type="email" class="form-control" placeholder="Email">
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-lg-12 col-md-12 col-lg-12">
-                                            <div class="form-group">
-                                                <label  class="control-label">Password</label>
-                                                <input type="password" class="form-control" placeholder="Password">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-12 col-lg-12 col-md-12 col-lg-12 d-flex justify-content-between login_option">
-                                            <button type="submit" class="btn btn-default login_btn">Register</button>
-                                        </div> 
-                                    </div>
-                                </form>
-                            </div><!--/.Panel 2-->
-                        </div>
-                    </div>
-                </div>
+  <div class="section">
+    <div class="container">
+      <div class="row mb-5">
+
+        <div class="col-12 mb-5 order-2">
+          <form action="#" method="post">
+            <div class="row">
+              <div class="col-md-6 form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" class="form-control ">
+              </div>
+              <div class="col-md-6 form-group">
+                <label for="phone">Phone</label>
+                <input type="text" id="phone" class="form-control ">
+              </div>
             </div>
-        </div>
-    </div>
-</section>  <!-- End Login Signup Option -->
-
-
-
-
-<section class="contact_info_wrapper">
-     <div class="container">  
-        <div class="row">  
-            <div class="col-12 col-sm-12 col-md-12 col-lg-6">
-                <div class="contact_info">
-                    <h3 class="title">Contact Details</h3>
-                    <p>You need to be sure there isn't anything embarrassing hidden in the repeat predefined chunks as nessing hidden in the repeat predefined chunks as necessary, making this the first true generator on the Internet.</p>
-                    <div class="event_location_info">                  
-                        <ul class="list-unstyled">
-                            <li>
-                                <h4 class="info_title">Address : </h4>
-                                <ul class="list-unstyled">
-                                    <li>Semeni Sidenama Zone </li>
-                                    <li>Bilate Zurya Balela.</li>
-                                </ul>
-                            </li>
-                            <li>
-                                <h4 class="info_title">Phone Numbers :</h4>
-                                <ul class="list-unstyled">
-                                    <li>+251935225763</li>
-                                    <li>+251906805154</li>
-                                </ul>
-                            </li>
-                            <li>
-                                <h4 class="info_title">Our E-mails :</h4>
-                                <ul class="list-unstyled">
-                                    <li>balelaschool24@bs.edu.et</li>                                    
-                                </ul>
-                            </li>                      
-                        </ul>
-                        <img src="Home/Assets/images/banner/map_shape.png" alt="" class="contact__info_shpae">
-                    </div>
-                </div>
+            <div class="row">
+              <div class="col-md-12 form-group">
+  
+              </div>
             </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-6">
-                <div class="contact_form_wrapper">
-                    <h3 class="title">Get In Touch</h3>
-                    <div class="leave_comment">
-                        <div class="contact_form">
-                            <form action="#">
-                                <div class="row">
-                                    <div class="col-12 col-sm-12 col-md-6 form-group">
-                                       <input type="text" class="form-control" id="name"  placeholder="Your Name">
-                                    </div>
-                                    <div class="col-12 col-sm-12 col-md-6 form-group">
-                                        <input type="email" class="form-control" id="email" placeholder="Your E-mail">
-                                    </div>                                    
-                                    <div class="col-12 col-sm-12 col-md-12 form-group">
-                                        <input type="text" class="form-control" id="subject" placeholder="Pick Your Subject">
-                                    </div>
-                                    <div class="col-12 col-sm-12 col-md-12 form-group">
-                                        <textarea class="form-control" id="comment" placeholder="Your Comment Wite Here ..."></textarea>
-                                    </div>
-                                     <div class="col-12 col-sm-12 col-md-12 submit-btn">
-                                        <button type="submit" class="text-center">Send Massage</button>
-                                    </div>
-                                </div>
-                            </form>   
-                        </div>
-                    </div> 
-                </div>
-           </div>
+            <div class="row">
+              <div class="col-md-12 form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" class="form-control ">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 form-group">
+                <label for="message">Write Message</label>
+                <textarea name="message" id="message" class="form-control " cols="30" rows="8"></textarea>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 form-group">
+                <input type="submit" value="Send Message" class="btn btn-outline-black px-3 py-3">
+              </div>
+            </div>
+          </form>
         </div>
-    </div>
-</section> <!-- Contact Info Wrappper-->
 
+        
+      </div>
 
-
-<section class="contact_map">
-    <div class="container-fluid">  
-        <div class="row">                  
-            <div class="col-12 col-sm-12 col-md-12 col-lg-12 mr-auto p-0">
-                <h2 class="disabled">Google Map</h2>
-                <div class="google_map">
-                    <div class="gmap">
-                        <div id="map"></div>
-                    </div><!-- Ends: .gmap -->                    
-                </div>
-           </div>
+      <div class="row">
+        <div class="col-12 contact-form-contact-info">
+          <div class="row">
+            <div class="col-lg-4" data-aos="fade-up" data-aos-delay="">
+              <p class="d-flex">
+                <span class="ion-ios-location icon mr-5"></span>
+                <span>34 Street Name, City Name Here, United States</span>
+              </p>
+            </div>
+            <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+              <p class="d-flex">
+                <span class="ion-ios-telephone icon mr-5"></span>
+                <span>+1 242 4942 290</span>
+              </p>
+            </div>
+            <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
+              <p class="d-flex">
+                <span class="ion-android-mail icon mr-5"></span>
+                <span>info@yourdomain.com</span>
+              </p>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
-</section> <!-- Ends: Google Map Area -->  
+  </div>
 
+  <div class="section bg-light block-11">
+    <div class="container">
+      <div class="row justify-content-center mb-5">
+        <div class="col-md-8 text-center">
+          <h2 class="mb-4 section-title">Testimonial</h2>
+        </div>
+      </div>
+      <div class="nonloop-block-11 owl-carousel">
+        <div class="item">
+          <div class="block-33 h-100">
+            <div class="vcard d-flex mb-3">
+              <div class="image align-self-center"><img src="Home/images/person_1.jpg" alt="Person here"></div>
+              <div class="name-text align-self-center">
+                <h2 class="heading">Carl Smith</h2>
+                <span class="meta">Customer Corp.</span>
+              </div>
+            </div>
+            <div class="text">
+              <blockquote>
+                <p>&rdquo; Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat qui, ipsum debitis id
+                  reprehenderit ut soluta possimus consectetur asperiores totam veniam quasi molestiae. Animi doloribus
+                  accusamus eius ex laudantium vitae? &ldquo;</p>
+              </blockquote>
+            </div>
+          </div>
+        </div>
 
+        <div class="item">
+          <div class="block-33 h-100">
+            <div class="vcard d-flex mb-3">
+              <div class="image align-self-center"><img src="Home/images/person_2.jpg" alt="Person here"></div>
+              <div class="name-text align-self-center">
+                <h2 class="heading">Craig Darren</h2>
+                <span class="meta">Customer Corp.</span>
+              </div>
+            </div>
+            <div class="text">
+              <blockquote>
+                <p>&rdquo; Lorem, ipsum dolor sit amet consectetur adipisicing elit. At, ut enim error molestias maxime
+                  deserunt voluptate doloribus nihil nesciunt id perferendis, doloremque earum architecto ab incidunt
+                  sunt
+                  corrupti. Consequuntur qui ullam voluptates sapiente quod esse eum. &ldquo;</p>
+              </blockquote>
+            </div>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="block-33 h-100">
+            <div class="vcard d-flex mb-3">
+              <div class="image align-self-center"><img src="Home/images/person_1.jpg" alt="Person here"></div>
+              <div class="name-text align-self-center">
+                <h2 class="heading">John Smith</h2>
+                <span class="meta">Customer Corp.</span>
+              </div>
+            </div>
+            <div class="text">
+              <blockquote>
+                <p>&rdquo; Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur, ab? Asperiores dolore
+                  blanditiis quis sapiente soluta aliquid officiis. &ldquo;</p>
+              </blockquote>
+            </div>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="block-33 h-100">
+            <div class="vcard d-flex mb-3">
+              <div class="image align-self-center"><img src="Home/images/person_2.jpg" alt="Person here"></div>
+              <div class="name-text align-self-center">
+                <h2 class="heading">John Smith</h2>
+                <span class="meta">Customer Corp.</span>
+              </div>
+            </div>
+            <div class="text">
+              <blockquote>
+                <p>&rdquo; Lorem ipsum dolor sit amet, consectetur adipisicing elit. At, accusamus? Porro fugit culpa
+                  consequuntur dolorum. &ldquo;</p>
+              </blockquote>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!-- END .block-4 -->
+  </div>
 <?php
-include "Home/footer.php";
+include('Home/footer.php');
 ?>
