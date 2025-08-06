@@ -52,7 +52,12 @@
   <header role="banner">
     <nav class="navbar navbar-expand-lg bg-dark">
       <div class="container-fluid">
-        <a class="navbar-brand" href="index.php">Balela-HighSchol</a>
+       <a class="navbar-brand d-flex align-items-center" href="index.php">
+  <img src="Home/images/logo.jpg" alt="Balela High School Logo" 
+       style="height: 40px; width: auto; margin-right: 10px;">
+  <span></span>
+</a>
+
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample05"
           aria-controls="navbarsExample05" aria-expanded="false" aria-label="Toggle navigation">

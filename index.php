@@ -43,7 +43,7 @@
               <h2>Startup Brand</h2>
               <p>Business</p>
             </div>
-            <img src="Home/images/work_1.jpg" alt="Image" class="img-fluid">
+            <img src="Home/images/fikru1.jpg" alt="Image" class="img-fluid">
           </a>
         </div>
 
@@ -73,7 +73,7 @@
               <h2>Rebranding Work</h2>
               <p>Business</p>
             </div>
-            <img src="Home/images/work_4.jpg" alt="Image" class="img-fluid">
+            <img src="Home/images/fikru2.jpg" alt="Image" class="img-fluid">
           </a>
         </div>
 
