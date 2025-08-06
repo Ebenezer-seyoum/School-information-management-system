@@ -6,7 +6,7 @@ include('Home/header.php');
     <div class="container">
       <div class="row slider-text align-items-center justify-content-center text-center">
         <div class="col-lg-12 col-sm-12">
-          <h1 class="mb-4" data-aos="fade-up" data-aos-delay="">Office Life</h1>
+          <h1 class="mb-4" data-aos="fade-up" data-aos-delay="">Balela Secondary School Life</h1>
           <p class="custom-breadcrumbs" data-aos="fade-up" data-aos-delay="100"><a href="index.html">Home</a> <span class="mx-3">/</span> About</p>
         </div>
       </div>
@@ -22,11 +22,9 @@ include('Home/header.php');
           </figure>
         </div>
         <div class="col-md-5 mr-auto" data-aos="fade-up" data-aos-delay="">
-          <h2 class="mb-4 section-title"><strong>Creativity</strong> is our DNA</h2>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi, quos, adipisci aliquid similique
-            saepe ipsa minus maxime alias libero nam quis officia eum impedit. At quisquam reprehenderit cum hic enim?</p>
-          <p>Necessitatibus eligendi molestias similique tempore, optio nobis numquam temporibus debitis cum aspernatur,
-            eius, nihil soluta sapiente enim. </p>
+          <h2 class="mb-4 section-title"><strong>Learning</strong> is our Passion</h2>
+          <p>At Balela Secondary School, we foster a vibrant learning environment where students are encouraged to explore, grow, and excel. Our dedicated faculty and diverse curriculum empower students to discover their potential.</p>
+          <p>We emphasize holistic education, nurturing creativity, critical thinking, and collaboration to prepare students for a dynamic future.</p>
         </div>
       </div>
     </div>
@@ -92,10 +90,8 @@ include('Home/header.php');
               </div>
             </div>
             <div class="text">
-              <blockquote>
-                <p>&rdquo; Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat qui, ipsum debitis id
-                  reprehenderit ut soluta possimus consectetur asperiores totam veniam quasi molestiae. Animi doloribus
-                  accusamus eius ex laudantium vitae? &ldquo;</p>
+             <blockquote>
+                <p>&rdquo; Balela Secondary School has given me the confidence to pursue my dreams. The teachers are supportive, and the environment encourages us to excel both academically and personally. &ldquo;</p>
               </blockquote>
             </div>
           </div>
@@ -112,10 +108,7 @@ include('Home/header.php');
             </div>
             <div class="text">
               <blockquote>
-                <p>&rdquo; Lorem, ipsum dolor sit amet consectetur adipisicing elit. At, ut enim error molestias maxime
-                  deserunt voluptate doloribus nihil nesciunt id perferendis, doloremque earum architecto ab incidunt
-                  sunt
-                  corrupti. Consequuntur qui ullam voluptates sapiente quod esse eum. &ldquo;</p>
+                <p>&rdquo; The science club at Balela has been a game-changer for me. I’ve learned so much through practical experiments, and it’s made me love learning even more! &ldquo;</p>
               </blockquote>
             </div>
           </div>
@@ -131,9 +124,8 @@ include('Home/header.php');
               </div>
             </div>
             <div class="text">
-              <blockquote>
-                <p>&rdquo; Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur, ab? Asperiores dolore
-                  blanditiis quis sapiente soluta aliquid officiis. &ldquo;</p>
+               <blockquote>
+                <p>&rdquo; The teachers and extracurricular activities at Balela have helped me discover my talents and build my confidence. I’m proud to be part of this school. &ldquo;</p>
               </blockquote>
             </div>
           </div>
@@ -149,9 +141,8 @@ include('Home/header.php');
               </div>
             </div>
             <div class="text">
-              <blockquote>
-                <p>&rdquo; Lorem ipsum dolor sit amet, consectetur adipisicing elit. At, accusamus? Porro fugit culpa
-                  consequuntur dolorum. &ldquo;</p>
+             <blockquote>
+                <p>&rdquo; Balela’s supportive community and engaging lessons make learning fun. I’ve grown so much since joining this school! &ldquo;</p>
               </blockquote>
             </div>
           </div>
