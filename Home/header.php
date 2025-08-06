@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,7 +18,6 @@
   <link rel="stylesheet" href="Home/css/owl.carousel.min.css">
   <link rel="stylesheet" href="Home/css/jquery.fancybox.min.css">
 
-
   <link rel="stylesheet" href="Home/fonts/ionicons/css/ionicons.min.css">
   <link rel="stylesheet" href="Home/fonts/fontawesome/css/font-awesome.min.css">
   <link rel="stylesheet" href="Home/fonts/flaticon/font/flaticon.css">
@@ -29,19 +27,38 @@
 
   <!-- Theme Style -->
   <link rel="stylesheet" href="Home/css/style.css">
+
+  <style>
+    /* ✅ Navbar Links Style */
+    .navbar-nav .nav-link {
+      font-size: 16px;
+      font-weight: 500;
+      color: #ffffff !important;
+      padding: 10px 15px;
+      transition: all 0.3s ease-in-out;
+    }
+
+    /* ✅ Hover Effect */
+    .navbar-nav .nav-link:hover {
+      font-size: 18px;
+      color: #f1c40f !important;  /* Gold color on hover */
+      transform: scale(1.1);      /* Slight zoom effect */
+      text-decoration: underline; /* Underline on hover */
+    }
+  </style>
 </head>
+
 <body>
   <header role="banner">
-    <nav class="navbar navbar-expand-lg  bg-dark">
+    <nav class="navbar navbar-expand-lg bg-dark">
       <div class="container-fluid">
-        <a class="navbar-brand " href="index.php">Balela-HighSchol</a>
+        <a class="navbar-brand" href="index.php">Balela-HighSchol</a>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample05"
           aria-controls="navbarsExample05" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
 
-   
         <div class="collapse navbar-collapse" id="navbarsExample05">
           <ul class="navbar-nav pl-md-5 ml-auto">
             <li class="nav-item">
@@ -50,31 +67,20 @@
             <li class="nav-item">
               <a class="nav-link" href="about.php">About</a>
             </li>
-<!--             
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="services.html" id="dropdown04" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">Services</a>
-              <div class="dropdown-menu" aria-labelledby="dropdown04">
-                <a class="dropdown-item" href="#">Branding</a>
-                <a class="dropdown-item" href="#">Web Design</a>
-                <a class="dropdown-item" href="#">App Design</a>
-                <a class="dropdown-item" href="#">Start Up</a>
-              </div>
-            </li>
-             -->
             <li class="nav-item">
               <a class="nav-link" href="contact.php">Contact</a>
             </li>
           </ul>
 
           <div class="navbar-nav ml-auto">
-             <li class="nav-item">
+            <li class="nav-item">
               <a class="nav-link" href="login.php">Login</a>
             </li>
           </div>
-
         </div>
       </div>
     </nav>
   </header>
   <!-- END header -->
+
+
