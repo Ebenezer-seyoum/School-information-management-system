@@ -1,20 +1,4 @@
 
-<!-- 
-////////////////////////////////////////////////////////////////
-
-Author: Free-Template.co
-Author URL: http://free-template.co.
-License: https://creativecommons.org/licenses/by/3.0/
-License URL: https://creativecommons.org/licenses/by/3.0/
-Site License URL: https://free-template.co/template-license/
-  
-Website:  https://free-template.co
-Facebook: https://www.facebook.com/FreeDashTemplate.co
-Twitter:  https://twitter.com/Free_Templateco
-RSS Feed: https://feeds.feedburner.com/Free-templateco
-
-////////////////////////////////////////////////////////////////
--->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -45,11 +29,8 @@ RSS Feed: https://feeds.feedburner.com/Free-templateco
 
   <!-- Theme Style -->
   <link rel="stylesheet" href="Home/css/style.css">
-
 </head>
-
 <body>
-
   <header role="banner">
     <nav class="navbar navbar-expand-lg  bg-dark">
       <div class="container-fluid">
@@ -80,19 +61,16 @@ RSS Feed: https://feeds.feedburner.com/Free-templateco
                 <a class="dropdown-item" href="#">Start Up</a>
               </div>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="portfolio.html">Projects</a>
-            </li> -->
+             -->
             <li class="nav-item">
               <a class="nav-link" href="contact.php">Contact</a>
             </li>
           </ul>
 
           <div class="navbar-nav ml-auto">
-            <form method="post" class="search-form">
-              <span class="icon ion ion-search"></span>
-              <input type="text" class="form-control" placeholder="Search...">
-            </form>
+             <li class="nav-item">
+              <a class="nav-link" href="login.php">Login</a>
+            </li>
           </div>
 
         </div>
