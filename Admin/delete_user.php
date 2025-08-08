@@ -3,7 +3,8 @@ include('adminHeader.php');
 ?>
 <?php
 $profile = getUserByID($_SESSION["uid"]);
-if (isset($_SESSION["uid"]) &&  ($profile["user_type"] == "Admin")) {
+$roleName = getRoleNameById($profile["user_type"]);
+if (isset($_SESSION["uid"]) && ($roleName == "Admin")) {
 ?>
 <!-- CSS for profile image -->
 <style>
