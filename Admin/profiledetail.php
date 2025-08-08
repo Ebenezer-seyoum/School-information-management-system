@@ -29,6 +29,7 @@ include('adminHeader.php');
 
 <?php
 $profile = getUserByID($_SESSION["uid"]);
+$roleName = getRoleNameById($profile["user_type"]);
 if (isset($_SESSION["uid"])) {
 ?>
 <div class="main-content">
@@ -96,7 +97,7 @@ if (isset($_SESSION["uid"])) {
      </div>
      <div class="form-group col-6">
        <label for="user_type">user_type</label>
-       <input type="text" class="form-control" value="<?php echo $userProfile["user_type"]; ?>" readonly />
+       <input type="text" class="form-control" value="<?php echo $roleName; ?>" readonly />
      </div>
      <div class="form-group col-12 mt-3">
        <a href="list_user.php" class="btn btn-secondary">Back</a>

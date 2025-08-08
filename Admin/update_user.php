@@ -18,11 +18,11 @@ include('adminHeader.php');
 
 <?php
   $idNumber = $firstName = $fatherName = $gFatherName = $gender = $email = "";
-  $password = $confirmPassword = $username = $profile_pic = $user_type = $success = "";
+  $password = $confirmPassword = $username = $profile_pic = $role_type = $success = "";
   $idNumber_err = $firstName_err = $fatherName_err = $gFatherName_err = "";
   $phone_err = "";
   $gender_err = $email_err = $password_err = $confirmPassword_err = $username_err = "";
-  $profile_pic_err = $user_type_err = $allErr = "";
+  $profile_pic_err = $role_type_err = $allErr = "";
   $test = true;
   $uid = "";
      //get the user id from the database
@@ -61,7 +61,7 @@ include('adminHeader.php');
             }
         }
     } else { 
-        $profile_pic = $userProfile['profile_pic']; 
+        $profile_pic = $userProfile['profile_picture']; 
     }
     //validate first name
      if (empty($_POST["first_name"])) {
@@ -143,23 +143,34 @@ if (empty($_POST["password"])) {
         $test = false;
     }
 }
-    //validate user_type
-    if (empty($_POST["user_type"])) {
-        $user_type_err = "Please select user_type";
+      //validate  Phone 
+    if (empty($_POST["phone"])) {
+        $phone_err = "Please enter your id number";
         $test = false;
-    } else if (validateUserType($_POST["user_type"]) == 0) {
-        $user_type_err = "Invalid input";
+    } else if (validatePhoneNumber($_POST["phone"]) == 0) {
+        $phone_err = "Please enter valid phone number";
         $test = false;
     } else {
-        $user_type = $_POST["user_type"];
+        $phone = $_POST["phone"];
+    }
+    //validate role_type
+    if (empty($_POST["role_type"])) {
+        $role_type_err = "Please select role_type";
+        $test = false;
+    } else if (validateUserType($_POST["role_type"]) == 0) {
+        $role_type_err = "Invalid input";
+        $test = false;
+    } else {
+        $role_type = $_POST["role_type"];
     }
     // Check if all validations passed
     if ($test == true) {
      if (userExist($uid) == 1) {
-      if (updateUser($uid, $idNumber, $profile_pic, $firstName, $fatherName, $gFatherName, 
-      $gender, $email, $username, $password, $user_type) == 1) { 
+         $encryptedPassword = encryptPassword($password);
+      if (updateUser($uid, $idNumber, $profile_pic, $firstName, $fatherName, $gFatherName, $gender,
+       $role_type, $username, $encryptedPassword, $email, $phone, $username) == 1) {
                 $success = "Successfully updated";
-                 header('refresh:2');
+                header('refresh:2');
                   $Notif_msg = "your account detail updated.";
               $sql_Notif = "INSERT INTO notifications (user_id, message) 
                   VALUES ('$uid', '$Notif_msg')";
@@ -175,7 +186,6 @@ if (empty($_POST["password"])) {
 ?>
 
 <?php
-
 $profile = getUserByID($_SESSION["uid"]);
 $roleName = getRoleNameById($profile["user_type"]);
 if (isset($_SESSION["uid"]) && ($roleName == "Admin")) {
@@ -216,24 +226,28 @@ if (isset($_SESSION["uid"]) && ($roleName == "Admin")) {
  <div class="row">
    <div class="form-group col-6">
      <label for="id_number">ID Number</label>
-     <input id="id_number" type="text" class="form-control" name="idNumber" value="<?php echo $userProfile["idNumber"]; ?>"/>
+     <input id="id_number" type="text" class="form-control" name="idNumber"
+     value="<?php echo $userProfile["idNumber"]; ?> " readonly/>
      <span class="text-danger"><?php echo $idNumber_err; ?></span>
    </div>
    <div class="form-group col-6">
      <label for="first_name">First Name</label>
-     <input id="first_name" type="text" class="form-control" name="first_name" value="<?php echo $userProfile["first_name"]; ?>"/>
+     <input id="first_name" type="text" class="form-control" name="first_name" 
+     value="<?php echo $userProfile["first_name"]; ?>"/>
      <span class="text-danger"><?php echo $firstName_err; ?></span>
    </div>
  </div>
 <div class="row">
   <div class="form-group col-6">
       <label for="father_name">Father Name</label>
-      <input id="father_name" type="text" class="form-control" name="father_name" autofocus value="<?php echo $userProfile["father_name"]; ?>" />
+      <input id="father_name" type="text" class="form-control" name="father_name" autofocus 
+      value="<?php echo $userProfile["father_name"]; ?>" />
       <span class="text-danger"><?php echo $fatherName_err; ?></span>
   </div>
   <div class="form-group col-6">
       <label for="grand_father_name">Grand Father Name</label>
-      <input id="grand_father_name" type="text" class="form-control" name="grand_father_name" value="<?php echo $userProfile["grandfather_name"]; ?>" />
+      <input id="grand_father_name" type="text" class="form-control" name="grand_father_name"
+       value="<?php echo $userProfile["grandfather_name"]; ?>" />
       <span class="text-danger"><?php echo $gFatherName_err; ?></span>
   </div>
 </div>
@@ -256,7 +270,8 @@ if (isset($_SESSION["uid"]) && ($roleName == "Admin")) {
 <div class="row">
   <div class="form-group col-6">
       <label for="password" class="d-block">Password</label>
-      <input id="password" type="text" class="form-control" name="password" onkeyup="checkADDPassword()" />
+      <input id="password" type="text" class="form-control" name="password" onkeyup="checkADDPassword()"
+       value="<?php echo $userProfile["password"]; ?>" />
       <span class="text-danger"><?php echo $password_err; ?></span>
       <!-- Password Checklist (initially hidden) -->
   <ul id="password-checklist" style="list-style: none; padding: 0; display: none;">
@@ -268,7 +283,8 @@ if (isset($_SESSION["uid"]) && ($roleName == "Admin")) {
   </div>
   <div class="form-group col-6">
       <label for="username">username</label>
-      <input id="username" type="text" class="form-control" name="username" value="<?php echo $userProfile["username"]; ?>" />
+      <input id="username" type="text" class="form-control" name="username" 
+      value="<?php echo $userProfile["username"]; ?>" />
       <span class="text-danger"><?php echo $username_err; ?></span>
   </div>
    <div class="form-group col-6">
@@ -278,20 +294,23 @@ if (isset($_SESSION["uid"]) && ($roleName == "Admin")) {
       <span class="text-danger"><?php echo $phone_err; ?></span>
   </div>
   <div class="form-group col-md-6">
-  <label for="role_type">Role Type</label>
-  <select class="form-control" id="role_type" name="role_type">
-      <option value="">Select role type...</option>
-      <?php
-      $types = getAllRoleType();
-      foreach ($types as $type) {
-          $selected = (isset($userProfile['role_type']) && $userProfile['role_type'] == $type['rid']) ? 'selected' : '';
-      ?>
-          <option value="<?php echo htmlspecialchars($type['rid']); ?>" <?php echo $selected; ?>>
-              <?php echo htmlspecialchars($type['role_name']); ?>
-          </option>
-      <?php } ?>
-  </select>
-  <span class="text-danger"><?php echo $role_type_err ?? ''; ?></span>
+    <label for="role_type">Role Type</label>
+    <select class="form-control" id="role_type" name="role_type" readonly>
+        <option value="">Select role type...</option>
+        <?php
+        $types = getAllRoleType();     
+        $currentRoleId = $userProfile['user_type'];       
+        foreach ($types as $type) {
+            ?>
+            <option value="<?php echo $type['rid']; ?>" 
+                <?php if ($currentRoleId == $type['rid']) echo 'selected="selected"'; ?>>
+                <?php echo htmlspecialchars($type['role_name']); ?>
+            </option>
+            <?php
+        }
+        ?>
+    </select>
+    <span class="text-danger"><?php echo $role_type_err ?? ''; ?></span>
 </div>
 
 <div class="form-group">

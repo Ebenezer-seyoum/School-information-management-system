@@ -6,6 +6,7 @@ $user = null;
 if ($uid) {
     $user = getUserByID($uid); // Get one user row
 }
+$roleName = getRoleNameById($profile["user_type"]);
 ?>
 
 <div class="container py-5">
@@ -23,8 +24,8 @@ if ($uid) {
     <div class="card-body p-4">
         <!-- Profile Image -->
         <div class="text-center mb-4">
-            <?php if (!empty($user['profile_pic'])): ?>
-                <img src="<?= htmlspecialchars($user['profile_pic']) ?>" 
+            <?php if (!empty($user['profile_picture'])): ?>
+                <img src="<?= htmlspecialchars($user['profile_picture']) ?>" 
                      alt="Profile Picture" 
                      class="rounded-circle border border-2" 
                      style="width: 100px; height: 100px; object-fit: cover;">
@@ -36,7 +37,7 @@ if ($uid) {
             <?php endif; ?>
 
             <h4 class="mt-3 text-primary"><?= htmlspecialchars($user['first_name']) ?>'s Profile</h4>
-            <span class="badge bg-secondary text-uppercase"><?= htmlspecialchars($user['user_type']) ?></span>
+            <span class="badge bg-secondary text-uppercase"><?= htmlspecialchars($roleName) ?></span>
         </div>
 
         <!-- User Details -->

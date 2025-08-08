@@ -1503,30 +1503,15 @@ function getConfirmDecision($judge_id) {
 }
 
 
-function updateUser($uid, $idNumber, $profile_pic, $firstName, $fatherName, $gFatherName,
-    $gender, $email, $username, $password, $user_type)
+function updateUser($uid, $idNumber, $profile_pic, $firstName, $fatherName, $gFatherName, $gender,
+       $role_type, $username, $encryptedPassword, $email, $phone, $userStatus)
 {
     global $conn;
-
-    // Sanitize all inputs
-    $uid = mysqli_real_escape_string($conn, $uid);
-    $idNumber = mysqli_real_escape_string($conn, $idNumber);
-    $profile_pic = mysqli_real_escape_string($conn, $profile_pic);
-    $firstName = mysqli_real_escape_string($conn, $firstName);
-    $fatherName = mysqli_real_escape_string($conn, $fatherName);
-    $gFatherName = mysqli_real_escape_string($conn, $gFatherName);
-    $gender = mysqli_real_escape_string($conn, $gender);
-    $email = mysqli_real_escape_string($conn, $email);
-    $username = mysqli_real_escape_string($conn, $username);
-    $password = encryptPassword($password);
-    $password = mysqli_real_escape_string($conn, $password);
-    $user_type = mysqli_real_escape_string($conn, $user_type);
-
     $query = mysqli_query($conn, "UPDATE users SET 
-        idNumber='$idNumber', profile_pic='$profile_pic', first_name='$firstName',
-        father_name='$fatherName', gfather_name='$gFatherName', gender='$gender', 
-        email='$email', username='$username', password='$password', user_type='$user_type'
-        WHERE uid='$uid'
+        idNumber='$idNumber', profile_picture='$profile_pic', first_name='$firstName',
+        father_name='$fatherName', grandfather_name='$gFatherName', gender='$gender', 
+        email='$email', phone='$phone', username='$username', password='$encryptedPassword',
+         user_type='$role_type' WHERE uid='$uid'
     ");
 
     if ($query) {

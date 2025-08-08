@@ -39,6 +39,7 @@ include('adminHeader.php');
 </div>
 
 <?php
+ $roleName = getRoleNameById($profile["user_type"]);
     if (isset($_SESSION["uid"])) {
         if (isset($_GET['search']) && !empty(trim($_GET['search']))) {
             $searchTerm = $_GET['search'];
@@ -68,7 +69,7 @@ include('adminHeader.php');
           </div>
           <div class="user-details">
             <h4 class="user-name mb-0"><?php echo $user["username"]; ?></h4>
-            <p><?php echo $user["user_type"]; ?></p>
+            <p><?php echo $roleName; ?></p>
           </div>
         </div>
       </div>

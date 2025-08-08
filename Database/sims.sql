@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Aug 08, 2025 at 01:19 PM
+-- Generation Time: Aug 08, 2025 at 03:37 PM
 -- Server version: 9.1.0
 -- PHP Version: 8.3.14
 
@@ -99,6 +99,32 @@ CREATE TABLE IF NOT EXISTS `mark` (
   `result` int NOT NULL,
   `semester` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notifications`
+--
+
+DROP TABLE IF EXISTS `notifications`;
+CREATE TABLE IF NOT EXISTS `notifications` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `message` varchar(255) NOT NULL,
+  `is_read` tinyint(1) DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `notifications`
+--
+
+INSERT INTO `notifications` (`id`, `user_id`, `message`, `is_read`, `created_at`) VALUES
+(1, 2, 'your account detail updated.', 0, '2025-08-08 15:35:31'),
+(2, 2, 'your account detail updated.', 0, '2025-08-08 15:35:41'),
+(3, 2, 'your account detail updated.', 0, '2025-08-08 15:36:57');
 
 -- --------------------------------------------------------
 
@@ -211,8 +237,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`uid`, `idNumber`, `profile_picture`, `first_name`, `father_name`, `grandfather_name`, `gender`, `user_type`, `username`, `password`, `email`, `phone`, `user_status`) VALUES
-(1, 'BSS/ADM/0001/17', '0', 'Abebe', 'Kebede', 'Zewdu', 'Male', 'Admin', 'admin', '3yFM88FVzw+XU0J2lPnUpA==', '', '912345678', 1),
-(2, 'BSS/ADM/0002/17', '../assets/img/pp.jpg', 'abenezer ', 'seyoum', 'tefera', 'M', '2', 'ab', 'nIvRPLWFfGH/pgidb0LY8A==', 'Abseyoum16@gmail.com', '+251909299398', 0);
+(2, 'BSS/ADM/0002/17 ', '../assets/img/pp.jpg', 'abenezer ', 'seyoum', 'mamo', 'M', '2', 'ab', 'nIvRPLWFfGH/pgidb0LY8A==', 'Abseyoum16@gmail.com', '+251909299398', 1);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
