@@ -71,7 +71,7 @@ include '../connection/function.php';
 </li>
 
 <li class="nav-item">
-<a data-bs-toggle="collapse" href="#cases"><i class="fas fa-balance-scale"></i><p>Cases Status</p><span class="caret"></span></a>
+<a data-bs-toggle="collapse" href="#cases"><i class="fas fa-balance-scale"></i><p>Students</p><span class="caret"></span></a>
     <div class="collapse" id="cases">
      <ul class="nav nav-collapse">
     <li><a href="pending_case.php"><i class="fas fa-hourglass-half"></i>Pending Cases</a></li>
@@ -85,7 +85,7 @@ include '../connection/function.php';
   </div>
 </li>
 <li class="nav-item">
-  <a data-bs-toggle="collapse" href="#casesManagement"><i class="fas fa-file-contract"></i><p>Cases Management</p><span class="caret"></span></a>
+  <a data-bs-toggle="collapse" href="#casesManagement"><i class="fas fa-file-contract"></i><p>Academic Management</p><span class="caret"></span></a>
   <div class="collapse" id="casesManagement">
     <ul class="nav nav-collapse">
       <li><a href="update_case.php"><i class="fas fa-edit"></i> Update Cases</a></li>

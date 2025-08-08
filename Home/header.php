@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>CardBoard &mdash; Free Website Template by Free-Template.co</title>
+  <title>BSMS</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
