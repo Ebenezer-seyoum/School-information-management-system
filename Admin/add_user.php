@@ -226,34 +226,6 @@ if ($test == true) {
 <div class="card-body">                                
   <div class="row">
     <div class="form-group col-12 col-md-6 mb-3">
-    <?php
-         echo "<pre>POST Data:\n";
-    print_r($_POST);
-    echo "</pre>";
-
-    echo "<pre>FILES Data:\n";
-    print_r($_FILES);
-    echo "</pre>";
-
-    // Also log validation error variables for debugging
-    $validationErrors = [
-        'idNumber_err' => $idNumber_err,
-        'profile_pic_err' => $profile_pic_err,
-        'firstName_err' => $firstName_err,
-        'fatherName_err' => $fatherName_err,
-        'gFatherName_err' => $gFatherName_err,
-        'gender_err' => $gender_err,
-        'email_err' => $email_err,
-        'password_err' => $password_err,
-        'confirmPassword_err' => $confirmPassword_err,
-        'username_err' => $username_err,
-        'phone_err' => $phone_err,
-        'role_type_err' => $role_type_err,
-    ];
-    echo "<pre>Validation errors:\n";
-    print_r($validationErrors);
-    echo "</pre>";
-    ?>
        <label for="id_number">ID Number</label>
        <input id="id_number" type="text" class="form-control" name="idNumber" 
        value="<?php echo $generatedId; ?>" readonly/>
