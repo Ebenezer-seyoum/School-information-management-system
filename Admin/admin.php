@@ -1,161 +1,130 @@
-
 <?php
-include "adminHeader.php";
+include "adminHeader.php"; 
 ?>
 
 <div class="container">
 <div class="page-inner">
   <div class="row g-4"> 
-<!-- All Cases -->
+
+<!-- All Students -->
 <div class="col-sm-6 col-md-3">
     <div class="card card-stats card-round h-100">
         <div class="card-body">
             <div class="row align-items-center">
                 <div class="col-icon">
                     <div class="icon-big text-center icon-primary bubble-shadow-small">
-                        <i class="fas fa-briefcase"></i>
+                        <i class="fas fa-user-graduate"></i>
                     </div>
                 </div>
                 <div class="col col-stats ms-3">
                     <div class="numbers">
-                        <p class="card-category">All Cases</p>
-                        <h4 class="card-title">0</h4>
+                        <p class="card-category">Total Students</p>
+                        <h4 class="card-title"></h4>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!-- Open Cases -->
+
+<!-- Teachers -->
 <div class="col-sm-6 col-md-3">
     <div class="card card-stats card-round h-100">
         <div class="card-body">
             <div class="row align-items-center">
                 <div class="col-icon">
                     <div class="icon-big text-center icon-info bubble-shadow-small">
-                        <i class="fas fa-folder-open"></i>
+                        <i class="fas fa-chalkboard-teacher"></i>
                     </div>
                 </div>
                 <div class="col col-stats ms-3">
                     <div class="numbers">
-                        <p class="card-category">Open Cases</p>
-                        <h4 class="card-title">0</h4>
+                        <p class="card-category">Total Teachers</p>
+                        <h4 class="card-title"></h4>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!-- Distributed Cases -->
+
+<!-- Classes -->
 <div class="col-sm-6 col-md-3">
     <div class="card card-stats card-round h-100">
         <div class="card-body">
             <div class="row align-items-center">
                 <div class="col-icon">
                     <div class="icon-big text-center icon-success bubble-shadow-small">
-                        <i class="fas fa-share-square"></i>
+                        <i class="fas fa-school"></i>
                     </div>
                 </div>
                 <div class="col col-stats ms-3">
                     <div class="numbers">
-                        <p class="card-category">Distributed Cases</p>
-                        <h4 class="card-title">0</h4>
+                        <p class="card-category">Total Classes</p>
+                        <h4 class="card-title"></h4>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
- <!-- pending appointment Cases -->
-<div class="col-sm-6 col-md-3">
-    <div class="card card-stats card-round h-100">
-        <div class="card-body">
-            <div class="row align-items-center">
-                <div class="col-icon">
-                    <div class="icon-big text-center icon-secondary bubble-shadow-small">
-                        <i class="fas fas fa-clock"></i>
-                    </div>
-                </div>
-                <div class="col col-stats ms-3">
-                    <div class="numbers">
-                        <p class="card-category">Pending Appointment Cases</p>
-                        <h4 class="card-title">0</h4>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Appointed Cases -->
-<div class="col-sm-6 col-md-3">
-    <div class="card card-stats card-round h-100">
-        <div class="card-body">
-            <div class="row align-items-center">
-                <div class="col-icon">
-                    <div class="icon-big text-center icon-secondary bubble-shadow-small">
-                        <i class="fas fa-user-check"></i>
-                    </div>
-                </div>
-                <div class="col col-stats ms-3">
-                    <div class="numbers">
-                        <p class="card-category">Appointed Cases</p>
-                        <h4 class="card-title">0</h4>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
- <!-- Pendig Decision Cases -->
-<div class="col-sm-6 col-md-3">
-    <div class="card card-stats card-round h-100">
-        <div class="card-body">
-            <div class="row align-items-center">
-                <div class="col-icon">
-                    <div class="icon-big text-center icon-secondary bubble-shadow-small">
-                        <i class="fas fas fa-clock"></i> 
-                    </div>
-                </div>
-                <div class="col col-stats ms-3">
-                    <div class="numbers">
-                        <p class="card-category">Pending Decision Cases</p>
-                        <h4 class="card-title">0</h4>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Decided Cases -->
+
+<!-- Upcoming Exams -->
 <div class="col-sm-6 col-md-3">
     <div class="card card-stats card-round h-100">
         <div class="card-body">
             <div class="row align-items-center">
                 <div class="col-icon">
                     <div class="icon-big text-center icon-warning bubble-shadow-small">
-                       <i class="fas fa-check-circle"></i>
+                        <i class="fas fa-file-alt"></i>
                     </div>
                 </div>
                 <div class="col col-stats ms-3">
                     <div class="numbers">
-                        <p class="card-category">Decided Cases</p>
-                        <h4 class="card-title">0</h4>
+                        <p class="card-category">Upcoming Exams</p>
+                        <h4 class="card-title"></h4>
                     </div>
                 </div>
             </div>
         </div>
     </div>
- </div>
-</div>		
+</div>
+
+<!-- Recent Events -->
+<div class="col-sm-6 col-md-3">
+    <div class="card card-stats card-round h-100">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-icon">
+                    <div class="icon-big text-center icon-secondary bubble-shadow-small">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                </div>
+                <div class="col col-stats ms-3">
+                    <div class="numbers">
+                        <p class="card-category">Recent Events</p>
+                        <h4 class="card-title"></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+  </div>		
 </div>
 </div>
+
 <div class="mt-5">
-<!-- Chart Container -->
+  <!-- Chart Container -->
   <div class="d-flex justify-content-center mb-4">
     <div style="max-width: 700px; width: 100%;">
       <canvas id="combinedChart"></canvas>
     </div>
   </div>
-  <?php
-  include "footer.php";
-  ?>
+</div>
+
+<?php
+include "footer.php";
+?>
+

@@ -1,5 +1,5 @@
 <?php
-include('adminHeader.php') ;
+include('judgeHeader.php') ;
 ?>
 <?php
 $case_id = null;
@@ -34,12 +34,12 @@ $case_id = null;
 <div class="card-body">
  <div class="row">
    <div class="form-group col-6 text-center">
-    <label for="profile">Litigant Details</label><br>
-    <a href="viewCase_detailByid.php?case_id=<?= $case_id;?>&cid=<?= $cid;?>" class="btn btn-primary mt-2">View Litigant Details</a>
+    <label for="profile">Litigant Detail</label><br>
+    <a href="viewCase_detailByid.php?case_id=<?= $case_id;?>&cid=<?= $cid;?>" class="btn btn-primary mt-2">View Profile Detail</a>
    </div>
     <div class="form-group col-6 text-center">
-      <label for="file">File Details</label><br>
-      <a href="view_filedetailByid.php?case_id=<?= $case_id;?>&cid=<?= $cid;?>" class="btn btn-secondary mt-2">View File Details</a>
+      <label for="file">File Detail</label><br>
+      <a href="view_filedetailByid.php?case_id=<?= $case_id;?>&cid=<?= $cid;?>" class="btn btn-secondary mt-2">View File Detail</a>
     </div>
   </div>
 </div>

@@ -1,7 +1,7 @@
 <footer class="footer">
   <div class="container-fluid">
         <p>Copyright &copy;<script>document.write(new Date().getFullYear());</script> 
-          Yeki wereda court - All rights reserved |</p>				
+         Balela Secondary School - All rights reserved |</p>				
   			</div>
   		</footer>
   	</div>
@@ -93,21 +93,26 @@
         }
     }, 2000); 
 </script>
-<!-- script for case_id automatically generated -->
+<!-- script for Management automatically generated -->
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    const caseTypeSelect = document.getElementById('case_type');
-    const caseIdInput = document.getElementById('case_id');
-    caseTypeSelect.addEventListener('change', function () {
-        const caseType = this.value;
-        if (caseType) {
-            fetch('getCaseId.php?case_type=' + caseType)
+    const roleTypeSelect = document.getElementById('role_type');
+    const idNumberInput = document.getElementById('id_number');  // <-- match your input ID here
+
+    roleTypeSelect.addEventListener('change', function () {
+        const roleType = this.value;
+        if (roleType) {
+            fetch('getManagementId.php?role_type=' + roleType)  // <-- make sure this PHP file is correct
                 .then(response => response.text())
                 .then(data => {
-                    caseIdInput.value = data;
+                    idNumberInput.value = data.trim();  // set generated ID here
+                })
+                .catch(err => {
+                    console.error('Error fetching new ID:', err);
+                    idNumberInput.value = '';
                 });
         } else {
-            caseIdInput.value = '';
+            idNumberInput.value = '';
         }
     });
 });

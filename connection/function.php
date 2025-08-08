@@ -359,72 +359,69 @@ function getNextIdNumber() {
     $paddedNumber = str_pad($newNumber, 4, "0", STR_PAD_LEFT);
     return $prefix . $paddedNumber . "/" . substr($ethiopianYear, -2);
 }
-
-function getCaseTypeById($ctid){
+// Function to get role type abbreviation by ID
+function getRoleTypeById($roleId) {
     global $conn;
-    $query = "SELECT `abbreviation_name` FROM case_type WHERE ctid = $ctid";
-    if (!is_numeric($ctid)) {
+    if (!is_numeric($roleId)) {
         return null; 
     }
+    $query = "SELECT `abbreviation_name` FROM role_type WHERE rid = $roleId";
     $result = mysqli_query($conn, $query);
     if ($result && mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
         return $row['abbreviation_name']; 
-    } else {
-        return null; 
     }
+    return null; 
 }
 
-function getNextCaseId($caseType) {
+// Function to get the next school ID based on role type
+function getNextSchoolId($roleType) {
     global $conn;
-    $caseTypeName = getCaseTypeById($caseType);
-     if (!$caseTypeName) {
-            return "";
-        }
-    $caseTypeName = str_replace(' ', '', $caseTypeName); 
+    $roleTypeName = getRoleTypeById($roleType);
+    if (!$roleTypeName) {
+        return "";
+    }
+    // Remove spaces in role name
+    $roleTypeName = str_replace(' ', '', $roleTypeName); 
+    // Ethiopian year calculation
     $gregorianYear = date("Y");
     $month = (int)date("n");
     $ethiopianYear = $gregorianYear - 7;
     if ($month < 9) {
         $ethiopianYear -= 1;
     }
-    $likePattern = "YWC/$caseTypeName/%";
-    $query = "SELECT case_id FROM `case` WHERE case_id LIKE '$likePattern' ORDER BY case_id DESC LIMIT 1";
+    // Prepare search pattern
+    $likePattern = "BSS/$roleTypeName/%";
+    $query = "SELECT idNumber FROM `users` WHERE idNumber LIKE '$likePattern' ORDER BY idNumber DESC LIMIT 1";
     $result = mysqli_query($conn, $query);
     $newNumber = 1;
     if ($result && mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
-        $parts = explode("/", $row['case_id']);
+        $parts = explode("/", $row['idNumber']);
         if (count($parts) === 4) {
             $newNumber = (int)$parts[2] + 1;
         }
     }
-    $paddedNumber = str_pad($newNumber, 6, "0", STR_PAD_LEFT);
-    return "YWC/$caseTypeName/$paddedNumber/" . substr($ethiopianYear, -2);
+    $paddedNumber = str_pad($newNumber, 4, "0", STR_PAD_LEFT);
+    return "BSS/$roleTypeName/$paddedNumber/" . substr($ethiopianYear, -2);
 }
-
-function addUser($idNumber, $profile_pic, $firstName, $fatherName, $gFatherName, $gender, $email, $username, $encrypted_password,$phone, $user_type, $userStatus)
+// Function to add a new user
+function addUser($idNumber, $profile_pic, $firstName, $fatherName, $gFatherName, $gender, 
+$role_type, $username, $encrypted_password, $email, $phone, $userStatus)
 {
     global $conn;
-    // Capitalize first letter of relevant fields
-    $idNumber = mysqli_real_escape_string($conn, $idNumber);
-    $profile_pic = mysqli_real_escape_string($conn, $profile_pic);
-    $firstName = mysqli_real_escape_string($conn, ucfirst($firstName));
-    $fatherName = mysqli_real_escape_string($conn, ucfirst($fatherName));
-    $gFatherName = mysqli_real_escape_string($conn, ucfirst($gFatherName));
-    $gender = mysqli_real_escape_string($conn, ucfirst($gender));
-    $email = mysqli_real_escape_string($conn, ucfirst($email));
-    $username = mysqli_real_escape_string($conn, ucfirst($username));
-    $user_type = mysqli_real_escape_string($conn, ucfirst($user_type));
-    $userStatus = mysqli_real_escape_string($conn, ucfirst($userStatus));
-    // Encrypt password
-    $encrypted_password = encryptPassword($encrypted_password);
-    $query = mysqli_query($conn, "INSERT INTO users(idNumber, profile_pic , first_name, father_name, gFather_name, gender, email, username, password,phone, user_type, user_status)
-    values('$idNumber','$profile_pic', '$firstName', '$fatherName', '$gFatherName', '$gender', '$email', '$username', '$encrypted_password','$phone', '$user_type', '$userStatus')");
-    if ($query)
+    $query = "INSERT INTO users (idNumber, profile_picture, first_name, father_name, grandfather_name, gender,
+     user_type, username, password, email, phone, user_status)
+    VALUES 
+    ('$idNumber', '$profile_pic', '$firstName', '$fatherName', '$gFatherName', '$gender',
+     '$role_type', '$username', '$encrypted_password', '$email', '$phone', $userStatus)";
+    $query = mysqli_query($conn, $query);
+    if ($query) {
         return 1;
-    else
+    } else {
+        echo "MySQL Error: " . mysqli_error($conn);
         return 0;
+    }
 }
 
 function addCase($case_id, $plaintiff, $defendant, $case_type, $decision, $case_status)
@@ -1025,10 +1022,10 @@ function getAllRegions()
     return $result;
 }
 
-function getAllCaseType()
+function getAllRoleType()
 {
     global $conn;
-    $query = mysqli_query($conn, "select * from case_type");
+    $query = mysqli_query($conn, "select * from role_type");
     $result = array();
     while ($row = mysqli_fetch_array($query)) {
         array_push($result, $row);

@@ -1,5 +1,5 @@
 <?php
-include "presidantheader.php"; 
+include "cdheader.php"; 
 ?>
 <?php
 $allCases = 0;
@@ -208,6 +208,6 @@ $typeCounts = extractCounts($labels, $caseType);
     </div>
   </div>
 <?php
-include "footer.php";
+include "../Admin/footer.php";
 ?>
 
