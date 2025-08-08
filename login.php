@@ -42,18 +42,20 @@ if (isset($_POST["login"]) and ($_SERVER["REQUEST_METHOD"] == "POST")) {
                 } else if ($user_data['user_status'] == 0 || $user_data['user_status'] == 1) {
                     $_SESSION["uid"] = $user_data['uid'];
                     updateUserStatus(1, $_SESSION["uid"]);
-                    // updateIs_loggedIn(1, $_SESSION["uid"]);
-                    if ($user_data['user_type'] == "Admin") {
-                        header('location: Admin/admin.php');
-                    } else if ($user_data['user_type'] == "Law_officer") {
-                        header('location: law_officer/law_officer.php');
-                    } else if ($user_data['user_type'] == "Judge") {
-                        header('location: judge/judge.php');
-                    } else if ($user_data['user_type'] == "Case_distributer") {
-                        header('location: case_distributer/case_distributer.php');
-                    } else if ($user_data['user_type'] == "president") {
-                        header('location: president/president.php');
-                    }
+                   $roleName = getRoleNameById($user_data['user_type']);
+
+if ($roleName === "Admin") {
+    header('location: Admin/admin.php');
+} else if ($roleName === "Law_officer") {
+    header('location: law_officer/law_officer.php');
+} else if ($roleName === "Judge") {
+    header('location: judge/judge.php');
+} else if ($roleName === "Case_distributer") {
+    header('location: case_distributer/case_distributer.php');
+} else if (strtolower($roleName) === "president") {
+    header('location: president/president.php');
+}
+
                 } 
             } else {
                 $all_err = "There is no user associated with the given information";

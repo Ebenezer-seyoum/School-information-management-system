@@ -276,19 +276,23 @@ if (isset($_SESSION["uid"]) && ($profile["user_type"] == "Admin")) {
       value="<?php echo $userProfile["phone"]; ?>" />
       <span class="text-danger"><?php echo $phone_err; ?></span>
   </div>
-  <div class="form-group col-6">
-      <label for="user_type">user_type</label>
-      <select name="user_type" id="user_type" class="form-control">
-          <option value="">...</option>
-          <option value="Admin" <?php if ($userProfile["user_type"] == "Admin") echo "selected=selected"; ?>> Admin</option>
-          <option value="Case_distributer" <?php if ($userProfile["user_type"] == "Case_distributer") echo "selected=selected"; ?>> Case_distributer</option>
-          <option value="Law_officer" <?php if ($userProfile["user_type"] == "Law_officer") echo "selected=selected"; ?>> law_officer</option>
-          <option value="Judge" <?php if ($userProfile["user_type"] == "Judge") echo "selected=selected"; ?>> Judge</option>
-          <option value="President" <?php if ($userProfile["user_type"] == "President") echo "selected=selected"; ?>> President</option>
-      </select>
-      <span class="text-danger"><?php echo $user_type_err; ?></span>
-  </div>
+  <div class="form-group col-md-6">
+  <label for="role_type">Role Type</label>
+  <select class="form-control" id="role_type" name="role_type">
+      <option value="">Select role type...</option>
+      <?php
+      $types = getAllRoleType();
+      foreach ($types as $type) {
+          $selected = (isset($userProfile['role_type']) && $userProfile['role_type'] == $type['rid']) ? 'selected' : '';
+      ?>
+          <option value="<?php echo htmlspecialchars($type['rid']); ?>" <?php echo $selected; ?>>
+              <?php echo htmlspecialchars($type['role_name']); ?>
+          </option>
+      <?php } ?>
+  </select>
+  <span class="text-danger"><?php echo $role_type_err ?? ''; ?></span>
 </div>
+
 <div class="form-group">
     <input type="submit" name="update" class="btn btn-primary btn-lg btn-block" value="update info" />
     <a href="view_userForUpdate.php" class="btn btn-secondary btn-lg btn-block">Back</a>

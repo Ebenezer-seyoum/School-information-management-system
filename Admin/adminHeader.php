@@ -132,7 +132,9 @@ include '../connection/function.php';
 				  <!--Notification -->
 		<?php
 $profile = getUserByID($_SESSION["uid"]);
-if (isset($_SESSION["uid"]) and ($profile["user_type"] == "Admin")) {
+$roleName = getRoleNameById($profile["user_type"]); 
+
+if (isset($_SESSION["uid"]) and ($roleName == "Admin")) {
 ?>	
 <!-- CSS for profile image -->
 <style>
@@ -172,7 +174,7 @@ if (isset($_SESSION["uid"]) and ($profile["user_type"] == "Admin")) {
 <!-- User Profile -->
 <li class="nav-item topbar-user dropdown hidden-caret">
  <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#" aria-expanded="false">
-    <div class="avatar-sm"><img class="profile-img" src="<?php echo $profile["profile_pic"]; ?>" 
+    <div class="avatar-sm"><img class="profile-img" src="<?php echo $profile["profile_picture"]; ?>" 
 	       alt="Profile Picture" width="100" height="100"></div>
     <span class="profile-username"><span class="op-7"><?php echo "$profile[username]";?></span></span></span>
  </a>
@@ -181,7 +183,7 @@ if (isset($_SESSION["uid"]) and ($profile["user_type"] == "Admin")) {
 <li>
 <div class="user-box">
   <div class="avatar-lg">
-    <img class="profile-img" src="<?php echo $profile["profile_pic"]; ?>" alt="Profile Picture" width="100" height="100"></div>
+    <img class="profile-img" src="<?php echo $profile["profile_picture"]; ?>" alt="Profile Picture" width="100" height="100"></div>
 	  <div class="u-text">
 		<h4><?php echo "$profile[username]";?></h4>
 		<p class="text-muted"><?php echo "$profile[email]";?></p>

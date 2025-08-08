@@ -1032,6 +1032,18 @@ function getAllRoleType()
     }
     return $result;
 }
+function getRoleNameById($role_id) {
+    global $conn;
+    $role_id = (int)$role_id;  // cast to int for safety
+    $query = "SELECT role_name FROM role_type WHERE rid = $role_id LIMIT 1";
+    $result = mysqli_query($conn, $query);
+    if ($result && mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        return $row['role_name'];
+    }
+    return null;
+}
+
 
 function getAllJudges() {
     global $conn;
@@ -1548,9 +1560,9 @@ function updateUser($uid, $idNumber, $profile_pic, $firstName, $fatherName, $gFa
     return $query ? 1 : 0;
     }
 
-function isJudgeAssigned($uid) {
+function isTeacherAssigned($uid) {
     global $conn;
-    $checkQuery = mysqli_query($conn, "SELECT * FROM assigned_judges WHERE user_id = '$uid'");
+    $checkQuery = mysqli_query($conn, "SELECT * FROM assign_teacher WHERE teacher_id = '$uid'");
     return mysqli_num_rows($checkQuery) > 0;
 }
 

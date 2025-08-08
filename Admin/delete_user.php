@@ -62,7 +62,7 @@ if (isset($_GET["duid"])) {
   $userData = mysqli_fetch_assoc($userQuery);
   $idNumberDisplay = $userData['idNumber'];
   $usernameDisplay = $userData['username'];  
-  if (isJudgeAssigned($duid)) {
+  if (isTeacherAssigned($duid)) {
     $allErr = "The user (ID: {$idNumberDisplay}, Username: {$usernameDisplay}) cannot be deleted as they are currently assigned to cases.";
   } else {
       if (deleteUserById($duid) == 1) {
