@@ -40,7 +40,7 @@ if (isset($_SESSION["uid"])) {
         <h5 class="text-primary fw-bold mb-0">Profile Picture</h5>
       </div>
 <div class="card-body text-center">
-  <img class="rounded-rectangle border border-2 shadow-sm" name="profile_picture" src="<?php echo $userProfile["profile_pic"]; ?>" 
+  <img class="rounded-rectangle border border-2 shadow-sm" name="profile_picture" src="<?php echo $userProfile["profile_picture"]; ?>" 
   alt="Profile Picture" width="150" height="150">
    </div> 
  </div>
@@ -68,7 +68,7 @@ if (isset($_SESSION["uid"])) {
      </div>
      <div class="form-group col-6">
        <label for="grand_father_name">Grand Father Name</label>
-       <input id="grand_father_name" type="text" class="form-control" name="grand_father_name" value="<?php echo $userProfile["gfather_name"]; ?>" readonly />
+       <input id="grand_father_name" type="text" class="form-control" name="grand_father_name" value="<?php echo $userProfile["grandfather_name"]; ?>" readonly />
      </div>
    </div>
    <div class="row">

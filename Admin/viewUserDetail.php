@@ -53,7 +53,7 @@ if ($uid) {
         </tr>
         <tr>
             <th>Grandfather's Name</th>
-            <td><?= htmlspecialchars($user['gfather_name']) ?></td>
+            <td><?= htmlspecialchars($user['grandfather_name']) ?></td>
         </tr>
         <tr>
             <th>Gender</th>

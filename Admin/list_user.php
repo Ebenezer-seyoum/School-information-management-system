@@ -64,7 +64,7 @@ include('adminHeader.php');
       <div class="user-content">
         <div class="user-info">
           <div class="user-img">
-            <img class="profile-images" src="<?php echo $user["profile_pic"]; ?>" alt="Profile Picture" width="100" height="100">
+            <img class="profile-images" src="<?php echo $user["profile_picture"]; ?>" alt="Profile Picture" width="100" height="100">
           </div>
           <div class="user-details">
             <h4 class="user-name mb-0"><?php echo $user["username"]; ?></h4>

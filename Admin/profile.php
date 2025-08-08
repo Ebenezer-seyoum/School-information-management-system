@@ -38,7 +38,7 @@ include('adminHeader.php');
     <div class="avatar-upload">
       <div class="avatar-preview">
         <div class="user-img">
-<img class="profile-images" name="profile_picture" src="<?php echo $userProfile["profile_pic"]; ?>" alt="Profile Picture" width="100" height="100">
+<img class="profile-images" name="profile_picture" src="<?php echo $userProfile["profile_picture"]; ?>" alt="Profile Picture" width="100" height="100">
       </div>
     </div>
   </div>
@@ -66,7 +66,7 @@ include('adminHeader.php');
     </div>
     <div class="form-group col-6">
       <label for="grand_father_name">Grand Father Name</label>
-      <input id="grand_father_name" type="text" class="form-control" name="grand_father_name" value="<?php echo $userProfile["gfather_name"]; ?>" readonly />
+      <input id="grand_father_name" type="text" class="form-control" name="grand_father_name" value="<?php echo $userProfile["grandfather_name"]; ?>" readonly />
     </div>
   </div>
   <div class="row">

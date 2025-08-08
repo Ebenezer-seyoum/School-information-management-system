@@ -117,7 +117,7 @@ if (isset($_SESSION["uid"]) &&  ($profile["user_type"] == "Admin")){
   <tr>
     <td style="border: 2px solid black;"><?php echo $no; ?></td>
     <td style="border: 2px solid black;"><?php echo $user["idNumber"]; ?></td>
-    <td style="border: 2px solid black;"><img class="profile-img" src="<?php echo $user["profile_pic"]; ?>" alt="Profile Picture" width="100" height="100"></td>
+    <td style="border: 2px solid black;"><img class="profile-img" src="<?php echo $user["profile_picture"]; ?>" alt="Profile Picture" width="100" height="100"></td>
     <td style="border: 2px solid black;"><?php echo $user["first_name"]; ?></td>
     <td style="border: 2px solid black;"><?php echo $user["father_name"]; ?></td>
     <td style="border: 2px solid black;"><?php echo $status; ?></td>
