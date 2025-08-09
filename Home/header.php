@@ -29,23 +29,23 @@
   <link rel="stylesheet" href="Home/css/style.css">
 
   <style>
-    /* ✅ Navbar Links Style */
-    .navbar-nav .nav-link {
-      font-size: 16px;
-      font-weight: 500;
-      color: #ffffff !important;
-      padding: 10px 15px;
-      transition: all 0.3s ease-in-out;
-    }
+  /* ✅ Navbar Links Style */
+  .navbar-nav .nav-link {
+    font-size: 16px;
+    font-weight: 500;
+    color: #ffffff !important;
+    padding: 10px 15px;
+    transition: all 0.3s ease-in-out;
+  }
 
-    /* ✅ Hover Effect */
-    .navbar-nav .nav-link:hover {
-      font-size: 18px;
-      color: #f1c40f !important;  /* Gold color on hover */
-      transform: scale(1.1);      /* Slight zoom effect */
-      text-decoration: underline; /* Underline on hover */
-    }
-  </style>
+  /* ✅ Hover Effect */
+  .navbar-nav .nav-link:hover {
+    font-size: 18px;
+    color: #f1c40f !important;  /* Gold color on hover */
+    transform: scale(1.1);      /* Slight zoom effect */
+    /* Removed text-decoration: underline; */
+  }
+</style>
   <style>
   .navbar-logo {
     height: 60px;  /* Increased from 40px to 60px */
