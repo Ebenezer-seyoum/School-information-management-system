@@ -46,6 +46,19 @@
       text-decoration: underline; /* Underline on hover */
     }
   </style>
+  <style>
+  .navbar-logo {
+    height: 60px;  /* Increased from 40px to 60px */
+    width: auto;   /* Maintain aspect ratio */
+    margin-right: 10px;
+  }
+
+  /* Keep logo vertically centered in the navbar */
+  .navbar-brand {
+    display: flex;
+    align-items: center;
+  }
+</style>
 </head>
 
 <body>
@@ -54,7 +67,7 @@
       <div class="container-fluid">
        <a class="navbar-brand d-flex align-items-center" href="index.php">
   <img src="Home/images/logo.jpg" alt="Balela High School Logo" 
-       style="height: 40px; width: auto; margin-right: 10px;">
+       style="height: 130px; width: auto; margin-right: 10px;">
   <span></span>
 </a>
 
