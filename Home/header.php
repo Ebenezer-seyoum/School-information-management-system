@@ -66,7 +66,7 @@
     <nav class="navbar navbar-expand-lg bg-dark">
       <div class="container-fluid">
        <a class="navbar-brand d-flex align-items-center" href="index.php">
-  <img src="Home/images/logo.jpg" alt="Balela High School Logo" 
+  <img src="Home/images/logo.png" alt="Balela High School Logo" 
        style="height: 130px; width: auto; margin-right: 10px;">
   <span></span>
 </a>
