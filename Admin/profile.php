@@ -28,7 +28,7 @@ include('adminHeader.php');
 ?>
   <?php
   $profile = getUserByID($_SESSION["uid"]);
-  $roleName = getRoleNameById($profile["user_type"]);
+  $roleName = getRoleNameById($userProfile["user_type"]);
   if (isset($_SESSION["uid"])) {
   ?>
 <div class="main-content">

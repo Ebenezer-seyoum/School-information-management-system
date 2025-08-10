@@ -69,7 +69,7 @@ include('adminHeader.php');
           </div>
           <div class="user-details">
             <h4 class="user-name mb-0"><?php echo $user["username"]; ?></h4>
-            <p><?php echo $roleName; ?></p>
+            <p><?php echo getRoleNameById($user["user_type"]); ?></p>
           </div>
         </div>
       </div>

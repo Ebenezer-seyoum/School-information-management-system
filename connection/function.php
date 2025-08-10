@@ -1035,7 +1035,7 @@ function getAllRoleType()
 function getRoleNameById($role_id) {
     global $conn;
     $role_id = (int)$role_id;  // cast to int for safety
-    $query = "SELECT role_name FROM role_type WHERE rid = $role_id LIMIT 1";
+    $query = "SELECT role_name FROM role_type WHERE rid = $role_id";
     $result = mysqli_query($conn, $query);
     if ($result && mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);

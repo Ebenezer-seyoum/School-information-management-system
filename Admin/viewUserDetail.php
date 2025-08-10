@@ -6,7 +6,7 @@ $user = null;
 if ($uid) {
     $user = getUserByID($uid); // Get one user row
 }
-$roleName = getRoleNameById($profile["user_type"]);
+$roleName = getRoleNameById($user["user_type"]);
 ?>
 
 <div class="container py-5">
