@@ -34,6 +34,7 @@ if ($row = mysqli_fetch_assoc($resultAppointed)) { $appointedCases = $row['total
 if ($row = mysqli_fetch_assoc($resultPendingDecision)) { $pendingDecisionCases = $row['total']; }
 if ($row = mysqli_fetch_assoc($resultDecided)) { $decidedCases = $row['total']; }
 ?>
+
 <div class="container">
 <div class="page-inner">
   <div class="row g-4"> 
@@ -50,7 +51,7 @@ if ($row = mysqli_fetch_assoc($resultDecided)) { $decidedCases = $row['total']; 
                 <div class="col col-stats ms-3">
                     <div class="numbers">
                         <p class="card-category">All Cases</p>
-                        <h4 class="card-title"><?php echo $allCases; ?></h4>
+                        <h4 class="card-title">0</h4>
                     </div>
                 </div>
             </div>
@@ -70,7 +71,7 @@ if ($row = mysqli_fetch_assoc($resultDecided)) { $decidedCases = $row['total']; 
                 <div class="col col-stats ms-3">
                     <div class="numbers">
                         <p class="card-category">Open Cases</p>
-                        <h4 class="card-title"><?php echo $openCases; ?></h4>
+                        <h4 class="card-title">0</h4>
                     </div>
                 </div>
             </div>
@@ -90,7 +91,7 @@ if ($row = mysqli_fetch_assoc($resultDecided)) { $decidedCases = $row['total']; 
                 <div class="col col-stats ms-3">
                     <div class="numbers">
                         <p class="card-category">Distributed Cases</p>
-                        <h4 class="card-title"><?php echo $distributedCases; ?></h4>
+                        <h4 class="card-title">0</h4>
                     </div>
                 </div>
             </div>
@@ -110,7 +111,7 @@ if ($row = mysqli_fetch_assoc($resultDecided)) { $decidedCases = $row['total']; 
                 <div class="col col-stats ms-3">
                     <div class="numbers">
                         <p class="card-category">Pending Appointment Cases</p>
-                        <h4 class="card-title"><?php echo $pendingAppointmentCases; ?></h4>
+                        <h4 class="card-title">0</h4>
                     </div>
                 </div>
             </div>
@@ -130,7 +131,7 @@ if ($row = mysqli_fetch_assoc($resultDecided)) { $decidedCases = $row['total']; 
                 <div class="col col-stats ms-3">
                     <div class="numbers">
                         <p class="card-category">Appointed Cases</p>
-                        <h4 class="card-title"><?php echo $appointedCases; ?></h4>
+                        <h4 class="card-title">0</h4>
                     </div>
                 </div>
             </div>
@@ -150,7 +151,7 @@ if ($row = mysqli_fetch_assoc($resultDecided)) { $decidedCases = $row['total']; 
                 <div class="col col-stats ms-3">
                     <div class="numbers">
                         <p class="card-category">Pending Decision Cases</p>
-                        <h4 class="card-title"><?php echo $pendingDecisionCases; ?></h4>
+                        <h4 class="card-title">0</h4>
                     </div>
                 </div>
             </div>
@@ -170,7 +171,7 @@ if ($row = mysqli_fetch_assoc($resultDecided)) { $decidedCases = $row['total']; 
                 <div class="col col-stats ms-3">
                     <div class="numbers">
                         <p class="card-category">Decided Cases</p>
-                        <h4 class="card-title"><?php echo $decidedCases; ?></h4>
+                        <h4 class="card-title">0</h4>
                     </div>
                 </div>
             </div>
@@ -180,33 +181,13 @@ if ($row = mysqli_fetch_assoc($resultDecided)) { $decidedCases = $row['total']; 
 </div>		
 </div>
 </div>
-<?php
-$summaryData = getCaseSummaryData();
-$caseStatus = $summaryData['status'];
-$caseType = $summaryData['type'];
-$allLabels = array_unique(array_merge(
-  array_column($caseStatus, 'label'),
-  array_column($caseType, 'label')
-));
-$labels = array_values($allLabels);
-function extractCounts($labels, $dataSet) {
-    $mapped = array_column($dataSet, 'count', 'label');
-    $result = [];
-    foreach ($labels as $label) {
-        $result[] = isset($mapped[$label]) ? $mapped[$label] : 0;
-    }
-    return $result;
-}
-$statusCounts = extractCounts($labels, $caseStatus);
-$typeCounts = extractCounts($labels, $caseType);
-?>
 <div class="mt-5">
 <!-- Chart Container -->
   <div class="d-flex justify-content-center mb-4">
     <div style="max-width: 700px; width: 100%;">
       <canvas id="combinedChart"></canvas>
     </div>
-  </div> 
+  </div>
 <?php
 include "../Admin/footer.php";
 ?>
