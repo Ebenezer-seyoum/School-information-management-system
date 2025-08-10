@@ -253,7 +253,7 @@ if ($test == true) {
   <div class="form-group col-12 col-md-6 mb-3">
     <label for="gender">Gender</label>
     <select name="gender" id="gender" class="form-control">
-        <option value="">...</option>
+        <option value="">Gender</option>
         <option value="M">M</option>
         <option value="F">F</option>
     </select>
