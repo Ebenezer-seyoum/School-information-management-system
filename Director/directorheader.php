@@ -47,11 +47,11 @@ include '../connection/function.php';
 	<div class="sidebar-content">
 		<ul class="nav nav-secondary">
 		  <li class="nav-item active">
-    <a href="case_distributer.php" class="collapsed"><i class="fas fa-home"></i><p>Case distributer</p></a></li>
+    <a href="director.php" class="collapsed"><i class="fas fa-home"></i><p>Director</p></a></li>
 <!-- Judge Control -->
 <li class="nav-item">
     <a data-bs-toggle="collapse" href="#judgeControl"><i class="fas fa-user-tie"></i>
-        <p>Judge Control</p><span class="caret"></span></a>
+        <p>Academic Manage</p><span class="caret"></span></a>
     <div class="collapse" id="judgeControl">
       <ul class="nav nav-collapse">
 	  <li><a href="view_judge.php"><i class="fas fa-gavel"></i>View Judges</a></li>					
@@ -60,15 +60,19 @@ include '../connection/function.php';
 </li>
 <!-- Case Management -->
 <li class="nav-item">
-    <a data-bs-toggle="collapse" href="#caseManagement"><i class="fas fa-briefcase"></i>
-        <p>Case Management</p><span class="caret"></span></a>
-    <div class="collapse" id="caseManagement">
-      <ul class="nav nav-collapse">
-	    <li><a href="view_AllCases.php"><i class="fa fa-folder-open"></i>All Cases</a></li>			
-        <li><a href="viewAssignCase.php"><i class="fa fa-eye"></i>Distributed Cases</a></li>	
-        <li><a href="Assign_case.php"><i class="fa fa-tasks"></i> Assign Cases</a></li>
-		<li><a href="view_transfer_cases.php"><i class="fa fa-eye"></i>Transfer Cases</a></li>
-      </ul>
+    <a data-bs-toggle="collapse" href="#users" role="button" aria-expanded="false" aria-controls="users">
+        <i class="fas fa-users-cog"></i>
+        <p>Manage Students</p>
+        <span class="caret"></span>
+    </a>
+    <div class="collapse" id="users">
+        <ul class="nav nav-collapse">
+            <li><a href="add_students.php"><i class="fas fa-user-plus"></i> Create Account</a></li>
+            <li><a href="view_userForUpdate.php"><i class="fas fa-user-edit"></i> Update Account</a></li>
+            <li><a href="delete_user.php"><i class="fas fa-user-times"></i> Delete Account</a></li>
+            <li><a href="Deactive_user.php"><i class="fas fa-user-slash"></i> De-Active Account</a></li>
+            <li><a href="list_user.php"><i class="fas fa-users"></i> View All Users</a></li>
+        </ul>
     </div>
 </li>
 <!-- Case Status -->
