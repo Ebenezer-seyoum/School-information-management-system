@@ -1,5 +1,5 @@
 <?php
-include('cdheader.php');
+include('adminHeader.php');
 $kid = $_GET['kid'] ?? null;
 
 $cases = [];
@@ -94,4 +94,4 @@ if ($kid) {
     <?php } ?>
 </div>
 
-<?php include('../Admin/footer.php'); ?>
+<?php include('footer.php'); ?>

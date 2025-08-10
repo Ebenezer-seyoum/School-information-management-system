@@ -12,7 +12,7 @@ $case_id = null;
 <div class="container">
  <div class="page-inner">
   <div class="page-header">
-    <h3 class="fw-bold mb-3">Update Case_detail</h3>
+    <h3 class="fw-bold mb-3">Case_detail</h3>
  <ul class="breadcrumbs mb-3">
    <li class="nav-home"><a href="#"><i class="icon-home"></i></a></li>
    <li class="separator"><i class="icon-arrow-right"></i></li>
@@ -34,12 +34,12 @@ $case_id = null;
 <div class="card-body">
  <div class="row">
    <div class="form-group col-6 text-center">
-    <label for="profile">Litigant Detail</label><br>
-    <a href="view_updateLitigant.php?case_id=<?= $case_id;?>&cid=<?= $cid;?>" class="btn btn-primary mt-2">View Litigant Detail</a>
+    <label for="profile">Litigant Details</label><br>
+    <a href="viewCase_detailByid.php?case_id=<?= $case_id;?>&cid=<?= $cid;?>" class="btn btn-primary mt-2">View Litigant Details</a>
    </div>
     <div class="form-group col-6 text-center">
-      <label for="file">File Detail</label><br>
-      <a href="case_fileByid.php?case_id=<?= $case_id;?>&cid=<?= $cid;?>" class="btn btn-secondary mt-2">View File Detail</a>
+      <label for="file">File Details</label><br>
+      <a href="view_filedetailByid.php?case_id=<?= $case_id;?>&cid=<?= $cid;?>" class="btn btn-secondary mt-2">View File Details</a>
     </div>
   </div>
 </div>
@@ -49,7 +49,7 @@ $case_id = null;
          </div>
      </section>
    </div>
-</div>
+ </div>
 </div>
 <?php
 include('../admin/footer.php');

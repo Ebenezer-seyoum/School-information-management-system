@@ -38,13 +38,12 @@ $cid = null;
         <h4 class="mb-0">View <?php echo $case_id ?> files</h4>
       </div>
 <div class="col-12 col-md-6">
-  <form method="GET">
     <div class="input-group">
-      <input type="text" id="caseSearch" class="form-control" 
+     <input type="text" id="caseSearch" class="form-control" 
        style="font-weight: bold;" 
        placeholder="Search by Case ID, Plaintiff, Defendant, or Status..." />
+
     </div>
-  </form>
 </div>  
 <?php
   if (isset($_SESSION["uid"])) {
@@ -65,7 +64,7 @@ $cid = null;
     <th style="border: 2px solid black;">#</th>
     <th style="border: 2px solid black;">files</th>
     <th style="border: 2px solid black;">record_date</th>
-    <th style="border: 2px solid black;">Actions</th>
+    
     </tr>
     </thead>
     <tbody>
@@ -82,10 +81,7 @@ if (!empty($cases)) {
     <a href="<?= htmlspecialchars($filePath) ?>" target="_blank"><?= htmlspecialchars(basename($filePath)) ?></a>
  </td>
   <td style="border: 2px solid black;"><span class="text-info">File uploaded at case registration</span></td>
-  <td style="border: 2px solid black;">
-   <a href="file_update.php?case_id=<?= $case['case_id']; ?>&cid=<?= $case['cid']; ?>&kid=<?= $case['kid']; ?>"
-    class="btn btn-primary btn-sm"><i class="fas fa-edit"></i>Edit</a>
-  </td>
+ 
 </tr>
 <?php
         }
@@ -114,11 +110,7 @@ if (!empty($attachedFiles)) {
         ?>
       </td>
       <td style="border: 2px solid black;"><?php echo !empty($recordDate) ? htmlspecialchars($recordDate) : '<span class="text-muted">No date found</span>'; ?></td>
-  <td style="border: 2px solid black;">
-    <a href="file_update.php?case_id=<?= $case['case_id']; ?>&cid=<?= $case['cid'];?>&fid=<?= $file['fid']; ?>" class="btn btn-sm btn-primary">
-      <i class="fa fa-edit"></i> Edit
-    </a>
-  </td>
+ 
     </tr>  
   <?php
   $no++;

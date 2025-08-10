@@ -1,5 +1,5 @@
 <?php
-include "directorheader.php"; 
+include "adminHeader.php"; 
 ?>
 
 <div class="container">
@@ -125,5 +125,6 @@ include "directorheader.php";
 </div>
 
 <?php
-include('../admin/footer.php');
+include "footer.php";
 ?>
+

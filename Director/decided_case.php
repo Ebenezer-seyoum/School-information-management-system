@@ -1,5 +1,5 @@
 <?php
-include('cdheader.php');
+include('adminHeader.php');
 ?>
 <!-- Page Header -->
 <div class="container">
@@ -30,7 +30,7 @@ include('cdheader.php');
 <div class="col-12 col-md-6">
   <form method="GET">
     <div class="input-group">
-     <input type="text" id="caseSearch" class="form-control" 
+   <input type="text" id="caseSearch" class="form-control" 
        style="font-weight: bold;" 
        placeholder="Search by Case ID, Plaintiff, Defendant, or Status..." />
        </div>

@@ -47,7 +47,7 @@ if (isset($_POST["login"]) and ($_SERVER["REQUEST_METHOD"] == "POST")) {
 if ($roleName === "Admin") {
     header('location: Admin/admin.php');
 } else if ($roleName === "Director") {
-    header('location: Director/director.php');
+    header('location: Director/admin.php');
 } else if ($roleName === "Judge") {
     header('location: judge/judge.php');
 } else if ($roleName === "Case_distributer") {

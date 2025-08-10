@@ -1,5 +1,5 @@
 <?php
-include('cdheader.php');
+include('adminHeader.php');
 // Logged-in user id
 $user_id = $_SESSION['uid'];
 
@@ -37,18 +37,18 @@ if (isset($_POST['clear_all'])) {
         <div class="card-header bg-primary text-white">
             <h4 class="mb-0"><i class="fa fa-bell me-2"></i> My Notifications</h4>
         </div>
-        <div class="card-body">
-            <?php if (mysqli_num_rows($result_all) > 0) { ?>
-                <div class="list-group">
-                    <?php while ($notif = mysqli_fetch_assoc($result_all)) { ?>
-                        <div class="list-group-item d-flex justify-content-between align-items-center">
-                            <div class="fw-semibold"><?= htmlspecialchars($notif['message']) ?></div>
-                            <div class="text-muted" id="notif-time-<?= $notif['id'] ?>" data-time="<?= $notif['created_at'] ?>">
-                                <?= timeAgo($notif['created_at']) ?>
-                            </div>
-                        </div>
-                    <?php } ?>
+<div class="card-body">
+  <?php if (mysqli_num_rows($result_all) > 0) { ?>
+    <div class="list-group">
+        <?php while ($notif = mysqli_fetch_assoc($result_all)) { ?>
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+                <div class="fw-semibold"><?= htmlspecialchars($notif['message']) ?></div>
+                <div class="text-muted" id="notif-time-<?= $notif['id'] ?>" data-time="<?= $notif['created_at'] ?>">
+                    <?= timeAgo($notif['created_at']) ?>
                 </div>
+            </div>
+        <?php } ?>
+    </div>
                     <!-- Clear all button -->
     <form method="POST" id="clearAllForm">
         <button type="submit" name="clear_all" class="btn btn-danger mt-3 w-100">

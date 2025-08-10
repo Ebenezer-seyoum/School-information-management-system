@@ -1,5 +1,5 @@
 <?php
-include('cdheader.php');
+include('adminHeader.php');
 ?>
 <!-- Page Header -->
 <div class="container">
@@ -20,6 +20,9 @@ include('cdheader.php');
 $case_id = null;
  if (isset($_GET['case_id'])) 
     $case_id = $_GET['case_id'];
+$cid = null;
+ if (isset($_GET['cid'])) 
+    $cid = $_GET['cid'];
 ?>
 <div class="main-content">
  <section class="section">
@@ -89,20 +92,21 @@ if (!empty($cases)) {
 <?php
   $no++;
  }
- }} else {
-      echo '<tr><td colspan="5" style="border: 2px solid black;" class="text-center text-danger">No cases found.</td></tr>';
-    }
-    ?>
+ ?>       
+   <?php } }  ?>
+       <?php if (empty($cases)) { ?>
+         <tr><td colspan="13" class="text-center text-danger" style="border: 2px solid black;">No cases found.</td></tr>
+        <?php } ?>  
   </tbody>
 </table>
 
 </div> 
 
  <div class="text-left mt-4">
-                <a href="case_detail.php?case_id=<?= $case['case_id'];?>&cid=<?= $case['cid'];?>" class="btn btn-outline-primary">
+      <a href="AllCase_detail.php?case_id=<?= $case_id;?>&cid=<?= $cid;?>" class="btn btn-outline-primary">
                     <i class="fa fa-arrow-left"></i> Back
                 </a>
-            </div>                      
+            </div>                       
       </div>
     </div>
   </div>
@@ -113,5 +117,5 @@ if (!empty($cases)) {
 </div>
 
 <?php
-include '../Admin/footer.php'; 
+include 'footer.php'; 
 ?>

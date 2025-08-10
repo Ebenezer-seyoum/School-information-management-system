@@ -1,5 +1,5 @@
 <?php
-include('cdheader.php');
+include('adminHeader.php');
 ?>
 <!-- page header -->
 <div class="container">
@@ -28,6 +28,7 @@ include('cdheader.php');
 ?>
   <?php
   $profile = getUserByID($_SESSION["uid"]);
+  $roleName = getRoleNameById($userProfile["user_type"]);
   if (isset($_SESSION["uid"])) {
   ?>
 <div class="main-content">
@@ -38,7 +39,7 @@ include('cdheader.php');
     <div class="avatar-upload">
       <div class="avatar-preview">
         <div class="user-img">
-<img class="profile-images" name="profile_picture" src="<?php echo $userProfile["profile_pic"]; ?>" alt="Profile Picture" width="100" height="100">
+<img class="profile-images" name="profile_picture" src="<?php echo $userProfile["profile_picture"]; ?>" alt="Profile Picture" width="100" height="100">
       </div>
     </div>
   </div>
@@ -66,7 +67,7 @@ include('cdheader.php');
     </div>
     <div class="form-group col-6">
       <label for="grand_father_name">Grand Father Name</label>
-      <input id="grand_father_name" type="text" class="form-control" name="grand_father_name" value="<?php echo $userProfile["gfather_name"]; ?>" readonly />
+      <input id="grand_father_name" type="text" class="form-control" name="grand_father_name" value="<?php echo $userProfile["grandfather_name"]; ?>" readonly />
     </div>
   </div>
   <div class="row">
@@ -94,10 +95,10 @@ include('cdheader.php');
      </div>
     <div class="form-group col-6">
       <label for="user_type">user_type</label>
-      <input type="text" class="form-control" value="<?php echo $userProfile["user_type"]; ?>" readonly />
+      <input type="text" class="form-control" value="<?php echo $roleName; ?>" readonly />
     </div>
          <div class="text-center mt-4">
-                <a href="case_distributer.php" class="btn btn-outline-primary">
+                <a href="admin.php" class="btn btn-outline-primary">
                     <i class="fa fa-arrow-left"></i> Back to Home
                 </a>
                  <a href="change_password.php?uid=<?php echo $userProfile['uid']; ?>" class="btn btn-outline-danger">
@@ -121,5 +122,5 @@ include('cdheader.php');
 ?>
 
 <?php
-include('../Admin/footer.php');
+include('footer.php');
 ?>

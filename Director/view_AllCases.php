@@ -1,5 +1,5 @@
 <?php
-include('cdheader.php');
+include('adminHeader.php');
 ?>
 <!-- Page Header -->
 <div class="container">
@@ -23,29 +23,22 @@ include('cdheader.php');
       <div class="card-header">
        <div class="row w-100 align-items-center">
          <div class="col-12 col-md-6 mb-2 mb-md-0">
-            <h4 class="mb-0">View Open cases</h4>
+            <h4 class="mb-0">View all cases</h4>
           </div>
 <div class="col-12 col-md-6">
-  <form method="GET">
     <div class="input-group">
-       <input type="text" id="caseSearch" class="form-control" 
+      <input type="text" id="caseSearch" class="form-control" 
        style="font-weight: bold;" 
        placeholder="Search by Case ID, Plaintiff, Defendant, or Status..." />
+
     </div>
-  </form>
 </div>     
 <?php
-  if (isset($_SESSION["uid"])) {
-      if (isset($_GET['search']) && !empty(trim($_GET['search']))) {
-          $searchTerm = $_GET['search'];
-          $cases = searchCases($searchTerm);
-      } else {
-          $cases = getAllOpenCases();
-      }
+  $cases = getAllCases();     
 ?>
 <div class="card-body">
   <div class="table-responsive">
-   <table class="table table-hover align-middle text-center" style="border: 2px solid black; border-collapse: collapse; width: 100%;">
+    <table class="table table-hover align-middle text-center" style="border: 2px solid black; border-collapse: collapse; width: 100%;">
   <thead class="table-secondary">
       <tr>
     <th style="border: 2px solid black;">#</th>
@@ -64,22 +57,20 @@ include('cdheader.php');
             $status = case_status($case["case_status"]); 
       ?>                                                            
    <tr>
-
     <td style="border: 2px solid black;"><?php echo $no; ?></td>
     <td style="border: 2px solid black;"><?php echo $case["case_id"]; ?></td>
     <td style="border: 2px solid black;"><?php echo $case["plaintiff"]; ?></td>
     <td style="border: 2px solid black;"><?php echo $case["defendant"]; ?></td>
     <td style="border: 2px solid black;"><?php echo $status; ?></td>
     <td style="border: 2px solid black;">
-    <a href="case_detail.php?case_id=<?= $case["case_id"]; ?>&cid=<?= $case["cid"]; ?>"
+    <a href="AllCase_detail.php?case_id=<?= $case["case_id"]; ?>&cid=<?= $case["cid"]; ?>"
      class="btn btn-primary btn-sm"><i class="fas fa-edit"></i> Details
     </a>
     </td>
   </tr>
    <?php  
-       $no++; }
+       $no++; }}
    ?>       
-   <?php } }  ?>
 <?php if (empty($cases)) { ?>
   <tr><td colspan="13" class="text-center text-danger" style="border: 2px solid black;">No cases found.</td></tr>
 <?php } ?>

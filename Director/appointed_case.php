@@ -1,5 +1,5 @@
 <?php
-include('cdheader.php');
+include('adminHeader.php');
 ?>
 <?php
 if (isset($_SESSION['uid']))
@@ -69,8 +69,8 @@ $no = 1;
     <td style="border: 2px solid black;"><?= $no++; ?></td>
     <td style="border: 2px solid black;"><?= $case['case_id']; ?></td>
     <td style="border: 2px solid black;"><?= $case['plaintiff']; ?></td>
-    <td style="border: 2px solid black;"><?= $case['defendant']; ?></td> 
-    <td style="border: 2px solid black;"><?php echo $status; ?></td>  
+    <td style="border: 2px solid black;"><?= $case['defendant']; ?></td>   
+    <td style="border: 2px solid black;"><?php echo $status; ?></td>
 </tr>
   <?php  
     $no++; }

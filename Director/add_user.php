@@ -1,5 +1,5 @@
 <?php
-include('directorheader.php');
+include('adminHeader.php');
 ?>
 <!-- Page content start -->
 <div class="container">
@@ -319,9 +319,8 @@ if ($test == true) {
 </div>
  </div>
   </div>
-  
 <?php
-include('../admin/footer.php');
+include('footer.php');
 ?>
 
 
