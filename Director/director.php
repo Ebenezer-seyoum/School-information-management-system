@@ -1,5 +1,5 @@
 <?php
-include "adminHeader.php"; 
+include "directorHeader.php"; 
 ?>
 
 <div class="container">
