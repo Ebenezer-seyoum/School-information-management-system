@@ -1,5 +1,5 @@
 <?php 
-include('judgeHeader.php'); 
+include('instructorHeader.php'); 
 ?>
 <!-- page header -->
 <div class="container">
@@ -163,5 +163,5 @@ if (empty($_POST["confirm_password"])) {
     </div>
 </div>
 <?php
- include '../Admin/footer.php'; 
+ include 'footer.php'; 
  ?>

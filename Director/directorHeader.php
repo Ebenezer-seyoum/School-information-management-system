@@ -67,7 +67,7 @@ if (isset($_SESSION["uid"]) and ($roleName == "Director")) {
     </a>
     <div class="collapse" id="users">
         <ul class="nav nav-collapse">
-            <li><a href="add_user.php"><i class="fas fa-user-plus"></i> Create Account</a></li>
+            <li><a href="register_student.php"><i class="fas fa-user-plus"></i> Register Student</a></li>
             <li><a href="view_userForUpdate.php"><i class="fas fa-user-edit"></i> Update Account</a></li>
             <li><a href="delete_user.php"><i class="fas fa-user-times"></i> Delete Account</a></li>
             <li><a href="Deactive_user.php"><i class="fas fa-user-slash"></i> De-Active Account</a></li>
