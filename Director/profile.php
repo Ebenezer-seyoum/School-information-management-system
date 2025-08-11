@@ -1,5 +1,5 @@
 <?php
-include('adminHeader.php');
+include('directorHeader.php');
 ?>
 <!-- page header -->
 <div class="container">
@@ -98,7 +98,7 @@ include('adminHeader.php');
       <input type="text" class="form-control" value="<?php echo $roleName; ?>" readonly />
     </div>
          <div class="text-center mt-4">
-                <a href="admin.php" class="btn btn-outline-primary">
+                <a href="director.php" class="btn btn-outline-primary">
                     <i class="fa fa-arrow-left"></i> Back to Home
                 </a>
                  <a href="change_password.php?uid=<?php echo $userProfile['uid']; ?>" class="btn btn-outline-danger">

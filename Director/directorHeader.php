@@ -32,6 +32,12 @@ include '../connection/function.php';
 	<link rel="stylesheet" href="../assets/css/plugins.min.css">
 	<link rel="stylesheet" href="../assets/css/kaiadmin.min.css">
 </head>
+<?php
+$profile = getUserByID($_SESSION["uid"]);
+$roleName = getRoleNameById($profile["user_type"]); 
+
+if (isset($_SESSION["uid"]) and ($roleName == "Director")) {
+?>	
 <body>
 <div class="wrapper">
   <div class="sidebar" data-background-color="dark">
@@ -52,11 +58,11 @@ include '../connection/function.php';
   <div class="sidebar-content">
 	<ul class="nav nav-secondary">
 	  <li class="nav-item">
-    <a href="admin.php" class="collapsed"><i class="fas fa-home"></i><p>ADMIN</p></a></li>   
+    <a href="director.php" class="collapsed"><i class="fas fa-home"></i><p><?php echo $roleName = getRoleNameById($profile["user_type"]); ?></p></a></li>   
 <li class="nav-item">
     <a data-bs-toggle="collapse" href="#users" role="button" aria-expanded="false" aria-controls="users">
         <i class="fas fa-users-cog"></i>
-        <p>Manage Users</p>
+        <p>Manage Students</p>
         <span class="caret"></span>
     </a>
     <div class="collapse" id="users">
@@ -130,12 +136,6 @@ include '../connection/function.php';
 				<!-- End Logo Header -->
 			</div>
 				  <!--Notification -->
-		<?php
-$profile = getUserByID($_SESSION["uid"]);
-$roleName = getRoleNameById($profile["user_type"]); 
-
-if (isset($_SESSION["uid"]) and ($roleName == "Admin")) {
-?>	
 <!-- CSS for profile image -->
 <style>
   .profile-img {
