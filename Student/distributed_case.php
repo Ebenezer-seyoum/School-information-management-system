@@ -5,13 +5,13 @@ include('adminHeader.php');
 <div class="container">
   <div class="page-inner">
      <div class="page-header">
-       <h3 class="fw-bold mb-3">Pending Decision Cases</h3>
+       <h3 class="fw-bold mb-3">Distributed Cases</h3>
     <ul class="breadcrumbs mb-3">
          <li class="nav-home"><a href="#"><i class="icon-home"></i></a></li>
          <li class="separator"><i class="icon-arrow-right"></i></li>
          <li class="nav-item"><a href="#">Case Status</a></li>
          <li class="separator"><i class="icon-arrow-right"></i></li>
-         <li class="nav-item"><a href="#">Pending Decision Cases</a></li>
+         <li class="nav-item"><a href="#">Distributed Cases</a></li>
     </ul>
  </div>
 <!-- End Page Header -->
@@ -25,7 +25,7 @@ include('adminHeader.php');
      <div class="card-header">
       <div class="row w-100 align-items-center">
         <div class="col-12 col-md-6 mb-2 mb-md-0">
-          <h4 class="mb-0">View Pending Decision cases</h4>
+          <h4 class="mb-0">View Distributed cases</h4>
         </div>
 <div class="col-12 col-md-6">
   <form method="GET">
@@ -42,12 +42,12 @@ include('adminHeader.php');
           $searchTerm = $_GET['search'];
           $cases = searchCases($searchTerm);
       } else {
-          $cases = getPendingDecisionCases();
+          $cases = getDistributedCases();
       }
 ?>
 <div class="card-body">
   <div class="table-responsive">
-  <table class="table table-hover align-middle text-center" style="border: 2px solid black; border-collapse: collapse; width: 100%;">
+    <table class="table table-hover align-middle text-center" style="border: 2px solid black; border-collapse: collapse; width: 100%;">
   <thead class="table-secondary">
       <tr>
     <th style="border: 2px solid black;">#</th>

@@ -45,7 +45,7 @@ if (isset($_POST["login"]) and ($_SERVER["REQUEST_METHOD"] == "POST")) {
                    $roleName = getRoleNameById($user_data['user_type']);
 
 if ($roleName === "Admin") {
-    header('location: Admin/admin.php');
+     header('location: Admin/admin.php');
 } else if ($roleName === "Director") {
     header('location: Director/director.php');
 } else if ($roleName === "Instructor") {
