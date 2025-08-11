@@ -123,8 +123,7 @@ include "directorHeader.php";
     </div>
   </div>
 </div>
-
 <?php
-include "footer.php";
+include('../admin/footer.php');
 ?>
 

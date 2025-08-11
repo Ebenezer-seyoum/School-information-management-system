@@ -320,7 +320,7 @@ if ($test == true) {
  </div>
   </div>
 <?php
-include('footer.php');
+include('../admin/footer.php');
 ?>
 
 
