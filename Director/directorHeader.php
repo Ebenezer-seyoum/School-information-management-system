@@ -199,6 +199,7 @@ if (isset($_SESSION["uid"]) and ($roleName == "Director")) {
 		</div>
 	</nav>
 </div>
+
 	<!-- End Navbar -->  
 <?php
 } else {
