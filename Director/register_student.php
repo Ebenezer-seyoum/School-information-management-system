@@ -5,34 +5,34 @@ include('directorHeader.php');
 <div class="container">
   <div class="page-inner">
    <div class="page-header">
-     <h3 class="fw-bold mb-3">Create Account</h3>
+     <h3 class="fw-bold mb-3">Register Student</h3>
     <ul class="breadcrumbs mb-3">
       <li class="nav-home"><a href="#"><i class="icon-home"></i></a></li>
       <li class="separator"><i class="icon-arrow-right"></i></li>
-      <li class="nav-item"><a href="#">Manage Account</a></li>
+      <li class="nav-item"><a href="#">Manage Students</a></li>
       <li class="separator"><i class="icon-arrow-right"></i></li>
-      <li class="nav-item"><a href="#">Create Account</a></li>
+      <li class="nav-item"><a href="#">Register Student</a></li>
     </ul>
 </div>
 <!-- End page header -->
 <?php
-     $idNumber = $profile_pic = $firstName = $fatherName = $gFatherName = $gender = $email = "";
+     $student_id = $profile_pic = $firstName = $fatherName = $gFatherName = $gender = $email = "";
      $password = $confirmPassword =$username = $phone = $role_type = $success = "";
-     $idNumber_err = $firstName_err = $fatherName_err = $gFatherName_err = "";
+     $student_id_err = $firstName_err = $fatherName_err = $gFatherName_err = "";
      $gender_err = $email_err = $password_err = $confirmPassword_err = $username_err = "";
      $profile_pic_err = $phone_err = $role_type_err= $allErr = "";
      $test = true;
-     $generatedId = getNextSchoolId($role_type);
+     $generatedId = getNextIdNumber();
 if (isset($_POST["register"]) && ($_SERVER["REQUEST_METHOD"] == "POST")) {
-    //validate id number
-    if (empty($_POST["idNumber"])) {
-        $idNumber_err = "Please enter your id number";
+    //validate student id
+    if (empty($_POST["student_id"])) {
+        $student_id_err = "Please enter your student_id";
         $test = false;
-    } else if (validateIdNumber($_POST["idNumber"]) == 0) {
-        $idNumber_err = "Please enter valid id number";
+    } else if (validateStudent_id($_POST["student_id"]) == 0) {
+        $student_id_err = "Please enter valid student_id";
         $test = false;
     } else {
-        $idNumber = $_POST["idNumber"];
+        $student_id = $_POST["student_id"];
     }
     //validate profile picture
     if (empty($_FILES["profile_picture"]["name"])) {
@@ -214,7 +214,7 @@ if ($test == true) {
 <div class="col-8 col-sm-8 col-lg-8">
  <div class="card ">
   <div class="card-header">
-    <h4>Create account</h4>
+    <h4>Register Student</h4>
   </div>
     <?php if (!empty($success))
      { ?>
@@ -226,10 +226,10 @@ if ($test == true) {
 <div class="card-body">                                
   <div class="row">
     <div class="form-group col-12 col-md-6 mb-3">
-       <label for="id_number">ID Number</label>
-       <input id="id_number" type="text" class="form-control" name="idNumber" 
+       <label for="student_id">Student_id</label>
+       <input id="student_id" type="text" class="form-control" name="student_id" 
        value="<?php echo $generatedId; ?>" readonly/>
-       <span class="text-danger"><?php echo $idNumber_err; ?></span>
+       <span class="text-danger"><?php echo $student_id_err; ?></span>
     </div>
     <div class="form-group col-12 col-md-6 mb-3">
         <label for="first_name">First Name</label>
@@ -292,20 +292,16 @@ if ($test == true) {
     <span class="text-danger"><?php echo $phone_err; ?></span>
   </div>
 </div>
-  <div class="form-group col-md-6">
-            <label for="role_type">Role Type</label>
-            <select class="form-control" id="role_type" name="role_type">
-                <option value="">...</option>
-                <?php
-                $types =  getAllRoleType();     
-                foreach ($types as $type) {
-                ?>
-             <option value="<?php echo $type["rid"]; ?>"><?php echo $type["role_name"]; ?></option>
-                <?php } ?>
-            </select>
-            <span class="text-danger"><?php echo $role_type_err; ?></span>
-        </div> 
-    </div>
+<div class="form-group col-12 col-md-6 mb-3">
+    <label for="role_type">Role Type</label>
+    <select name="role_type" id="role_type" class="form-control">
+        <option value="">Select Role Type</option>
+        <option value="general">General</option>
+        <option value="natural">Natural</option>
+        <option value="social">Social</option>
+    </select>
+<span class="text-danger"><?php echo $role_type_err; ?></span>
+</div>
   <div class="form-group">
     <input type="submit" name="register" class="btn btn-primary btn-lg btn-block" value="Register"/>   
     <input type="reset" name="reset"  class="btn btn-danger btn-lg btn-block" value="reset"/>

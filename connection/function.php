@@ -338,7 +338,7 @@ function getRoleByPassword($data)
 
 function getNextIdNumber() {
     global $conn;
-    $query = "SELECT idNumber FROM users ORDER BY idNumber DESC LIMIT 1"; 
+    $query = "SELECT student_id FROM students ORDER BY Student_id DESC LIMIT 1"; 
     $result = mysqli_query($conn, $query);
     $gregorianYear = date("Y");
     $month = (int)date("n"); 
@@ -346,7 +346,7 @@ function getNextIdNumber() {
     if ($month < 9) {
         $ethiopianYear -= 1;
     }
-    $prefix = "YWCIM/";
+    $prefix = "BSS/STU/";
     $newNumber = 1;
     if ($result && mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
@@ -359,6 +359,7 @@ function getNextIdNumber() {
     $paddedNumber = str_pad($newNumber, 4, "0", STR_PAD_LEFT);
     return $prefix . $paddedNumber . "/" . substr($ethiopianYear, -2);
 }
+
 // Function to get role type abbreviation by ID
 function getRoleTypeById($roleId) {
     global $conn;
