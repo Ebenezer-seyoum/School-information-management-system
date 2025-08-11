@@ -17,8 +17,10 @@ include('directorHeader.php');
 <!-- End page header -->
 <?php
      $student_id = $profile_pic = $firstName = $fatherName = $gFatherName = $gender = $email = "";
+     $region = $zone = $woreda = $kebele ="";
      $password = $confirmPassword =$username = $phone = $role_type = $success = "";
      $student_id_err = $firstName_err = $fatherName_err = $gFatherName_err = "";
+     $region_err = $zone_err = $woreda_err = $kebele_err = "";
      $gender_err = $email_err = $password_err = $confirmPassword_err = $username_err = "";
      $profile_pic_err = $phone_err = $role_type_err= $allErr = "";
      $test = true;
@@ -111,6 +113,37 @@ if (empty($_POST["email"])) {
         $email = $_POST["email"];
     }
 } 
+// Validate region
+if (empty($_POST["region"])) {
+    $region_err = "Please select your region";
+    $test = false;
+} else {
+    $region = $_POST["region"];
+}
+
+// Validate zone
+if (empty($_POST["zone"])) {
+    $zone_err = "Please select your zone";
+    $test = false;
+} else {
+    $zone = $_POST["zone"];
+}
+
+// Validate woreda
+if (empty($_POST["woreda"])) {
+    $woreda_err = "Please select your woreda";
+    $test = false;
+} else {
+    $woreda = $_POST["woreda"];
+}
+
+// Validate kebele
+if (empty($_POST["kebele"])) {
+    $kebele_err = "Please enter your kebele";
+    $test = false;
+} else {
+    $kebele = $_POST["kebele"];
+}
     //validate username
     if (empty($_POST["username"])) {
         $username_err = "Please enter your username";
@@ -232,16 +265,6 @@ if ($test == true) {
        <span class="text-danger"><?php echo $student_id_err; ?></span>
     </div>
     <div class="form-group col-12 col-md-6 mb-3">
-    <label for="role_type">Class Type</label>
-    <select name="role_type" id="role_type" class="form-control">
-        <option value="">Select Class Type</option>
-        <option value="general">General</option>
-        <option value="natural">Natural</option>
-        <option value="social">Social</option>
-    </select>
-<span class="text-danger"><?php echo $role_type_err; ?></span>
-</div>
-    <div class="form-group col-12 col-md-6 mb-3">
         <label for="first_name">First Name</label>
         <input id="first_name" type="text" class="form-control" name="first_name"/>
         <span class="text-danger"><?php echo $firstName_err; ?></span>
@@ -274,6 +297,41 @@ if ($test == true) {
     <input id="Email" type="text" class="form-control" name="email" />
     <span class="text-danger"><?php echo $email_err; ?></span>
   </div>     
+  <div class="row">
+                                <div class="form-group col-6">
+                                    <label>Region</label>
+                                    <select class="form-control" name="region">
+                                        <option value="">Select Region</option>
+                                        <?php
+                                        $regions = getAllRegions();
+                                        foreach ($regions as $regionItem): ?>
+                                            <option value="<?php echo $regionItem['id']; ?>"><?php echo $regionItem['name']; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <span class="text-danger"><?php echo $region_err; ?></span>
+                                </div>
+                                <div class="form-group col-6">
+                                <label>Zone</label>
+                     <select class="form-control" name="zone" id="zone">
+                  <option value="">Select Zone</option>
+                  </select>
+                 <span class="text-danger"><?php echo $zone_err; ?></span>
+                           </div>
+                         </div>
+                            <div class="row">
+                                <div class="form-group col-6">
+                                <label>Woreda</label>
+        <select class="form-control" name="woreda" id="woreda">
+            <option value="">Select Woreda</option>
+        </select>
+        <span class="text-danger"><?php echo $woreda_err; ?></span>
+    </div>
+                                <div class="form-group col-6">
+                                    <label>Kebele</label>
+                                    <input type="text" class="form-control" name="kebele" />
+                                    <span class="text-danger"><?php echo $kebele_err; ?></span>
+                                </div>
+                            </div>
 <div class="row">
   <div class="form-group col-12 col-md-6 mb-3">
     <label for="password" class="d-block">Password</label>
@@ -302,17 +360,16 @@ if ($test == true) {
     <span class="text-danger"><?php echo $phone_err; ?></span>
   </div>
 </div>
-<!-- 
-<div class="form-group col-12 col-md-6 mb-3">
-    <label for="role_type">address</label>
+ <div class="form-group col-12 col-md-6 mb-3">
+    <label for="role_type">Class Type</label>
     <select name="role_type" id="role_type" class="form-control">
-        <option value="">Select address</option>
+        <option value="">Select Class Type</option>
         <option value="general">General</option>
         <option value="natural">Natural</option>
         <option value="social">Social</option>
     </select>
 <span class="text-danger"><?php echo $role_type_err; ?></span>
-</div> -->
+</div>
   <div class="form-group">
     <input type="submit" name="register" class="btn btn-primary btn-lg btn-block" value="Register"/>   
     <input type="reset" name="reset"  class="btn btn-danger btn-lg btn-block" value="reset"/>
