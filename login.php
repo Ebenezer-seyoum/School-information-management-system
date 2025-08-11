@@ -49,11 +49,11 @@ if ($roleName === "Admin") {
 } else if ($roleName === "Director") {
     header('location: Director/director.php');
 } else if ($roleName === "Instructor") {
-    header('location: Instructor/judge.php');
-} else if ($roleName === "Case_distributer") {
-    header('location: case_distributer/case_distributer.php');
-} else if (strtolower($roleName) === "president") {
-    header('location: president/president.php');
+    header('location: Instructor/instructor.php');
+} else if ($roleName === "Teacher") {
+    header('location: Teacher/teacher.php');
+} else if ($roleName === "student") {
+    header('location: Student/student.php');
 }
 
                 } 
