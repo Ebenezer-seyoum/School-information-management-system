@@ -17,10 +17,10 @@ include('directorHeader.php');
 <!-- End page header -->
 <?php
      $student_id = $profile_pic = $firstName = $fatherName = $gFatherName = $gender = $email = "";
-     $password = $confirmPassword = $username = $phone = $role_type = $success = "";
+     $password = $confirmPassword =$username = $phone = $role_type = $success = "";
      $student_id_err = $firstName_err = $fatherName_err = $gFatherName_err = "";
      $gender_err = $email_err = $password_err = $confirmPassword_err = $username_err = "";
-     $profile_pic_err = $phone_err = $role_type_err = $allErr = "";
+     $profile_pic_err = $phone_err = $role_type_err= $allErr = "";
      $test = true;
      $generatedId = getNextIdNumber();
 if (isset($_POST["register"]) && ($_SERVER["REQUEST_METHOD"] == "POST")) {
@@ -171,10 +171,10 @@ if (empty($_POST["email"])) {
     }
 if ($test == true) {
     $userStatus = 0;
-    if (userExist($student_id) == 0) {
+    if (userExist($idNumber) == 0) {
         $encryptedPassword = encryptPassword($password);
         
-       if (addUser($student_id, $profile_pic, $firstName, $fatherName, $gFatherName, $gender, $role_type, $username, 
+       if (addUser($idNumber, $profile_pic, $firstName, $fatherName, $gFatherName, $gender, $role_type, $username, 
     $encryptedPassword, $email, $phone, $userStatus) == 1) {
     $success = "User Successfully registered";
     header('refresh:2');
@@ -226,39 +226,20 @@ if ($test == true) {
 <div class="card-body">                                
   <div class="row">
     <div class="form-group col-12 col-md-6 mb-3">
-       <label for="student_id">Student ID</label>
+       <label for="student_id">Student_id</label>
        <input id="student_id" type="text" class="form-control" name="student_id" 
        value="<?php echo $generatedId; ?>" readonly/>
        <span class="text-danger"><?php echo $student_id_err; ?></span>
     </div>
     <div class="form-group col-12 col-md-6 mb-3">
     <label for="role_type">Class Type</label>
-    <select name="role_type" id="role_type" class="form-control" onchange="toggleClassField()">
+    <select name="role_type" id="role_type" class="form-control">
         <option value="">Select Class Type</option>
         <option value="general">General</option>
         <option value="natural">Natural</option>
         <option value="social">Social</option>
     </select>
-    <span class="text-danger"><?php echo $role_type_err; ?></span>
-</div>
-<div class="form-group col-12 col-md-6 mb-3" id="class_field" style="display: none;">
-    <label for="class">Class</label>
-    <select name="class" id="class" class="form-control" onchange="toggleHistoryField()">
-        <option value="">Select Class</option>
-        <option value="G-9">G-9</option>
-        <option value="G-10">G-10</option>
-    </select>
-    <span class="text-danger"><?php echo $role_type_err; ?></span>
-</div>
-<div class="form-group col-12 col-md-6 mb-3" id="history_field" style="display: none;">
-    <label for="student_history">Student History</label>
-    <select name="student_history" id="student_history" class="form-control">
-        <option value="">Select History Type</option>
-        <option value="general">General</option>
-        <option value="natural">Natural</option>
-        <option value="social">Social</option>
-    </select>
-    <span class="text-danger"><?php echo $role_type_err; ?></span>
+<span class="text-danger"><?php echo $role_type_err; ?></span>
 </div>
     <div class="form-group col-12 col-md-6 mb-3">
         <label for="first_name">First Name</label>
@@ -311,7 +292,7 @@ if ($test == true) {
     <span class="text-danger"><?php echo $confirmPassword_err; ?></span>
   </div>
   <div class="form-group col-12 col-md-6 mb-3">
-    <label for="username">Username</label>
+    <label for="username">username</label>
     <input id="username" type="text" class="form-control" name="username" />
     <span class="text-danger"><?php echo $username_err; ?></span>
   </div> 
@@ -321,67 +302,32 @@ if ($test == true) {
     <span class="text-danger"><?php echo $phone_err; ?></span>
   </div>
 </div>
+<!-- 
 <div class="form-group col-12 col-md-6 mb-3">
-    <label for="address">Address</label>
-    <select name="address" id="address" class="form-control">
-        <option value="">Select Address</option>
+    <label for="role_type">address</label>
+    <select name="role_type" id="role_type" class="form-control">
+        <option value="">Select address</option>
         <option value="general">General</option>
         <option value="natural">Natural</option>
         <option value="social">Social</option>
     </select>
-    <span class="text-danger"><?php echo $role_type_err; ?></span>
-</div>
+<span class="text-danger"><?php echo $role_type_err; ?></span>
+</div> -->
   <div class="form-group">
     <input type="submit" name="register" class="btn btn-primary btn-lg btn-block" value="Register"/>   
-    <input type="reset" name="reset" class="btn btn-danger btn-lg btn-block" value="Reset"/>
+    <input type="reset" name="reset"  class="btn btn-danger btn-lg btn-block" value="reset"/>
   </div>
-</div>
-</div>
-</div>
-</div>
 </form>
+ </div>
+  </div>
+   </div>
+    </div>
 </section>
 </div>
-</div>
-</div>
-<script>
-function toggleClassField() {
-    const roleType = document.getElementById('role_type').value;
-    const classField = document.getElementById('class_field');
-    const classSelect = document.getElementById('class');
-    const historyField = document.getElementById('history_field');
-    const historySelect = document.getElementById('student_history');
-    
-    if (roleType === 'general') {
-        classField.style.display = 'block';
-    } else {
-        classField.style.display = 'none';
-        classSelect.value = ''; // Clear class selection when hidden
-        historyField.style.display = 'none'; // Hide history field when class is hidden
-        historySelect.value = ''; // Clear history selection when hidden
-    }
-    toggleHistoryField(); // Ensure history field state is updated
-}
-
-function toggleHistoryField() {
-    const classSelect = document.getElementById('class').value;
-    const historyField = document.getElementById('history_field');
-    const historySelect = document.getElementById('student_history');
-    
-    if (classSelect === 'G-10') {
-        historyField.style.display = 'block';
-    } else {
-        historyField.style.display = 'none';
-        historySelect.value = ''; // Clear history selection when hidden
-    }
-}
-
-// Run on page load to ensure initial state is correct
-document.addEventListener('DOMContentLoaded', function() {
-    toggleClassField();
-    toggleHistoryField();
-});
-</script>
+ </div>
+  </div>
 <?php
 include('../admin/footer.php');
 ?>
+
+
