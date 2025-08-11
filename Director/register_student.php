@@ -1,8 +1,9 @@
 <?php
 include('directorHeader.php');
 ?>
+
 <!-- Page content start -->
-<div class="container">
+<div class="container-fluid px-2 px-md-4">
   <div class="page-inner">
    <div class="page-header">
      <h3 class="fw-bold mb-3">Register Student</h3>
@@ -17,10 +18,8 @@ include('directorHeader.php');
 <!-- End page header -->
 <?php
      $student_id = $profile_pic = $firstName = $fatherName = $gFatherName = $gender = $email = "";
-     $region = $zone = $woreda = $kebele ="";
      $password = $confirmPassword =$username = $phone = $role_type = $success = "";
      $student_id_err = $firstName_err = $fatherName_err = $gFatherName_err = "";
-     $region_err = $zone_err = $woreda_err = $kebele_err = "";
      $gender_err = $email_err = $password_err = $confirmPassword_err = $username_err = "";
      $profile_pic_err = $phone_err = $role_type_err= $allErr = "";
      $test = true;
@@ -30,75 +29,77 @@ if (isset($_POST["register"]) && ($_SERVER["REQUEST_METHOD"] == "POST")) {
     if (empty($_POST["student_id"])) {
         $student_id_err = "Please enter your student_id";
         $test = false;
-    } else if (validateStudent_id($_POST["student_id"]) == 0) {
-        $student_id_err = "Please enter valid student_id";
+      } else if (validateStudent_id($_POST["student_id"]) == 0) {
+        $student_id_err = "Please enter a valid student ID";
         $test = false;
-    } else {
+      } else {
         $student_id = $_POST["student_id"];
-    }
-    //validate profile picture
-    if (empty($_FILES["profile_picture"]["name"])) {
+      }
+
+      // Validate profile picture
+      if (empty($_FILES["profile_picture"]["name"])) {
         $profile_pic_err = "Please select your profile picture";
         $test = false;
-    } else if ($_FILES["profile_picture"]["error"] !== UPLOAD_ERR_OK) { 
+      } else if ($_FILES["profile_picture"]["error"] !== UPLOAD_ERR_OK) {
         $profile_pic_err = "Error uploading file. Error code: " . $_FILES["profile_picture"]["error"];
         $test = false;
-    } else if (validateProfilePicture($_FILES["profile_picture"]) !== true) { 
+      } else if (validateProfilePicture($_FILES["profile_picture"]) !== true) {
         $profile_pic_err = validateProfilePicture($_FILES["profile_picture"]);
         $test = false;
-    } else {
+      } else {
         $uploadDir = '../assets/img/';
         $uploadFile = $uploadDir . basename($_FILES["profile_picture"]["name"]);
         if (move_uploaded_file($_FILES["profile_picture"]["tmp_name"], $uploadFile)) {
-            $profile_pic = $uploadFile; 
+          $profile_pic = $uploadFile;
         } else {
-            $profile_pic_err = "Failed to upload the profile picture.";
-            $test = false;
+          $profile_pic_err = "Failed to upload the profile picture.";
+          $test = false;
         }
-    }
-    //validate first name
-    if (empty($_POST["first_name"])) {
+      }
+
+      // Validate first name
+      if (empty($_POST["first_name"])) {
         $firstName_err = "Please enter your first name";
         $test = false;
-    } else if (validateName($_POST["first_name"]) == 0) {
-        $firstName_err = "Please enter valid first name";
+      } else if (validateName($_POST["first_name"]) == 0) {
+        $firstName_err = "Please enter a valid first name";
         $test = false;
-    } else {
+      } else {
         $firstName = $_POST["first_name"];
-    }
+      }
 
-    //validate father name
-    if (empty($_POST["father_name"])) {
+      // Validate father name
+      if (empty($_POST["father_name"])) {
         $fatherName_err = "Please enter your father name";
         $test = false;
-    } else if (validateName($_POST["father_name"]) == 0) {
-        $fatherName_err = "Please enter valid father name";
+      } else if (validateName($_POST["father_name"]) == 0) {
+        $fatherName_err = "Please enter a valid father name";
         $test = false;
-    } else {
+      } else {
         $fatherName = $_POST["father_name"];
-    }
+      }
 
-    //validate grand father name
-    if (empty($_POST["grand_father_name"])) {
+      // Validate grand father name
+      if (empty($_POST["grand_father_name"])) {
         $gFatherName_err = "Please enter your grand father name";
         $test = false;
-    } else if (validateName($_POST["grand_father_name"]) == 0) {
-        $gFatherName_err = "Please enter valid grand father name";
+      } else if (validateName($_POST["grand_father_name"]) == 0) {
+        $gFatherName_err = "Please enter a valid grand father name";
         $test = false;
-    } else {
+      } else {
         $gFatherName = $_POST["grand_father_name"];
-    }
+      }
 
-    //validate gender
-    if (empty($_POST["gender"])) {
+      // Validate gender
+      if (empty($_POST["gender"])) {
         $gender_err = "Please select your gender";
         $test = false;
-    } else if (validateGender($_POST["gender"]) == 0) {
+      } else if (validateGender($_POST["gender"]) == 0) {
         $gender_err = "Invalid input";
         $test = false;
-    } else {
+      } else {
         $gender = $_POST["gender"];
-    }
+      }
 
    // Validate email
 if (empty($_POST["email"])) {
@@ -113,93 +114,66 @@ if (empty($_POST["email"])) {
         $email = $_POST["email"];
     }
 } 
-// Validate region
-if (empty($_POST["region"])) {
-    $region_err = "Please select your region";
-    $test = false;
-} else {
-    $region = $_POST["region"];
-}
-
-// Validate zone
-if (empty($_POST["zone"])) {
-    $zone_err = "Please select your zone";
-    $test = false;
-} else {
-    $zone = $_POST["zone"];
-}
-
-// Validate woreda
-if (empty($_POST["woreda"])) {
-    $woreda_err = "Please select your woreda";
-    $test = false;
-} else {
-    $woreda = $_POST["woreda"];
-}
-
-// Validate kebele
-if (empty($_POST["kebele"])) {
-    $kebele_err = "Please enter your kebele";
-    $test = false;
-} else {
-    $kebele = $_POST["kebele"];
-}
     //validate username
     if (empty($_POST["username"])) {
         $username_err = "Please enter your username";
         $test = false;
-    } else if (validateName($_POST["username"]) == 0) {
-        $username_err = "Please enter valid username";
+      } else if (validateName($_POST["username"]) == 0) {
+        $username_err = "Please enter a valid username";
         $test = false;
-    } else {
+      } else {
         $username = $_POST["username"];
-    }   
-    //validate password
-        if (empty($_POST["password"])) {
-         $password_err = "Please enter your new password";
-         $test = false;
-     } else if (validatePassword($_POST["password"]) == 0) {
-         $password_err = "Please enter a valid password (no invalid symbols)";
-         $test = false;
-     } else {
-         $password = $_POST["password"];
-        $strongPassword = isStrongPassword($password);
-         if ($strongPassword !== true) {
-             $password_err = $strongPassword;
-             $test = false;
-       }
-     }
+      }
 
-    //validate password confirmation
-    if (empty($_POST["confirm_password"])) {
+      // Validate password
+      if (empty($_POST["password"])) {
+        $password_err = "Please enter your new password";
+        $test = false;
+      } else if (validatePassword($_POST["password"]) == 0) {
+        $password_err = "Please enter a valid password (no invalid symbols)";
+        $test = false;
+      } else {
+        $password = $_POST["password"];
+        $strongPassword = isStrongPassword($password);
+        if ($strongPassword !== true) {
+          $password_err = $strongPassword;
+          $test = false;
+        }
+      }
+
+      // Validate password confirmation
+      if (empty($_POST["confirm_password"])) {
         $confirmPassword_err = "Please enter your new password";
         $test = false;
-    } else if (validatePassword($_POST["confirm_password"]) == 0) {
-        $confirmPassword_err = "Please enter valid password";
+      } else if (validatePassword($_POST["confirm_password"]) == 0) {
+        $confirmPassword_err = "Please enter a valid password";
         $test = false;
-    } else if (comparePasswords($_POST["password"], $_POST["confirm_password"]) == 0) {
+      } else if (comparePasswords($_POST["password"], $_POST["confirm_password"]) == 0) {
         $confirmPassword_err = "Password did not match";
-    } else {
+        $test = false;
+      } else {
         $confirmPassword = $_POST["confirm_password"];
-    }
-      //validate  Phone 
-    if (empty($_POST["phone"])) {
-        $phone_err = "Please enter your id number";
+      }
+
+      // Validate phone
+      if (empty($_POST["phone"])) {
+        $phone_err = "Please enter your phone number";
         $test = false;
-    } else if (validatePhoneNumber($_POST["phone"]) == 0) {
-        $phone_err = "Please enter valid phone number";
+      } else if (validatePhoneNumber($_POST["phone"]) == 0) {
+        $phone_err = "Please enter a valid phone number";
         $test = false;
-    } else {
+      } else {
         $phone = $_POST["phone"];
-    }
-    //validate role_type
-    if (empty($_POST["role_type"])) {
-        $role_type_err = "Please select role_type";
+      }
+
+      // Validate role_type
+      if (empty($_POST["role_type"])) {
+        $role_type_err = "Please select class type";
         $test = false;
-    } else if (validateUserType($_POST["role_type"]) == 0) {
+      } else if (validateUserType($_POST["role_type"]) == 0) {
         $role_type_err = "Invalid input";
         $test = false;
-    } else {
+      } else {
         $role_type = $_POST["role_type"];
     }
 if ($test == true) {
@@ -265,6 +239,16 @@ if ($test == true) {
        <span class="text-danger"><?php echo $student_id_err; ?></span>
     </div>
     <div class="form-group col-12 col-md-6 mb-3">
+    <label for="role_type">Class Type</label>
+    <select name="role_type" id="role_type" class="form-control">
+        <option value="">Select Class Type</option>
+        <option value="general">General</option>
+        <option value="natural">Natural</option>
+        <option value="social">Social</option>
+    </select>
+<span class="text-danger"><?php echo $role_type_err; ?></span>
+</div>
+    <div class="form-group col-12 col-md-6 mb-3">
         <label for="first_name">First Name</label>
         <input id="first_name" type="text" class="form-control" name="first_name"/>
         <span class="text-danger"><?php echo $firstName_err; ?></span>
@@ -297,41 +281,6 @@ if ($test == true) {
     <input id="Email" type="text" class="form-control" name="email" />
     <span class="text-danger"><?php echo $email_err; ?></span>
   </div>     
-  <div class="row">
-                                <div class="form-group col-6">
-                                    <label>Region</label>
-                                    <select class="form-control" name="region">
-                                        <option value="">Select Region</option>
-                                        <?php
-                                        $regions = getAllRegions();
-                                        foreach ($regions as $regionItem): ?>
-                                            <option value="<?php echo $regionItem['id']; ?>"><?php echo $regionItem['name']; ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                    <span class="text-danger"><?php echo $region_err; ?></span>
-                                </div>
-                                <div class="form-group col-6">
-                                <label>Zone</label>
-                     <select class="form-control" name="zone" id="zone">
-                  <option value="">Select Zone</option>
-                  </select>
-                 <span class="text-danger"><?php echo $zone_err; ?></span>
-                           </div>
-                         </div>
-                            <div class="row">
-                                <div class="form-group col-6">
-                                <label>Woreda</label>
-        <select class="form-control" name="woreda" id="woreda">
-            <option value="">Select Woreda</option>
-        </select>
-        <span class="text-danger"><?php echo $woreda_err; ?></span>
-    </div>
-                                <div class="form-group col-6">
-                                    <label>Kebele</label>
-                                    <input type="text" class="form-control" name="kebele" />
-                                    <span class="text-danger"><?php echo $kebele_err; ?></span>
-                                </div>
-                            </div>
 <div class="row">
   <div class="form-group col-12 col-md-6 mb-3">
     <label for="password" class="d-block">Password</label>
@@ -360,16 +309,17 @@ if ($test == true) {
     <span class="text-danger"><?php echo $phone_err; ?></span>
   </div>
 </div>
- <div class="form-group col-12 col-md-6 mb-3">
-    <label for="role_type">Class Type</label>
+<!-- 
+<div class="form-group col-12 col-md-6 mb-3">
+    <label for="role_type">address</label>
     <select name="role_type" id="role_type" class="form-control">
-        <option value="">Select Class Type</option>
+        <option value="">Select address</option>
         <option value="general">General</option>
         <option value="natural">Natural</option>
         <option value="social">Social</option>
     </select>
 <span class="text-danger"><?php echo $role_type_err; ?></span>
-</div>
+</div> -->
   <div class="form-group">
     <input type="submit" name="register" class="btn btn-primary btn-lg btn-block" value="Register"/>   
     <input type="reset" name="reset"  class="btn btn-danger btn-lg btn-block" value="reset"/>
@@ -387,4 +337,66 @@ if ($test == true) {
 include('../admin/footer.php');
 ?>
 
+<style>
+  .avatar-upload .avatar-preview img {
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+  .card {
+    border-radius: 10px;
+  }
+  .form-control, .form-select {
+    border-radius: 5px;
+  }
+  .alert {
+    border-radius: 5px;
+    margin-bottom: 1rem;
+  }
+  @media (max-width: 576px) {
+    .page-header {
+      text-align: center;
+    }
+    .breadcrumbs {
+      justify-content: center;
+    }
+    .avatar-upload .change-btn {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .btn-sm {
+      width: 100%;
+    }
+  }
+</style>
 
+<script>
+  function checkADDPassword() {
+    const password = document.getElementById('password').value;
+    const checklist = document.getElementById('password-checklist');
+    const lower = document.getElementById('lower');
+    const upper = document.getElementById('upper');
+    const special = document.getElementById('special');
+    const length = document.getElementById('length');
+
+    checklist.style.display = 'block';
+
+    lower.style.color = /[a-z]/.test(password) ? 'green' : 'red';
+    lower.innerHTML = /[a-z]/.test(password) ? '✅ One lowercase letter' : '❌ One lowercase letter';
+
+    upper.style.color = /[A-Z]/.test(password) ? 'green' : 'red';
+    upper.innerHTML = /[A-Z]/.test(password) ? '✅ One uppercase letter' : '❌ One uppercase letter';
+
+    special.style.color = /[@#$%^&+=!]/.test(password) ? 'green' : 'red';
+    special.innerHTML = /[@#$%^&+=!]/.test(password) ? '✅ One special character (@#$%^&+=!)' : '❌ One special character (@#$%^&+=!)';
+
+    length.style.color = password.length >= 8 ? 'green' : 'red';
+    length.innerHTML = password.length >= 8 ? '✅ At least 8 characters' : '❌ At least 8 characters';
+  }
+
+  document.getElementById('removeImage').addEventListener('click', function() {
+    document.getElementById('imageUpload').value = '';
+    document.querySelector('.profile-images').src = '../assets/img/no.png';
+  });
+</script>
