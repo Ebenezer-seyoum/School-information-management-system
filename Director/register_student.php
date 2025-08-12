@@ -204,10 +204,10 @@ if (empty($_POST["kebele"])) {
     }
 if ($test == true) {
     $userStatus = 0;
-    if (userExist($idNumber) == 0) {
+    if (userExist($student_id) == 0) {
         $encryptedPassword = encryptPassword($password);
         
-       if (addUser($idNumber, $profile_pic, $firstName, $fatherName, $gFatherName, $gender, $role_type, $username, 
+       if (addUser($student_id, $profile_pic, $firstName, $fatherName, $gFatherName, $gender, $role_type, $username, 
     $encryptedPassword, $email, $phone, $userStatus) == 1) {
     $success = "User Successfully registered";
     header('refresh:2');
@@ -227,7 +227,7 @@ if ($test == true) {
   <section class="section">
     <form action="" method="POST" enctype="multipart/form-data"> 
     <div class="row">
-    <div class="col-12 col-lg-4 mb-4">
+    <div class="col-lg-4 mb-4">
     <label class="form-label text-primary">Photo</label>
 <div class="avatar-upload">
   <div class="avatar-preview">
@@ -244,7 +244,7 @@ if ($test == true) {
      </div>
   </div>
 </div>
-<div class="col-8 col-sm-8 col-lg-8">
+<div class="col-lg-8">
  <div class="card ">
   <div class="card-header">
     <h4>Register Student</h4>
@@ -410,5 +410,3 @@ if ($test == true) {
 <?php
 include('../admin/footer.php');
 ?>
-
-
