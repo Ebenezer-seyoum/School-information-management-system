@@ -296,7 +296,18 @@ if ($test == true) {
     <label for="Email">Email</label>
     <input id="Email" type="text" class="form-control" name="email" />
     <span class="text-danger"><?php echo $email_err; ?></span>
-  </div>     
+  </div>   
+  <!-- Personal Details -->
+<div class="row">
+    <div class="form-group col-12 col-md-6 mb-3">
+        <label for="dob">Date of Birth</label>
+        <input type="date" name="dob" id="dob" class="form-control">
+    </div>
+    <div class="form-group col-12 col-md-6 mb-3">
+        <label for="birth_place">Place of Birth</label>
+        <input type="text" name="birth_place" id="birth_place" class="form-control">
+    </div>
+</div>  
   <div class="row">
                                 <div class="form-group col-6">
                                     <label>Region</label>
@@ -370,6 +381,19 @@ if ($test == true) {
     </select>
 <span class="text-danger"><?php echo $role_type_err; ?></span>
 </div>
+<!-- Emergency Contact -->
+<h5 class="mt-4">Emergency Contact</h5>
+<div class="row">
+    <div class="form-group col-12 col-md-6 mb-3">
+        <label for="emergency_contact_name">Contact Name</label>
+        <input type="text" name="emergency_contact_name" id="emergency_contact_name" class="form-control">
+    </div>
+    <div class="form-group col-12 col-md-6 mb-3">
+        <label for="emergency_contact_phone">Contact Phone</label>
+        <input type="text" name="emergency_contact_phone" id="emergency_contact_phone" class="form-control">
+    </div>
+</div>
+
   <div class="form-group">
     <input type="submit" name="register" class="btn btn-primary btn-lg btn-block" value="Register"/>   
     <input type="reset" name="reset"  class="btn btn-danger btn-lg btn-block" value="reset"/>
