@@ -56,7 +56,7 @@ include '../connection/function.php';
 <li class="nav-item">
     <a data-bs-toggle="collapse" href="#users" role="button" aria-expanded="false" aria-controls="users">
         <i class="fas fa-users-cog"></i>
-        <p>Manage Users</p>
+        <p>Manage Account</p>
         <span class="caret"></span>
     </a>
     <div class="collapse" id="users">
@@ -65,7 +65,7 @@ include '../connection/function.php';
             <li><a href="view_userForUpdate.php"><i class="fas fa-user-edit"></i> Update Account</a></li>
             <li><a href="delete_user.php"><i class="fas fa-user-times"></i> Delete Account</a></li>
             <li><a href="Deactive_user.php"><i class="fas fa-user-slash"></i> De-Active Account</a></li>
-            <li><a href="list_user.php"><i class="fas fa-users"></i> View All Users</a></li>
+            <li><a href="list_user.php"><i class="fas fa-users"></i> View All Staff</a></li>
         </ul>
     </div>
 </li>

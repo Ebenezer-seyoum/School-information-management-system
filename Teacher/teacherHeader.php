@@ -36,7 +36,7 @@ include '../connection/function.php';
 $profile = getUserByID($_SESSION["uid"]);
 $roleName = getRoleNameById($profile["user_type"]); 
 
-if (isset($_SESSION["uid"]) and ($roleName == "Instructor")) {
+if (isset($_SESSION["uid"]) and ($roleName == "Teacher")) {
 ?>	
 <body>
 <div class="wrapper">
@@ -59,7 +59,7 @@ if (isset($_SESSION["uid"]) and ($roleName == "Instructor")) {
 	<ul class="nav nav-secondary">
 	  <li class="nav-item">
     <a href="director.php" class="collapsed"><i class="fas fa-home"></i><p><?php echo $roleName = getRoleNameById($profile["user_type"]); ?></p></a></li>   
-      <!-- My Classes -->
+ <!-- My Classes -->
       <li class="nav-item">
         <a data-bs-toggle="collapse" href="#myClasses" role="button" aria-expanded="false" aria-controls="myClasses">
           <i class="fas fa-chalkboard"></i>
@@ -73,7 +73,8 @@ if (isset($_SESSION["uid"]) and ($roleName == "Instructor")) {
           </ul>
         </div>
       </li>
-<!-- Attendance -->
+
+ <!-- Attendance -->
       <li class="nav-item">
         <a data-bs-toggle="collapse" href="#attendance" role="button" aria-expanded="false" aria-controls="attendance">
           <i class="fas fa-user-check"></i>
@@ -87,7 +88,34 @@ if (isset($_SESSION["uid"]) and ($roleName == "Instructor")) {
           </ul>
         </div>
       </li>
+<!-- Marks -->
+      <li class="nav-item">
+        <a data-bs-toggle="collapse" href="#marks" role="button" aria-expanded="false" aria-controls="marks">
+          <i class="fas fa-pen"></i>
+          <p>Marks</p>
+          <span class="caret"></span>
+        </a>
+        <div class="collapse" id="marks">
+          <ul class="nav nav-collapse">
+            <li><a href="add_marks.php"><i class="fas fa-plus-circle"></i> Add Marks</a></li>
+            <li><a href="view_marks.php"><i class="fas fa-eye"></i> View Marks</a></li>
+          </ul>
+        </div>
+      </li>
 
+      <!-- Academic Management -->
+      <li class="nav-item">
+        <a data-bs-toggle="collapse" href="#academic" role="button" aria-expanded="false" aria-controls="academic">
+          <i class="fas fa-book"></i>
+          <p>schedule</p>
+          <span class="caret"></span>
+        </a>
+        <div class="collapse" id="academic">
+          <ul class="nav nav-collapse">
+            <li><a href="view_timetable.php"><i class="fas fa-calendar-check"></i> View Schedule</a></li>
+          </ul>
+        </div>
+      </li>
 <!-- Announcements -->
 <li class="nav-item">
   <a data-bs-toggle="collapse" href="#announcements" role="button" aria-expanded="false" aria-controls="announcements">
@@ -98,20 +126,6 @@ if (isset($_SESSION["uid"]) and ($roleName == "Instructor")) {
   <div class="collapse" id="announcements">
     <ul class="nav nav-collapse">
       <li><a href="view_announcements.php"><i class="fas fa-eye"></i> View Announcements</a></li>
-    </ul>
-  </div>
-</li>
-
-<!-- Schedule -->
-<li class="nav-item">
-  <a data-bs-toggle="collapse" href="#schedule" role="button" aria-expanded="false" aria-controls="schedule">
-    <i class="fas fa-bullhorn"></i>
-    <p>Schedule</p>
-    <span class="caret"></span>
-  </a>
-  <div class="collapse" id="schedule">
-    <ul class="nav nav-collapse">
-      <li><a href="view_schedule.php"><i class="fas fa-eye"></i> View Schedule</a></li>
     </ul>
   </div>
 </li>

@@ -148,8 +148,12 @@ if (isset($_SESSION["uid"]) and ($roleName == "Director")) {
     </ul>
   </div>
 </li>
-
-
+<li class="nav-item">
+   <a data-bs-toggle="collapse" href="#feedback"><i class="fas fa-comments"></i><p>Feedback</p><span class="caret"></span></a>
+    <div class="collapse" id="feedback">
+    <ul class="nav nav-collapse"><li><a href="view_feedback.php">  <i class="fas fa-comments"></i>Customer Feedback</a></li></ul>
+ </div>
+</li>
 <li class="nav-item">
   <a data-bs-toggle="collapse" href="#reports"><i class="fas fa-chart-bar"></i><p>Reports</p><span class="caret"></span></a>
     <div class="collapse" id="reports">

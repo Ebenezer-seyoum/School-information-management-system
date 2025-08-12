@@ -1,5 +1,5 @@
 <?php
-include "instructorHeader.php"; 
+include "teacherHeader.php"; 
 ?>
 
 <div class="container">
@@ -123,8 +123,7 @@ include "instructorHeader.php";
     </div>
   </div>
 </div>
-
 <?php
-include "footer.php";
+include('../admin/footer.php');
 ?>
 
