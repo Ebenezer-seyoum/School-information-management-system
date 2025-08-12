@@ -76,36 +76,80 @@ if (isset($_SESSION["uid"]) and ($roleName == "Director")) {
     </div>
 </li>
 
+<!-- Manage Teachers -->
+      <li class="nav-item">
+        <a data-bs-toggle="collapse" href="#teachers" role="button" aria-expanded="false" aria-controls="teachers">
+          <i class="fas fa-chalkboard-teacher"></i>
+          <p>Manage Teachers</p>
+          <span class="caret"></span>
+        </a>
+        <div class="collapse" id="teachers">
+          <ul class="nav nav-collapse">
+            <li><a href="register_teacher.php"><i class="fas fa-user-plus"></i> Assign Teacher</a></li>
+            <li><a href="view_teachers.php"><i class="fas fa-users"></i> View All Teachers</a></li>
+          </ul>
+        </div>
+      </li>
+<!-- Manage Instructors -->
+      <li class="nav-item">
+        <a data-bs-toggle="collapse" href="#instructors" role="button" aria-expanded="false" aria-controls="instructors">
+          <i class="fas fa-user-tie"></i>
+          <p>Manage Instructors</p>
+          <span class="caret"></span>
+        </a>
+        <div class="collapse" id="instructors">
+          <ul class="nav nav-collapse">
+            <li><a href="register_instructor.php"><i class="fas fa-user-plus"></i> Assign Instructor</a></li>
+            <li><a href="view_instructors.php"><i class="fas fa-users"></i> View All Instructors</a></li>
+          </ul>
+        </div>
+      </li>
+
+      <!-- Academic Management -->
+      <li class="nav-item">
+        <a data-bs-toggle="collapse" href="#academic" role="button" aria-expanded="false" aria-controls="academic">
+          <i class="fas fa-book"></i>
+          <p>Academic Management</p>
+          <span class="caret"></span>
+        </a>
+        <div class="collapse" id="academic">
+          <ul class="nav nav-collapse">
+            <li><a href="create_timetable.php"><i class="fas fa-calendar-alt"></i> Create Timetable</a></li>
+            <li><a href="view_timetable.php"><i class="fas fa-calendar-check"></i> View Timetable</a></li>
+          </ul>
+        </div>
+      </li>
+      <!-- Student Report Cards -->
 <li class="nav-item">
-<a data-bs-toggle="collapse" href="#cases"><i class="fas fa-balance-scale"></i><p>Students</p><span class="caret"></span></a>
-    <div class="collapse" id="cases">
-     <ul class="nav nav-collapse">
-    <li><a href="pending_case.php"><i class="fas fa-hourglass-half"></i>Pending Cases</a></li>
-    <li><a href="open_case.php"><i class="fas fa-folder-open"></i> Open Cases</a></li>
-    <li><a href="distributed_case.php"><i class="fas fa-gavel"></i> Distributed Cases</a></li>
-    <li><a href="pending_appointment.php"><i class="fas fa-hourglass-end"></i> Pending Appointment Cases</a></li>
-    <li><a href="appointed_case.php"><i class="fas fa-calendar-check"></i> Appointed Cases</a></li>
-    <li><a href="pending_decision.php"><i class="fas fa-hourglass-end"></i> Pending Decision Cases</a></li>
-    <li><a href="decided_case.php"><i class="fas fa-check-circle"></i> Decided Cases</a></li>
-     </ul>
-  </div>
-</li>
-<li class="nav-item">
-  <a data-bs-toggle="collapse" href="#casesManagement"><i class="fas fa-file-contract"></i><p>Academic Management</p><span class="caret"></span></a>
-  <div class="collapse" id="casesManagement">
+  <a data-bs-toggle="collapse" href="#reportCard" role="button" aria-expanded="false" aria-controls="reportCard">
+    <i class="fas fa-file-alt"></i>
+    <p>Student Report Cards</p>
+    <span class="caret"></span>
+  </a>
+  <div class="collapse" id="reportCard">
     <ul class="nav nav-collapse">
-      <li><a href="update_case.php"><i class="fas fa-edit"></i> Update Cases</a></li>
-      <li><a href="delete_case.php"><i class="fas fa-trash-alt"></i> Delete Cases</a></li>
-      <li><a href="view_AllCases.php"><i class="fas fa-folder-open"></i> View All Cases</a></li>
+      <li><a href="generate_report_card.php"><i class="fas fa-plus-circle"></i> Generate Report Card</a></li>
+      <li><a href="view_report_cards.php"><i class="fas fa-eye"></i> View Report Cards</a></li>
     </ul>
   </div>
 </li>
+
+<!-- Announcements -->
 <li class="nav-item">
-   <a data-bs-toggle="collapse" href="#feedback"><i class="fas fa-comments"></i><p>Feedback</p><span class="caret"></span></a>
-    <div class="collapse" id="feedback">
-    <ul class="nav nav-collapse"><li><a href="view_feedback.php">  <i class="fas fa-comments"></i>Customer Feedback</a></li></ul>
- </div>
+  <a data-bs-toggle="collapse" href="#announcements" role="button" aria-expanded="false" aria-controls="announcements">
+    <i class="fas fa-bullhorn"></i>
+    <p>Announcements</p>
+    <span class="caret"></span>
+  </a>
+  <div class="collapse" id="announcements">
+    <ul class="nav nav-collapse">
+      <li><a href="create_announcement.php"><i class="fas fa-plus-circle"></i> Create Announcement</a></li>
+      <li><a href="view_announcements.php"><i class="fas fa-eye"></i> View Announcements</a></li>
+    </ul>
+  </div>
 </li>
+
+
 <li class="nav-item">
   <a data-bs-toggle="collapse" href="#reports"><i class="fas fa-chart-bar"></i><p>Reports</p><span class="caret"></span></a>
     <div class="collapse" id="reports">
