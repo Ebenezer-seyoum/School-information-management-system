@@ -841,13 +841,26 @@ function getUserByID($data)
     }
     return $result;
 }
-function getStudentByID($sid) {
+
+function getStudentByID($student_id) {
     global $conn;
-    $sid = mysqli_real_escape_string($conn, $sid);
-    $query = mysqli_query($conn, "SELECT * FROM students WHERE sid = '$sid'");
-    $result = mysqli_fetch_assoc($query);
-    return $result; 
+    $student_id = mysqli_real_escape_string($conn, $student_id);
+    $query = mysqli_query($conn, "SELECT * FROM students WHERE student_id = '$student_id'");
+    if (!$query) {
+        die("Query error: " . mysqli_error($conn));
+    }
+    return mysqli_fetch_assoc($query);
 }
+function getStudentSidByID($id) {
+    global $conn;
+    $id = (int)$id; // make sure it's an integer
+    $query = mysqli_query($conn, "SELECT * FROM students WHERE sid = $id");
+    if (!$query) {
+        die("Query error: " . mysqli_error($conn));
+    }
+    return mysqli_fetch_assoc($query);
+}
+
 
 function getUserIdNumberByID($data)
 {

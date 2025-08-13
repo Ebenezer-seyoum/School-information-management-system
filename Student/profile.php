@@ -1,126 +1,280 @@
 <?php
 include('studentHeader.php');
-?>
-<!-- page header -->
-<div class="container">
-  <div class="page-inner">
-    <div class="page-header">
-      <h3 class="fw-bold mb-3">Account Details</h3>
-      <ul class="breadcrumbs mb-3">
-        <li class="nav-home"><a href="#"><i class="icon-home"></i></a></li>
-        <li class="separator"><i class="icon-arrow-right"></i></li>
-        <li class="nav-item"><a href="#">Manage Account</a></li>
-        <li class="separator"><i class="icon-arrow-right"></i></li>
-        <li class="nav-item"><a href="#">Account Details</a></li>
-      </ul>
-  </div>
-<!-- end page header -->
-<?php
-  $uid = "";
-    if (isset($_GET["uid"])) {
-      $uid = basics($_GET["uid"]);
-      $userProfile = getUserByID($uid);
-    } else {
-      echo "<p>User ID not provided.</p>";
-      include('footer.php');
-      exit;
+
+if (isset($_GET["sid"])) {
+    $sid = basics($_GET["sid"]);
+    $userProfile = getStudentSidByID($sid);
+    if (!$userProfile) {
+        echo "<p>No student found.</p>";
+        include('footer.php');
+        exit;
     }
+} else {
+    echo "<p>User ID not provided.</p>";
+    include('footer.php');
+    exit;
+}
 ?>
-  <?php
-  $profile = getUserByID($_SESSION["uid"]);
-  $roleName = getRoleNameById($userProfile["user_type"]);
-  if (isset($_SESSION["uid"])) {
-  ?>
-<div class="main-content">
- <section class="section">
-  <div class="row">
-    <div class="col-xl-4 col-lg-4">
-    <label class="form-label text-primary">Profile picture</label>
-    <div class="avatar-upload">
-      <div class="avatar-preview">
-        <div class="user-img">
-<img class="profile-images" name="profile_picture" src="<?php echo $userProfile["profile_picture"]; ?>" alt="Profile Picture" width="100" height="100">
+
+<div class="container">
+ <div class="page-inner">
+   <div class="page-header">
+     <h3 class="fw-bold mb-3">View Account</h3>
+     <ul class="breadcrumbs mb-3">
+       <li class="nav-home"><a href="#"><i class="icon-home"></i></a></li>
+       <li class="separator"><i class="icon-arrow-right"></i></li>
+       <li class="nav-item"><a href="#">Users</a></li>
+       <li class="separator"><i class="icon-arrow-right"></i></li>
+       <li class="nav-item"><a href="#">View Account</a></li>
+     </ul>
+  </div>
+
+  <div class="main-content">
+  <section class="section">
+
+    <!-- Personal Information -->
+    <div class="card mb-3">
+      <div class="card-header bg-primary text-white" data-bs-toggle="collapse" href="#personalInfo" style="cursor:pointer;">
+        <h4 class="mb-0">
+          Personal Information
+          <span class="float-end collapse-arrow">&#9660;</span>
+        </h4>
       </div>
-    </div>
-  </div>
-</div>
-<div class="col-8 col-sm-8 col-lg-8">
-  <div class="card ">
-<div class="card-header">
-  <h4>Account details</h4>
-</div>
-<div class="card-body">
- <div class="row">
-    <div class="form-group col-6">
-      <label for="id_number">ID Number</label>
-      <input id="id_number" type="text" class="form-control" name="idNumber" value="<?php echo $userProfile["idNumber"]; ?>" readonly />
-    </div>
-    <div class="form-group col-6">
-      <label for="first_name">First Name</label>
-      <input id="first_name" type="text" class="form-control" name="first_name" value="<?php echo $userProfile["first_name"]; ?>" readonly />
-    </div>
-  </div>
-  <div class="row">
-    <div class="form-group col-6">
-      <label for="father_name">Father Name</label>
-      <input id="father_name" type="text" class="form-control" name="father_name" autofocus value="<?php echo $userProfile["father_name"]; ?>" readonly />
-    </div>
-    <div class="form-group col-6">
-      <label for="grand_father_name">Grand Father Name</label>
-      <input id="grand_father_name" type="text" class="form-control" name="grand_father_name" value="<?php echo $userProfile["grandfather_name"]; ?>" readonly />
-    </div>
-  </div>
-  <div class="row">
-    <div class="form-group col-6">
-      <label for="gender">Gender</label>
-      <input type="text" class="form-control" value="<?php echo $userProfile["gender"]; ?>" readonly />
-    </div>
-    <div class="form-group col-6">
-      <label for="Email">Email</label>
-      <input id="Email" type="text" class="form-control" name="email" value="<?php echo $userProfile["email"]; ?>" readonly />
-    </div>
-  </div>
-  <div class="row">
-    <div class="form-group col-6">
-      <label for="password" class="d-block">Password</label>
-      <input id="password" type="text" class="form-control pwstrength" name="password" value="<?php echo $userProfile["password"]; ?>" readonly />
-    </div>
-    <div class="form-group col-6">
-      <label for="username">username</label>
-      <input id="username" type="text" class="form-control" name="username" value="<?php echo $userProfile["username"]; ?>" readonly />
-    </div>
-    <div class="form-group col-6">
-       <label for="phone">phone</label>
-       <input type="text" class="form-control" value="<?php echo $userProfile["phone"]; ?>" readonly />
-     </div>
-    <div class="form-group col-6">
-      <label for="user_type">user_type</label>
-      <input type="text" class="form-control" value="<?php echo $roleName; ?>" readonly />
-    </div>
-         <div class="text-center mt-4">
-                <a href="director.php" class="btn btn-outline-primary">
-                    <i class="fa fa-arrow-left"></i> Back to Home
-                </a>
-                 <a href="change_password.php?uid=<?php echo $userProfile['uid']; ?>" class="btn btn-outline-danger">
-                    <i class="fa fa-edit"></i>Change Password
-                </a>
+      <div class="collapse show" id="personalInfo">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-4 mb-4 text-center">
+              <img src="<?php echo !empty($userProfile['student_photo']) ? htmlspecialchars($userProfile['student_photo']) : '../assets/img/no.png'; ?>" 
+                   alt="Profile Picture" width="120" height="120" class="mb-2">
             </div>
+            <div class="col-lg-8">
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Student ID</label>
+                  <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['student_id']); ?>" disabled>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">First Name</label>
+                  <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['first_name']); ?>" disabled>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Father Name</label>
+                  <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['father_name']); ?>" disabled>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Grand Father Name</label>
+                  <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['grand_father_name']); ?>" disabled>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Gender</label>
+                  <input type="text" class="form-control" value="<?php echo $userProfile['gender'] == 'M' ? 'Male' : 'Female'; ?>" disabled>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Date of Birth</label>
+                  <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['dob']); ?>" disabled>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Email</label>
+                  <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['email']); ?>" disabled>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Phone</label>
+                  <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['phone']); ?>" disabled>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Place of Birth</label>
+                  <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['birth_place']); ?>" disabled>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Nationality</label>
+                  <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['nationality']); ?>" disabled>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Region</label>
+                  <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['region']); ?>" disabled>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Zone</label>
+                  <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['zone']); ?>" disabled>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Woreda</label>
+                  <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['woreda']); ?>" disabled>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Kebele</label>
+                  <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['kebele']); ?>" disabled>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Username</label>
+                  <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['username']); ?>" disabled>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Class Type</label>
+                  <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['role_type']); ?>" disabled>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
- </div>
+
+    <!-- Parent / Guardian Information -->
+    <div class="card mb-3">
+      <div class="card-header bg-primary text-white" data-bs-toggle="collapse" href="#parentInfo" style="cursor:pointer;">
+        <h4 class="mb-0">
+          Parent / Guardian Information
+          <span class="float-end collapse-arrow">&#9660;</span>
+        </h4>
+      </div>
+      <div class="collapse" id="parentInfo">
+        <div class="card-body">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Father’s Full Name</label>
+              <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['father_name']); ?>" disabled>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Mother’s Full Name</label>
+              <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['mother_name']); ?>" disabled>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Father’s Contact</label>
+              <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['father_contact']); ?>" disabled>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Mother’s Contact</label>
+              <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['mother_contact']); ?>" disabled>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Father’s Occupation</label>
+              <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['father_occupation']); ?>" disabled>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Mother’s Occupation</label>
+              <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['mother_occupation']); ?>" disabled>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Emergency Information -->
+    <div class="card mb-3">
+      <div class="card-header bg-warning text-white" data-bs-toggle="collapse" href="#emergencyInfo" style="cursor:pointer;">
+        <h4 class="mb-0">
+          Emergency Information
+          <span class="float-end collapse-arrow">&#9660;</span>
+        </h4>
+      </div>
+      <div class="collapse" id="emergencyInfo">
+        <div class="card-body">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Contact Name</label>
+              <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['emergency_contact_name']); ?>" disabled>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Contact Phone</label>
+              <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['emergency_contact_phone']); ?>" disabled>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Health Information -->
+    <div class="card mb-3">
+      <div class="card-header bg-danger text-white" data-bs-toggle="collapse" href="#healthInfo" style="cursor:pointer;">
+        <h4 class="mb-0">
+          Health Information
+          <span class="float-end collapse-arrow">&#9660;</span>
+        </h4>
+      </div>
+      <div class="collapse" id="healthInfo">
+        <div class="card-body">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Blood Group</label>
+              <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['blood_group']); ?>" disabled>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Medical Condition</label>
+              <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['medical_condition']); ?>" disabled>
+            </div>
+          </div>
+          <?php if (!empty($userProfile['other_condition'])): ?>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Other Condition</label>
+              <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['other_condition']); ?>" disabled>
+            </div>
+          </div>
+          <?php endif; ?>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Disabilities</label>
+              <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['disabilities']); ?>" disabled>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Academic Information -->
+    <div class="card mb-3">
+      <div class="card-header bg-success text-white" data-bs-toggle="collapse" href="#academicInfo" style="cursor:pointer;">
+        <h4 class="mb-0">
+          Academic Information
+          <span class="float-end collapse-arrow">&#9660;</span>
+        </h4>
+      </div>
+      <div class="collapse" id="academicInfo">
+        <div class="card-body">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Previous School</label>
+              <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['previous_school']); ?>" disabled>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Academic Status Before Joining</label>
+              <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['academic_status']); ?>" disabled>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <label class="form-label">Previous Documents</label>
+              <?php if (!empty($userProfile['previous_documents'])): ?>
+                <a href="<?php echo htmlspecialchars($userProfile['previous_documents']); ?>" target="_blank" class="form-control d-block">View Document</a>
+              <?php else: ?>
+                <input type="text" class="form-control" value="None" disabled>
+              <?php endif; ?>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
 </div>
-</section>
-      </div>
-    </div>
-  </div>
 
-<?php
-  } else {
-    //header('location: ../index.php');
-  }
-?>
-
-<?php
-include('footer.php');
-?>
+<?php include('../Admin/footer.php'); ?>

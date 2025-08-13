@@ -33,9 +33,8 @@ include '../connection/function.php';
 	<link rel="stylesheet" href="../assets/css/kaiadmin.min.css">
 </head>
 <?php
-if (isset($_SESSION["sid"])) {
-  
 $profile = getStudentByID($_SESSION["sid"]);
+if (isset($_SESSION["sid"])) {
 ?>
 <body>
 <div class="wrapper">
