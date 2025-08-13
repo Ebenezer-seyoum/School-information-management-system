@@ -350,7 +350,7 @@ function getNextIdNumber() {
     $newNumber = 1;
     if ($result && mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
-        $lastId = $row['idNumber']; 
+        $lastId = $row['student_id']; 
         $parts = explode("/", $lastId);
         if (count($parts) === 3) {
             $newNumber = (int)$parts[1] + 1;
@@ -406,6 +406,7 @@ function getNextSchoolId($roleType) {
     $paddedNumber = str_pad($newNumber, 4, "0", STR_PAD_LEFT);
     return "BSS/$roleTypeName/$paddedNumber/" . substr($ethiopianYear, -2);
 }
+
 // Function to add a new user
 function addUser($idNumber, $profile_pic, $firstName, $fatherName, $gFatherName, $gender, 
 $role_type, $username, $encrypted_password, $email, $phone, $userStatus)
@@ -422,6 +423,44 @@ $role_type, $username, $encrypted_password, $email, $phone, $userStatus)
     } else {
         echo "MySQL Error: " . mysqli_error($conn);
         return 0;
+    }
+}
+
+// Function to check if a student exists by ID
+function studentExist($student_id)
+{
+    global $conn;
+    $query = mysqli_query($conn, "SELECT student_id FROM students WHERE student_id='$student_id'");
+    return mysqli_num_rows($query); // returns 0 if not found, >0 if exists
+}
+
+
+// Function to register a new student
+function registerStudent($student_id, $profile_pic, $firstName, $fatherName, $gFatherName, $gender, 
+    $role_type, $username, $password, $email, $phone, $userStatus, $dob, $birth_place, 
+    $emergency_contact_name, $emergency_contact_phone)
+{
+    global $conn;
+
+ $query = "INSERT INTO students (
+    student_id, first_name, father_name, grandfather_name, gender, 
+    email, place_of_birth, date_of_birth, region, zone, 
+    worada, kebele, username, password, phone, 
+    class_type, contact_name, contact_phone, profile_image, student_status
+) VALUES (
+    '$student_id', '$firstName', '$fatherName', '$gFatherName', '$gender',
+    '$email', '$place_of_birth', '$date_of_birth', '$region', '$zone',
+    '$worada', '$kebele', '$username', '$encryptedPassword', '$phone',
+    '$class_type', '$contact_name', '$contact_phone', '$profile_image', '$student_status'
+)";
+
+
+    $result = mysqli_query($conn, $query);
+
+    if ($result) {
+        return 1; // success
+    } else {
+        return "MySQL Error: " . mysqli_error($conn);
     }
 }
 
