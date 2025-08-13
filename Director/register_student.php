@@ -17,12 +17,14 @@ include('directorHeader.php');
 <!-- End page header -->
 <?php
      $student_id = $profile_pic = $firstName = $fatherName = $gFatherName = $gender = $email = "";
-     $region = $zone = $woreda = $kebele ="";
-     $password = $confirmPassword =$username = $phone = $role_type = $success = "";
+     $region = $zone = $woreda = $kebele = "";
+     $password = $confirmPassword = $username = $phone = $role_type = $success = "";
+     $dob = $birth_place = $emergency_contact_name = $emergency_contact_phone = "";
      $student_id_err = $firstName_err = $fatherName_err = $gFatherName_err = "";
      $region_err = $zone_err = $woreda_err = $kebele_err = "";
      $gender_err = $email_err = $password_err = $confirmPassword_err = $username_err = "";
-     $profile_pic_err = $phone_err = $role_type_err= $allErr = "";
+     $profile_pic_err = $phone_err = $role_type_err = $allErr = "";
+     $dob_err = $birth_place_err = $emergency_contact_name_err = $emergency_contact_phone_err = "";
      $test = true;
      $generatedId = getNextIdNumber();
 if (isset($_POST["register"]) && ($_SERVER["REQUEST_METHOD"] == "POST")) {
@@ -66,7 +68,6 @@ if (isset($_POST["register"]) && ($_SERVER["REQUEST_METHOD"] == "POST")) {
     } else {
         $firstName = $_POST["first_name"];
     }
-
     //validate father name
     if (empty($_POST["father_name"])) {
         $fatherName_err = "Please enter your father name";
@@ -77,7 +78,6 @@ if (isset($_POST["register"]) && ($_SERVER["REQUEST_METHOD"] == "POST")) {
     } else {
         $fatherName = $_POST["father_name"];
     }
-
     //validate grand father name
     if (empty($_POST["grand_father_name"])) {
         $gFatherName_err = "Please enter your grand father name";
@@ -88,7 +88,6 @@ if (isset($_POST["register"]) && ($_SERVER["REQUEST_METHOD"] == "POST")) {
     } else {
         $gFatherName = $_POST["grand_father_name"];
     }
-
     //validate gender
     if (empty($_POST["gender"])) {
         $gender_err = "Please select your gender";
@@ -99,51 +98,84 @@ if (isset($_POST["register"]) && ($_SERVER["REQUEST_METHOD"] == "POST")) {
     } else {
         $gender = $_POST["gender"];
     }
-
-   // Validate email
-if (empty($_POST["email"])) {
-    $email_err = "Please enter your email";
-    $test = false;
-} else {
-    $email = trim($_POST["email"]);
-    if (!validateEmail($email)) {
-        $email_err = "Please enter a valid email address (example: user@domain.com)";
+    // Validate email
+    if (empty($_POST["email"])) {
+        $email_err = "Please enter your email";
         $test = false;
     } else {
-        $email = $_POST["email"];
+        $email = trim($_POST["email"]);
+        if (!validateEmail($email)) {
+            $email_err = "Please enter a valid email address (example: user@domain.com)";
+            $test = false;
+        } else {
+            $email = $_POST["email"];
+        }
+    } 
+    // Validate region
+    if (empty($_POST["region"])) {
+        $region_err = "Please select your region";
+        $test = false;
+    } else {
+        $region = $_POST["region"];
     }
-} 
-// Validate region
-if (empty($_POST["region"])) {
-    $region_err = "Please select your region";
-    $test = false;
-} else {
-    $region = $_POST["region"];
-}
-
-// Validate zone
-if (empty($_POST["zone"])) {
-    $zone_err = "Please select your zone";
-    $test = false;
-} else {
-    $zone = $_POST["zone"];
-}
-
-// Validate woreda
-if (empty($_POST["woreda"])) {
-    $woreda_err = "Please select your woreda";
-    $test = false;
-} else {
-    $woreda = $_POST["woreda"];
-}
-
-// Validate kebele
-if (empty($_POST["kebele"])) {
-    $kebele_err = "Please enter your kebele";
-    $test = false;
-} else {
-    $kebele = $_POST["kebele"];
-}
+    // Validate zone
+    if (empty($_POST["zone"])) {
+        $zone_err = "Please select your zone";
+        $test = false;
+    } else {
+        $zone = $_POST["zone"];
+    }
+    // Validate woreda
+    if (empty($_POST["woreda"])) {
+        $woreda_err = "Please select your woreda";
+        $test = false;
+    } else {
+        $woreda = $_POST["woreda"];
+    }
+    // Validate kebele
+    if (empty($_POST["kebele"])) {
+        $kebele_err = "Please enter your kebele";
+        $test = false;
+    } else {
+        $kebele = $_POST["kebele"];
+    }
+    // Validate Date of Birth
+    if (empty($_POST["dob"])) {
+        $dob_err = "Please enter your date of birth";
+        $test = false;
+    } else {
+        $dob = $_POST["dob"];
+    }
+    // Validate Place of Birth
+    if (empty($_POST["birth_place"])) {
+        $birth_place_err = "Please enter your place of birth";
+        $test = false;
+    } else if (validateName($_POST["birth_place"]) == 0) {
+        $birth_place_err = "Please enter a valid place of birth";
+        $test = false;
+    } else {
+        $birth_place = $_POST["birth_place"];
+    }
+    // Validate Emergency Contact Name
+    if (empty($_POST["emergency_contact_name"])) {
+        $emergency_contact_name_err = "Please enter the emergency contact name";
+        $test = false;
+    } else if (validateName($_POST["emergency_contact_name"]) == 0) {
+        $emergency_contact_name_err = "Please enter a valid emergency contact name";
+        $test = false;
+    } else {
+        $emergency_contact_name = $_POST["emergency_contact_name"];
+    }
+    // Validate Emergency Contact Phone
+    if (empty($_POST["emergency_contact_phone"])) {
+        $emergency_contact_phone_err = "Please enter the emergency contact phone number";
+        $test = false;
+    } else if (validatePhoneNumber($_POST["emergency_contact_phone"]) == 0) {
+        $emergency_contact_phone_err = "Please enter a valid emergency contact phone number";
+        $test = false;
+    } else {
+        $emergency_contact_phone = $_POST["emergency_contact_phone"];
+    }
     //validate username
     if (empty($_POST["username"])) {
         $username_err = "Please enter your username";
@@ -155,21 +187,20 @@ if (empty($_POST["kebele"])) {
         $username = $_POST["username"];
     }   
     //validate password
-        if (empty($_POST["password"])) {
-         $password_err = "Please enter your new password";
-         $test = false;
-     } else if (validatePassword($_POST["password"]) == 0) {
-         $password_err = "Please enter a valid password (no invalid symbols)";
-         $test = false;
-     } else {
-         $password = $_POST["password"];
+    if (empty($_POST["password"])) {
+        $password_err = "Please enter your new password";
+        $test = false;
+    } else if (validatePassword($_POST["password"]) == 0) {
+        $password_err = "Please enter a valid password (no invalid symbols)";
+        $test = false;
+    } else {
+        $password = $_POST["password"];
         $strongPassword = isStrongPassword($password);
-         if ($strongPassword !== true) {
-             $password_err = $strongPassword;
-             $test = false;
-       }
-     }
-
+        if ($strongPassword !== true) {
+            $password_err = $strongPassword;
+            $test = false;
+        }
+    }
     //validate password confirmation
     if (empty($_POST["confirm_password"])) {
         $confirmPassword_err = "Please enter your new password";
@@ -179,12 +210,13 @@ if (empty($_POST["kebele"])) {
         $test = false;
     } else if (comparePasswords($_POST["password"], $_POST["confirm_password"]) == 0) {
         $confirmPassword_err = "Password did not match";
+        $test = false;
     } else {
         $confirmPassword = $_POST["confirm_password"];
     }
-      //validate  Phone 
+    //validate Phone 
     if (empty($_POST["phone"])) {
-        $phone_err = "Please enter your id number";
+        $phone_err = "Please enter your phone number";
         $test = false;
     } else if (validatePhoneNumber($_POST["phone"]) == 0) {
         $phone_err = "Please enter valid phone number";
@@ -202,27 +234,24 @@ if (empty($_POST["kebele"])) {
     } else {
         $role_type = $_POST["role_type"];
     }
-if ($test == true) {
-    $userStatus = 0;
-    if (userExist($student_id) == 0) {
-        $encryptedPassword = encryptPassword($password);
-        
-       if (addUser($student_id, $profile_pic, $firstName, $fatherName, $gFatherName, $gender, $role_type, $username, 
-    $encryptedPassword, $email, $phone, $userStatus) == 1) {
-    $success = "User Successfully registered";
-    header('refresh:2');
-} else {
-    $allErr = "There was error while registration";
+    if ($test == true) {
+        $userStatus = 0;
+        if (StudentExist($student_id) == 0) {
+            $encryptedPassword = encryptPassword($password);
+            if (addStudent($student_id, $profile_pic, $firstName, $fatherName, $gFatherName, $gender, $role_type, $username, 
+                $encryptedPassword, $email, $phone, $userStatus, $dob, $birth_place, $emergency_contact_name, $emergency_contact_phone) == 1) {
+                $success = "User Successfully registered";
+                header('refresh:2;url=register_student.php');
+            } else {
+                $allErr = "There was error while registration";
+            }
+        } else {
+            $allErr = "User with this id number already exists";
+        }
+    }
 }
-
-} else {
-    $allErr = "User with this id number already exists";
-}
-}
-
-} //if (isset($_POST["register"]) and ($_SERVER["REQUEST_METHOD"] = "POST")) {
 ?>
-     <!-- Main Content -->
+<!-- Main Content -->
 <div class="main-content">
   <section class="section">
     <form action="" method="POST" enctype="multipart/form-data"> 
@@ -232,15 +261,14 @@ if ($test == true) {
 <div class="avatar-upload">
   <div class="avatar-preview">
     <div class="user-img">
-    <img class="profile-images" src="<?php echo !empty($userProfile["profile_picture"]) ? $userProfile["profile_picture"] :
-     '../assets/img/no.png'; ?>" alt="Profile Picture" width="100" height="100">
+    <img class="profile-images" src="<?php echo !empty($userProfile["profile_picture"]) ? htmlspecialchars($userProfile["profile_picture"]) : '../assets/img/no.png'; ?>" alt="Profile Picture" width="100" height="100">
      </div>
    </div>
 <div class="change-btn mt-2 mb-lg-0 mb-3">
 <input type="file" class="form-control d-none" id="imageUpload" name="profile_picture">
 <label for="imageUpload" class="dlab-upload mb-0 btn btn-primary btn-sm">Choose File</label>
     <button type="button" id="removeImage" class="btn btn-danger light remove-img ms-2 btn-sm">Remove</button><br>
-    <span class="text-danger"><?php echo $profile_pic_err; ?></span>
+    <span class="text-danger"><?php echo htmlspecialchars($profile_pic_err); ?></span>
      </div>
   </div>
 </div>
@@ -249,37 +277,36 @@ if ($test == true) {
   <div class="card-header">
     <h4>Register Student</h4>
   </div>
-    <?php if (!empty($success))
-     { ?>
-  <div class=" form-control bg-success"><?php echo $success; ?></div>
-        <?php  } ?>
+    <?php if (!empty($success)) { ?>
+  <div class="form-control bg-success"><?php echo htmlspecialchars($success); ?></div>
+        <?php } ?>
     <?php if (!empty($allErr)) { ?>
-  <div class=" form-control bg-danger"><?php echo $allErr; ?></div>
-        <?php  } ?>
+  <div class="form-control bg-danger"><?php echo htmlspecialchars($allErr); ?></div>
+        <?php } ?>
 <div class="card-body">                                
   <div class="row">
     <div class="form-group col-12 col-md-6 mb-3">
-       <label for="student_id">Student_id</label>
+       <label for="student_id">Student ID</label>
        <input id="student_id" type="text" class="form-control" name="student_id" 
-       value="<?php echo $generatedId; ?>" readonly/>
-       <span class="text-danger"><?php echo $student_id_err; ?></span>
+       value="<?php echo htmlspecialchars($generatedId); ?>" readonly/>
+       <span class="text-danger"><?php echo htmlspecialchars($student_id_err); ?></span>
     </div>
     <div class="form-group col-12 col-md-6 mb-3">
         <label for="first_name">First Name</label>
-        <input id="first_name" type="text" class="form-control" name="first_name"/>
-        <span class="text-danger"><?php echo $firstName_err; ?></span>
+        <input id="first_name" type="text" class="form-control" name="first_name" value="<?php echo htmlspecialchars($firstName); ?>"/>
+        <span class="text-danger"><?php echo htmlspecialchars($firstName_err); ?></span>
     </div>
 </div>
 <div class="row">
      <div class="form-group col-12 col-md-6 mb-3">
        <label for="father_name">Father Name</label>
-       <input id="father_name" type="text" class="form-control" name="father_name"/>
-       <span class="text-danger"><?php echo $fatherName_err; ?></span>
+       <input id="father_name" type="text" class="form-control" name="father_name" value="<?php echo htmlspecialchars($fatherName); ?>"/>
+       <span class="text-danger"><?php echo htmlspecialchars($fatherName_err); ?></span>
      </div>
      <div class="form-group col-12 col-md-6 mb-3">
        <label for="grand_father_name">Grand Father Name</label>
-       <input id="grand_father_name" type="text" class="form-control" name="grand_father_name"/>
-       <span class="text-danger"><?php echo $gFatherName_err; ?></span>
+       <input id="grand_father_name" type="text" class="form-control" name="grand_father_name" value="<?php echo htmlspecialchars($gFatherName); ?>"/>
+       <span class="text-danger"><?php echo htmlspecialchars($gFatherName_err); ?></span>
     </div>       
 </div>
 <div class="row">
@@ -287,126 +314,130 @@ if ($test == true) {
     <label for="gender">Gender</label>
     <select name="gender" id="gender" class="form-control">
         <option value="">Gender</option>
-        <option value="M">M</option>
-        <option value="F">F</option>
+        <option value="M" <?php echo $gender == 'M' ? 'selected' : ''; ?>>M</option>
+        <option value="F" <?php echo $gender == 'F' ? 'selected' : ''; ?>>F</option>
     </select>
-    <span class="text-danger"><?php echo $gender_err; ?></span>
+    <span class="text-danger"><?php echo htmlspecialchars($gender_err); ?></span>
   </div> 
   <div class="form-group col-12 col-md-6 mb-3">
     <label for="Email">Email</label>
-    <input id="Email" type="text" class="form-control" name="email" />
-    <span class="text-danger"><?php echo $email_err; ?></span>
+    <input id="Email" type="text" class="form-control" name="email" value="<?php echo htmlspecialchars($email); ?>" />
+    <span class="text-danger"><?php echo htmlspecialchars($email_err); ?></span>
   </div>   
-  <!-- Personal Details -->
+</div>
+<!-- Personal Details -->
 <div class="row">
     <div class="form-group col-12 col-md-6 mb-3">
         <label for="dob">Date of Birth</label>
-        <input type="date" name="dob" id="dob" class="form-control">
+        <input type="date" name="dob" id="dob" class="form-control" value="<?php echo htmlspecialchars($dob); ?>">
+        <span class="text-danger"><?php echo htmlspecialchars($dob_err); ?></span>
     </div>
     <div class="form-group col-12 col-md-6 mb-3">
         <label for="birth_place">Place of Birth</label>
-        <input type="text" name="birth_place" id="birth_place" class="form-control">
+        <input type="text" name="birth_place" id="birth_place" class="form-control" value="<?php echo htmlspecialchars($birth_place); ?>">
+        <span class="text-danger"><?php echo htmlspecialchars($birth_place_err); ?></span>
     </div>
 </div>  
-  <div class="row">
-                                <div class="form-group col-6">
-                                    <label>Region</label>
-                                    <select class="form-control" name="region">
-                                        <option value="">Select Region</option>
-                                        <?php
-                                        $regions = getAllRegions();
-                                        foreach ($regions as $regionItem): ?>
-                                            <option value="<?php echo $regionItem['id']; ?>"><?php echo $regionItem['name']; ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                    <span class="text-danger"><?php echo $region_err; ?></span>
-                                </div>
-                                <div class="form-group col-6">
-                                <label>Zone</label>
-                     <select class="form-control" name="zone" id="zone">
-                  <option value="">Select Zone</option>
-                  </select>
-                 <span class="text-danger"><?php echo $zone_err; ?></span>
-                           </div>
-                         </div>
-                            <div class="row">
-                                <div class="form-group col-6">
-                                <label>Woreda</label>
+<div class="row">
+    <div class="form-group col-6">
+        <label>Region</label>
+        <select class="form-control" name="region">
+            <option value="">Select Region</option>
+            <?php
+            $regions = getAllRegions();
+            foreach ($regions as $regionItem): ?>
+                <option value="<?php echo htmlspecialchars($regionItem['id']); ?>" <?php echo $region == $regionItem['id'] ? 'selected' : ''; ?>><?php echo htmlspecialchars($regionItem['name']); ?></option>
+            <?php endforeach; ?>
+        </select>
+        <span class="text-danger"><?php echo htmlspecialchars($region_err); ?></span>
+    </div>
+    <div class="form-group col-6">
+        <label>Zone</label>
+        <select class="form-control" name="zone" id="zone">
+            <option value="">Select Zone</option>
+        </select>
+        <span class="text-danger"><?php echo htmlspecialchars($zone_err); ?></span>
+    </div>
+</div>
+<div class="row">
+    <div class="form-group col-6">
+        <label>Woreda</label>
         <select class="form-control" name="woreda" id="woreda">
             <option value="">Select Woreda</option>
         </select>
-        <span class="text-danger"><?php echo $woreda_err; ?></span>
+        <span class="text-danger"><?php echo htmlspecialchars($woreda_err); ?></span>
     </div>
-                                <div class="form-group col-6">
-                                    <label>Kebele</label>
-                                    <input type="text" class="form-control" name="kebele" />
-                                    <span class="text-danger"><?php echo $kebele_err; ?></span>
-                                </div>
-                            </div>
+    <div class="form-group col-6">
+        <label>Kebele</label>
+        <input type="text" class="form-control" name="kebele" value="<?php echo htmlspecialchars($kebele); ?>" />
+        <span class="text-danger"><?php echo htmlspecialchars($kebele_err); ?></span>
+    </div>
+</div>
 <div class="row">
   <div class="form-group col-12 col-md-6 mb-3">
     <label for="password" class="d-block">Password</label>
     <input type="password" id="password" name="password" class="form-control" onkeyup="checkADDPassword()" />
-  <ul id="password-checklist" style="list-style: none; padding: 0; display: none;">
-    <li id="lower" style="color: red;">❌ One lowercase letter</li>
-    <li id="upper" style="color: red;">❌ One uppercase letter</li>
-    <li id="special" style="color: red;">❌ One special character (@#$%^&+=!)</li>
-    <li id="length" style="color: red;">❌ At least 8 characters</li>
-</ul>
-    <span class="text-danger"><?php echo $password_err; ?></span>
+    <ul id="password-checklist" style="list-style: none; padding: 0; display: none;">
+        <li id="lower" style="color: red;">❌ One lowercase letter</li>
+        <li id="upper" style="color: red;">❌ One uppercase letter</li>
+        <li id="special" style="color: red;">❌ One special character (@#$%^&+=!)</li>
+        <li id="length" style="color: red;">❌ At least 8 characters</li>
+    </ul>
+    <span class="text-danger"><?php echo htmlspecialchars($password_err); ?></span>
   </div>
   <div class="form-group col-12 col-md-6 mb-3">
     <label for="password2" class="d-block">Password Confirmation</label>
     <input id="password2" type="password" class="form-control" name="confirm_password" />
-    <span class="text-danger"><?php echo $confirmPassword_err; ?></span>
+    <span class="text-danger"><?php echo htmlspecialchars($confirmPassword_err); ?></span>
   </div>
   <div class="form-group col-12 col-md-6 mb-3">
-    <label for="username">username</label>
-    <input id="username" type="text" class="form-control" name="username" />
-    <span class="text-danger"><?php echo $username_err; ?></span>
+    <label for="username">Username</label>
+    <input id="username" type="text" class="form-control" name="username" value="<?php echo htmlspecialchars($username); ?>" />
+    <span class="text-danger"><?php echo htmlspecialchars($username_err); ?></span>
   </div> 
    <div class="form-group col-12 col-md-6 mb-3">
     <label for="phone">Phone Number</label>
-    <input id="phone" type="text" class="form-control" name="phone" />
-    <span class="text-danger"><?php echo $phone_err; ?></span>
+    <input id="phone" type="text" class="form-control" name="phone" value="<?php echo htmlspecialchars($phone); ?>" />
+    <span class="text-danger"><?php echo htmlspecialchars($phone_err); ?></span>
   </div>
 </div>
- <div class="form-group col-12 col-md-6 mb-3">
+<div class="form-group col-12 col-md-6 mb-3">
     <label for="role_type">Class Type</label>
     <select name="role_type" id="role_type" class="form-control">
         <option value="">Select Class Type</option>
-        <option value="general">General</option>
-        <option value="natural">Natural</option>
-        <option value="social">Social</option>
+        <option value="general" <?php echo $role_type == 'general' ? 'selected' : ''; ?>>General</option>
+        <option value="natural" <?php echo $role_type == 'natural' ? 'selected' : ''; ?>>Natural</option>
+        <option value="social" <?php echo $role_type == 'social' ? 'selected' : ''; ?>>Social</option>
     </select>
-<span class="text-danger"><?php echo $role_type_err; ?></span>
+    <span class="text-danger"><?php echo htmlspecialchars($role_type_err); ?></span>
 </div>
 <!-- Emergency Contact -->
 <h5 class="mt-4">Emergency Contact</h5>
 <div class="row">
     <div class="form-group col-12 col-md-6 mb-3">
         <label for="emergency_contact_name">Contact Name</label>
-        <input type="text" name="emergency_contact_name" id="emergency_contact_name" class="form-control">
+        <input type="text" name="emergency_contact_name" id="emergency_contact_name" class="form-control" value="<?php echo htmlspecialchars($emergency_contact_name); ?>">
+        <span class="text-danger"><?php echo htmlspecialchars($emergency_contact_name_err); ?></span>
     </div>
     <div class="form-group col-12 col-md-6 mb-3">
         <label for="emergency_contact_phone">Contact Phone</label>
-        <input type="text" name="emergency_contact_phone" id="emergency_contact_phone" class="form-control">
+        <input type="text" name="emergency_contact_phone" id="emergency_contact_phone" class="form-control" value="<?php echo htmlspecialchars($emergency_contact_phone); ?>">
+        <span class="text-danger"><?php echo htmlspecialchars($emergency_contact_phone_err); ?></span>
     </div>
 </div>
-
-  <div class="form-group">
+<div class="form-group">
     <input type="submit" name="register" class="btn btn-primary btn-lg btn-block" value="Register"/>   
-    <input type="reset" name="reset"  class="btn btn-danger btn-lg btn-block" value="reset"/>
-  </div>
+    <input type="reset" name="reset" class="btn btn-danger btn-lg btn-block" value="Reset"/>
+</div>
 </form>
- </div>
-  </div>
-   </div>
-    </div>
+</div>
+</div>
+</div>
+</div>
 </section>
 </div>
- </div>
-  </div>
+</div>
+</div>
 <?php
 include('../admin/footer.php');
 ?>
