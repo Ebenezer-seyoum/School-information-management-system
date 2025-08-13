@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Aug 11, 2025 at 05:00 PM
+-- Generation Time: Aug 13, 2025 at 04:53 PM
 -- Server version: 9.1.0
 -- PHP Version: 8.3.14
 
@@ -220,14 +220,52 @@ CREATE TABLE IF NOT EXISTS `section` (
 DROP TABLE IF EXISTS `students`;
 CREATE TABLE IF NOT EXISTS `students` (
   `sid` int NOT NULL AUTO_INCREMENT,
-  `student_id` int NOT NULL,
-  `first_name` varchar(30) NOT NULL,
-  `father_name` varchar(30) NOT NULL,
-  `grandfather_name` varchar(30) NOT NULL,
-  `gender` varchar(30) NOT NULL,
-  `address` varchar(30) NOT NULL,
-  PRIMARY KEY (`sid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `student_photo` varchar(250) COLLATE utf8mb4_general_ci NOT NULL,
+  `student_id` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `first_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `father_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `grand_father_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `gender` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `dob` date NOT NULL,
+  `email` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `phone` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `birth_place` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `nationality` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `region` int NOT NULL,
+  `zone` int DEFAULT NULL,
+  `woreda` int DEFAULT NULL,
+  `kebele` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `username` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `role_type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `mother_name` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `father_contact` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `mother_contact` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `father_occupation` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `mother_occupation` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `emergency_contact_name` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `emergency_contact_phone` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `blood_group` varchar(10) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `medical_condition` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `other_condition` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `disabilities` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `previous_school` varchar(150) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `academic_status` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `previous_documents` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`sid`),
+  UNIQUE KEY `student_id` (`student_id`),
+  UNIQUE KEY `username` (`username`)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `students`
+--
+
+INSERT INTO `students` (`sid`, `student_photo`, `student_id`, `first_name`, `father_name`, `grand_father_name`, `gender`, `dob`, `email`, `phone`, `birth_place`, `nationality`, `region`, `zone`, `woreda`, `kebele`, `username`, `role_type`, `password`, `mother_name`, `father_contact`, `mother_contact`, `father_occupation`, `mother_occupation`, `emergency_contact_name`, `emergency_contact_phone`, `blood_group`, `medical_condition`, `other_condition`, `disabilities`, `previous_school`, `academic_status`, `previous_documents`, `created_at`) VALUES
+(1, '../assets/img/wallpaper.jpg', 'BSS/STU/0001/17', 'alem', 'Kebede', 'tefera', 'M', '2009-01-01', 'Abseyoum16@gmail.com', '+251909299398', 'bishoftu', 'ethiopia', 12, 89, 591, 'kebele 01', 'Mecry', 'general', 'igJzPdVP5cUymhx5zrs7NQ==', 'alem', '+251913865846', '+251913865846', 'doctor', 'doctur', 'seyoium', '+251909299398', 'A+', 'Epilepsy', '', 'Yes', 'ebenezer', 'Ongoing Studies', '', '2025-08-13 15:21:24'),
+(2, '', 'BSS/STU/0002/17', 'abenezer', 'seyoum', 'tefera', 'M', '2009-01-01', 'Abeniseyoum16@gmail.com', '+251909299378', 'bishoftu', 'ethiopia', 12, 89, 591, 'kebele 01', 'ab', 'natural', 'e3GsIIeW3jPNBqjoHG9rMw==', 'alem', '+251913865846', '+251913865846', 'doctor', 'doctur', 'seyoium', '+251909299398', 'A+', 'Diabetes', '', 'Yes', 'ebenezer', 'Dropped Out', '../assets/case_files/DS Outline.pdf', '2025-08-13 15:37:38'),
+(3, '../assets/img/wallpaper.jpg', 'BSS/STU/0003/17', 'alem', 'Abebe', 'tefera', 'M', '2009-01-01', 'abeniseyoum16@gmail.com', '+251909299378', 'bishoftu', 'ethiopia', 5, 34, 240, 'kebele 04', 'miki', 'social', '7JhZ6nTY0ZMD5g4DeE/W/Q==', 'alem', '+251913865846', '+251913865846', 'doctor', 'doctur', 'seyoium', '+251909299398', 'A+', 'Epilepsy', '', 'Yes', 'ebenezer', 'Dropped Out', '../assets/case_files/DS Outline.pdf', '2025-08-13 15:43:56');
 
 -- --------------------------------------------------------
 
@@ -264,15 +302,17 @@ CREATE TABLE IF NOT EXISTS `users` (
   `phone` varchar(50) NOT NULL,
   `user_status` int NOT NULL,
   PRIMARY KEY (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`uid`, `idNumber`, `profile_picture`, `first_name`, `father_name`, `grandfather_name`, `gender`, `user_type`, `username`, `password`, `email`, `phone`, `user_status`) VALUES
-(2, 'BSS/ADM/0002/17 ', '../assets/img/pp.jpg', 'abenezer ', 'seyoum', 'mamo', 'M', '2', 'ab', 'nIvRPLWFfGH/pgidb0LY8A==', 'Abseyoum16@gmail.com', '+251909299398', 0),
-(3, 'BSS/DIR/0001/17', '../assets/img/profile.jpg', 'miki', 'Abebe', 'Mohamed', 'M', '3', 'miki', '7JhZ6nTY0ZMD5g4DeE/W/Q==', 'abseyoum1634@gmail.com', '+251909299378', 1);
+(2, 'BSS/ADM/0002/17 ', '../assets/img/pp.jpg', 'abenezer ', 'seyoum', 'mamo', 'M', '2', 'ab', 'nIvRPLWFfGH/pgidb0LY8A==', 'Abseyoum16@gmail.com', '+251909299398', 1),
+(3, 'BSS/DIR/0001/17', '../assets/img/profile.jpg', 'miki', 'Abebe', 'Mohamed', 'M', '3', 'miki', '7JhZ6nTY0ZMD5g4DeE/W/Q==', 'abseyoum1634@gmail.com', '+251909299378', 0),
+(4, 'BSS/TCH/0001/17', '../assets/img/man united.jpg', 'Eyu', 'tareke', 'Mohamed', 'M', '1', 'hamid', '3yFM88FVzw+XU0J2lPnUpA==', 'abseyoum1634@gmail.com', '+251909299378', 0),
+(5, 'BSS/INSTR/0001/17', '../assets/img/download.jpg', 'alem', 'Kebede', 'teferaa', 'F', '4', 'simo', 'KXCtygnqkBRg46jdWFl5yQ==', 'Abeniseyoum16@gmail.com', '+251909299378', 0);
 
 -- --------------------------------------------------------
 
