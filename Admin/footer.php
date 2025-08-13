@@ -117,6 +117,36 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 </script>
+<!-- Add this JS at the bottom to rotate arrow -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const collapseHeaders = document.querySelectorAll('[data-bs-toggle="collapse"]');
+    collapseHeaders.forEach(header => {
+      const arrow = header.querySelector('.collapse-arrow');
+      const targetId = header.getAttribute('href') || header.dataset.bsTarget; // get collapse target
+      const collapseEl = document.querySelector(targetId);
+      if (collapseEl && arrow) {
+        collapseEl.addEventListener('show.bs.collapse', () => {
+          arrow.style.transform = 'rotate(0deg)';
+        });
+        collapseEl.addEventListener('hide.bs.collapse', () => {
+          arrow.style.transform = 'rotate(90deg)';
+        });
+        if (!collapseEl.classList.contains('show')) {
+          arrow.style.transform = 'rotate(90deg)';
+        }
+      }
+    });
+  });
+</script>
+
+<!-- medical condtion in student register -->
+ <script>
+  document.getElementById('medical_condition').addEventListener('change', function () {
+    document.getElementById('other_condition_group').style.display = 
+      this.value === 'Other' ? 'block' : 'none';
+  });
+</script>
 <!-- select dynamically address -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>

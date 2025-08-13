@@ -39,6 +39,17 @@ function validateIdNumber($data)
     else
         return 0;
 }
+//validate date 
+function checkDateOfBirth($dob) {
+    // Check if the date is in YYYY-MM-DD format
+    $d = DateTime::createFromFormat('Y-m-d', $dob);
+    if ($d && $d->format('Y-m-d') === $dob) {
+        return true; // valid date format
+    } else {
+        return false; // invalid date format
+    }
+}
+
 //validate number
 function validateNumber($data)
 {
@@ -176,6 +187,24 @@ function checkUserCredentials($username, $inputPassword) {
 
     return false; // Login failed
 }
+// New function to check students table
+function checkStudentCredentials($student_id, $inputPassword) {
+    global $conn;
+    $student_id = mysqli_real_escape_string($conn, $student_id);
+
+    $query = mysqli_query($conn, "SELECT * FROM students WHERE student_id = '$student_id'");
+    $row = mysqli_fetch_assoc($query);
+
+    if ($row) {
+        // Decrypt password like users
+        $decryptedPassword = decryptPassword($row['password']);
+        if ($inputPassword === $decryptedPassword) {
+            return $row;
+        }
+    }
+
+    return false;
+}
 
 
 //user password get
@@ -227,6 +256,20 @@ function validateUserType($data)
     else
         return 0;
 }
+//validate class type
+function validateClassType($data)
+{
+    $data = basics($data);
+    if (preg_match("/^[a-zA-Z0-9 _]*$/", $data))
+        return 1;
+    else
+        return 0;
+}
+  // Function to validate blood group
+    function validateBloodGroup($bloodGroup) {
+      $validBloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+      return in_array($bloodGroup, $validBloodGroups);
+    }
 // End validation
 
 //function for user_status 
@@ -352,8 +395,8 @@ function getNextIdNumber() {
         $row = mysqli_fetch_assoc($result);
         $lastId = $row['student_id']; 
         $parts = explode("/", $lastId);
-        if (count($parts) === 3) {
-            $newNumber = (int)$parts[1] + 1;
+        if (count($parts) === 4) {
+            $newNumber = (int)$parts[2] + 1;
         }
     }
     $paddedNumber = str_pad($newNumber, 4, "0", STR_PAD_LEFT);
@@ -417,13 +460,7 @@ $role_type, $username, $encrypted_password, $email, $phone, $userStatus)
     VALUES 
     ('$idNumber', '$profile_pic', '$firstName', '$fatherName', '$gFatherName', '$gender',
      '$role_type', '$username', '$encrypted_password', '$email', '$phone', $userStatus)";
-    $query = mysqli_query($conn, $query);
-    if ($query) {
-        return 1;
-    } else {
-        echo "MySQL Error: " . mysqli_error($conn);
-        return 0;
-    }
+  
 }
 
 // Function to check if a student exists by ID
@@ -436,31 +473,71 @@ function studentExist($student_id)
 
 
 // Function to register a new student
-function registerStudent($student_id, $profile_pic, $firstName, $fatherName, $gFatherName, $gender, 
-    $role_type, $username, $password, $email, $phone, $userStatus, $dob, $birth_place, 
-    $emergency_contact_name, $emergency_contact_phone)
+function registerStudent( $student_photo, $student_id, $first_name, $father_name, $grand_father_name,
+    $gender, $dob, $email, $phone, $birth_place, $nationality,
+    $region, $zone, $woreda, $kebele, $username, $role_type, $password,
+    $mother_name = null, $father_contact = null, $mother_contact = null,
+    $father_occupation = null, $mother_occupation = null,
+    $emergency_contact_name = null, $emergency_contact_phone = null,
+    $blood_group = null, $medical_condition = null, $other_condition = null,
+    $disabilities = null, $previous_school = null, $academic_status = null,
+    $previous_documents = null)
 {
     global $conn;
+    // Sanitize variables
+    $student_id = mysqli_real_escape_string($conn, $student_id);
+    $first_name = mysqli_real_escape_string($conn, $first_name);
+    $father_name = mysqli_real_escape_string($conn, $father_name);
+    $grand_father_name = mysqli_real_escape_string($conn, $grand_father_name);
+    $gender = mysqli_real_escape_string($conn, $gender);
+    $dob = mysqli_real_escape_string($conn, $dob);
+    $email = mysqli_real_escape_string($conn, $email);
+    $phone = mysqli_real_escape_string($conn, $phone);
+    $birth_place = mysqli_real_escape_string($conn, $birth_place);
+    $nationality = mysqli_real_escape_string($conn, $nationality);
+    $region = mysqli_real_escape_string($conn, $region);
+    $zone = mysqli_real_escape_string($conn, $zone);
+    $woreda = mysqli_real_escape_string($conn, $woreda);
+    $kebele = mysqli_real_escape_string($conn, $kebele);
+    $username = mysqli_real_escape_string($conn, $username);
+    $role_type = mysqli_real_escape_string($conn, $role_type);
+    $password = mysqli_real_escape_string($conn, $password);
+    $mother_name = mysqli_real_escape_string($conn, $mother_name);
+    $father_contact = mysqli_real_escape_string($conn, $father_contact);
+    $mother_contact = mysqli_real_escape_string($conn, $mother_contact);
+    $father_occupation = mysqli_real_escape_string($conn, $father_occupation);
+    $mother_occupation = mysqli_real_escape_string($conn, $mother_occupation);
+    $emergency_contact_name = mysqli_real_escape_string($conn, $emergency_contact_name);
+    $emergency_contact_phone = mysqli_real_escape_string($conn, $emergency_contact_phone);
+    $blood_group = mysqli_real_escape_string($conn, $blood_group);
+    $medical_condition = mysqli_real_escape_string($conn, $medical_condition);
+    $other_condition = mysqli_real_escape_string($conn, $other_condition);
+    $disabilities = mysqli_real_escape_string($conn, $disabilities);
+    $previous_school = mysqli_real_escape_string($conn, $previous_school);
+    $academic_status = mysqli_real_escape_string($conn, $academic_status);
+    $previous_documents = mysqli_real_escape_string($conn, $previous_documents);
 
- $query = "INSERT INTO students (
-    student_id, first_name, father_name, grandfather_name, gender, 
-    email, place_of_birth, date_of_birth, region, zone, 
-    worada, kebele, username, password, phone, 
-    class_type, contact_name, contact_phone, profile_image, student_status
-) VALUES (
-    '$student_id', '$firstName', '$fatherName', '$gFatherName', '$gender',
-    '$email', '$place_of_birth', '$date_of_birth', '$region', '$zone',
-    '$worada', '$kebele', '$username', '$encryptedPassword', '$phone',
-    '$class_type', '$contact_name', '$contact_phone', '$profile_image', '$student_status'
-)";
-
-
-    $result = mysqli_query($conn, $query);
-
-    if ($result) {
-        return 1; // success
+    // INSERT query matching your table columns
+    $query = "
+        INSERT INTO students (
+            student_photo, student_id, first_name, father_name, grand_father_name, gender, dob, email, phone, birth_place, nationality,
+            region, zone, woreda, kebele, username, role_type, password, mother_name, father_contact, mother_contact,
+            father_occupation, mother_occupation, emergency_contact_name, emergency_contact_phone, blood_group, medical_condition,
+            other_condition, disabilities, previous_school, academic_status, previous_documents
+        ) VALUES (
+            '$student_photo', '$student_id', '$first_name', '$father_name', '$grand_father_name', '$gender', '$dob', '$email', '$phone',
+            '$birth_place', '$nationality', '$region', '$zone', '$woreda', '$kebele', '$username', '$role_type', '$password',
+            '$mother_name', '$father_contact', '$mother_contact', '$father_occupation', '$mother_occupation', '$emergency_contact_name',
+            '$emergency_contact_phone', '$blood_group', '$medical_condition', '$other_condition', '$disabilities', '$previous_school',
+            '$academic_status', '$previous_documents'
+        )
+    ";
+    $query = mysqli_query($conn, $query);
+    if ($query) {
+        return 1;
     } else {
-        return "MySQL Error: " . mysqli_error($conn);
+        echo "MySQL Error: " . mysqli_error($conn);
+        return 0;
     }
 }
 
@@ -763,6 +840,13 @@ function getUserByID($data)
         $result["password"] = decryptPassword($result["password"]);
     }
     return $result;
+}
+function getStudentByID($sid) {
+    global $conn;
+    $sid = mysqli_real_escape_string($conn, $sid);
+    $query = mysqli_query($conn, "SELECT * FROM students WHERE sid = '$sid'");
+    $result = mysqli_fetch_assoc($query);
+    return $result; 
 }
 
 function getUserIdNumberByID($data)

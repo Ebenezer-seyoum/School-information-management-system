@@ -33,39 +33,45 @@ if (isset($_POST["login"]) and ($_SERVER["REQUEST_METHOD"] == "POST")) {
       // $all_err = "You are already login.";
     // } else {   
     // Check user credentials
-    if ($test == true) {
-        if (checkUserByUsername($username)) {
-            $user_data = checkUserCredentials($username , $password);
-            if ($user_data) {
-                if ($user_data['user_status'] == 2) {
-                    $all_err = "This account is deactivated. Please contact the admin.";
-                } else if ($user_data['user_status'] == 0 || $user_data['user_status'] == 1) {
-                    $_SESSION["uid"] = $user_data['uid'];
-                    updateUserStatus(1, $_SESSION["uid"]);
-                   $roleName = getRoleNameById($user_data['user_type']);
+   if ($test == true) {
+    $user_data = checkUserCredentials($username, $password);
 
-if ($roleName === "Admin") {
-     header('location: Admin/admin.php');
-} else if ($roleName === "Director") {
-    header('location: Director/director.php');
-} else if ($roleName === "Instructor") {
-    header('location: Instructor/instructor.php');
-} else if ($roleName === "Teacher") {
-    header('location: Teacher/teacher.php');
-} else if ($roleName === "student") {
-    header('location: Student/student.php');
-}
+    if ($user_data) {
+        // User found in users table
+        if ($user_data['user_status'] == 2) {
+            $all_err = "This account is deactivated. Please contact the admin.";
+        } else {
+            $_SESSION["uid"] = $user_data['uid'];
+            updateUserStatus(1, $_SESSION["uid"]);
+            $roleName = getRoleNameById($user_data['user_type']);
 
-                } 
-            } else {
-                $all_err = "There is no user associated with the given information";
+            if ($roleName === "Admin") {
+                header('location: Admin/admin.php');
+                exit;
+            } else if ($roleName === "Director") {
+                header('location: Director/director.php');
+                exit;
+            } else if ($roleName === "Instructor") {
+                header('location: Instructor/instructor.php');
+                exit;
+            } else if ($roleName === "Teacher") {
+                header('location: Teacher/teacher.php');
+                exit;
             }
+        }
+    } else {
+        // Not found in users table → check students table
+        $student_data = checkStudentCredentials($username, $password);
+        if ($student_data) {
+            $_SESSION["sid"] = $student_data['student_id'];
+            header('location: Student/student.php');
+            exit;
         } else {
             $all_err = "There is no user associated with the given information";
         }
     }
- }
-// }
+}
+}
 ?>
 <!-- Navigation Bar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">

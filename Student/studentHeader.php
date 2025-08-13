@@ -33,11 +33,10 @@ include '../connection/function.php';
 	<link rel="stylesheet" href="../assets/css/kaiadmin.min.css">
 </head>
 <?php
-$profile = getUserByID($_SESSION["uid"]);
-$roleName = getRoleNameById($profile["user_type"]); 
-
-if (isset($_SESSION["uid"]) and ($roleName == "Student")) {
-?>	
+if (isset($_SESSION["sid"])) {
+  
+$profile = getStudentByID($_SESSION["sid"]);
+?>
 <body>
 <div class="wrapper">
   <div class="sidebar" data-background-color="dark">
@@ -58,7 +57,7 @@ if (isset($_SESSION["uid"]) and ($roleName == "Student")) {
   <div class="sidebar-content">
 	<ul class="nav nav-secondary">
 	  <li class="nav-item">
-    <a href="director.php" class="collapsed"><i class="fas fa-home"></i><p><?php echo $roleName = getRoleNameById($profile["user_type"]); ?></p></a></li>   
+    <a href="student.php" class="collapsed"><i class="fas fa-home"></i><p><?php echo htmlspecialchars(($profile['first_name'] ?? '') . ' ' . ($profile['father_name'] ?? '')); ?></p></a></li>   
 <li class="nav-item">
     <a data-bs-toggle="collapse" href="#users" role="button" aria-expanded="false" aria-controls="users">
         <i class="fas fa-users-cog"></i>
@@ -174,20 +173,20 @@ if (isset($_SESSION["uid"]) and ($roleName == "Student")) {
 <!-- User Profile -->
 <li class="nav-item topbar-user dropdown hidden-caret">
  <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#" aria-expanded="false">
-    <div class="avatar-sm"><img class="profile-img" src="<?php echo $profile["profile_picture"]; ?>" 
+    <div class="avatar-sm"><img class="profile-img" src="<?php echo $profile["student_photo"]; ?>" 
 	       alt="Profile Picture" width="100" height="100"></div>
-    <span class="profile-username"><span class="op-7"><?php echo "$profile[username]";?></span></span></span>
+    <span class="profile-username"><span class="op-7"><?php echo htmlspecialchars(($profile['first_name'] ?? '') . ' ' . ($profile['father_name'] ?? '')); ?></span></span></span>
  </a>
 <ul class="dropdown-menu dropdown-user animated fadeIn">
   <div class="dropdown-user-scroll scrollbar-outer">
 <li>
 <div class="user-box">
   <div class="avatar-lg">
-    <img class="profile-img" src="<?php echo $profile["profile_picture"]; ?>" alt="Profile Picture" width="100" height="100"></div>
+    <img class="profile-img" src="<?php echo htmlspecialchars($profile['student_photo'] ?? ''); ?>" alt="Profile Picture" width="100" height="100"></div>
 	  <div class="u-text">
-		<h4><?php echo "$profile[username]";?></h4>
-		<p class="text-muted"><?php echo "$profile[email]";?></p>
-        <a href="profile.php?uid=<?php echo $profile['uid']; ?>" class="btn btn-xs btn-secondary btn-sm">View Profile</a>
+		<h4><?php echo htmlspecialchars($profile['first_name'] ?? ''); ?></h4>
+		<p class="text-muted"><?php echo htmlspecialchars($profile['email'] ?? ''); ?></p>
+        <a href="profile.php?sid=<?php echo htmlspecialchars($profile['sid'] ?? ''); ?>" class="btn btn-xs btn-secondary btn-sm">View Profile</a>
         <a href="../connection/logout.php" class="btn btn-xs btn-secondary btn-sm">Logout</a>
 								    </div>
 								</div>
