@@ -58,47 +58,65 @@ $profile = getStudentByID($_SESSION["sid"]);
 	<ul class="nav nav-secondary">
 	  <li class="nav-item">
     <a href="student.php" class="collapsed"><i class="fas fa-home"></i><p><?php echo htmlspecialchars(($profile['first_name'] ?? '') . ' ' . ($profile['father_name'] ?? '')); ?></p></a></li>   
+  <!-- Class -->
 <li class="nav-item">
-    <a data-bs-toggle="collapse" href="#users" role="button" aria-expanded="false" aria-controls="users">
-        <i class="fas fa-users-cog"></i>
-        <p>Manage Students</p>
-        <span class="caret"></span>
-    </a>
-    <div class="collapse" id="users">
-        <ul class="nav nav-collapse">
-            <li><a href="add_user.php"><i class="fas fa-user-plus"></i> Create Account</a></li>
-            <li><a href="view_userForUpdate.php"><i class="fas fa-user-edit"></i> Update Account</a></li>
-            <li><a href="delete_user.php"><i class="fas fa-user-times"></i> Delete Account</a></li>
-            <li><a href="Deactive_user.php"><i class="fas fa-user-slash"></i> De-Active Account</a></li>
-            <li><a href="list_user.php"><i class="fas fa-users"></i> View All Users</a></li>
-        </ul>
-    </div>
-</li>
-
-<li class="nav-item">
-<a data-bs-toggle="collapse" href="#cases"><i class="fas fa-balance-scale"></i><p>Students</p><span class="caret"></span></a>
-    <div class="collapse" id="cases">
-     <ul class="nav nav-collapse">
-    <li><a href="pending_case.php"><i class="fas fa-hourglass-half"></i>Pending Cases</a></li>
-    <li><a href="open_case.php"><i class="fas fa-folder-open"></i> Open Cases</a></li>
-    <li><a href="distributed_case.php"><i class="fas fa-gavel"></i> Distributed Cases</a></li>
-    <li><a href="pending_appointment.php"><i class="fas fa-hourglass-end"></i> Pending Appointment Cases</a></li>
-    <li><a href="appointed_case.php"><i class="fas fa-calendar-check"></i> Appointed Cases</a></li>
-    <li><a href="pending_decision.php"><i class="fas fa-hourglass-end"></i> Pending Decision Cases</a></li>
-    <li><a href="decided_case.php"><i class="fas fa-check-circle"></i> Decided Cases</a></li>
-     </ul>
-  </div>
-</li>
-<li class="nav-item">
-  <a data-bs-toggle="collapse" href="#casesManagement"><i class="fas fa-file-contract"></i><p>Academic Management</p><span class="caret"></span></a>
-  <div class="collapse" id="casesManagement">
+  <a data-bs-toggle="collapse" href="#classMenu" role="button" aria-expanded="false" aria-controls="classMenu">
+    <i class="fas fa-chalkboard-teacher"></i>
+    <p>Class</p>
+    <span class="caret"></span>
+  </a>
+  <div class="collapse" id="classMenu">
     <ul class="nav nav-collapse">
-      <li><a href="update_case.php"><i class="fas fa-edit"></i> Update Cases</a></li>
-      <li><a href="delete_case.php"><i class="fas fa-trash-alt"></i> Delete Cases</a></li>
-      <li><a href="view_AllCases.php"><i class="fas fa-folder-open"></i> View All Cases</a></li>
+      <li><a href="class.php"><i class="fas fa-list"></i> My Classes</a></li>
+      <li><a href="class_schedule.php"><i class="fas fa-calendar-alt"></i> Class Schedule</a></li>
     </ul>
   </div>
 </li>
+
+<!-- Attendance -->
+<li class="nav-item">
+  <a data-bs-toggle="collapse" href="#attendanceMenu" role="button" aria-expanded="false" aria-controls="attendanceMenu">
+    <i class="fas fa-calendar-check"></i>
+    <p>Attendance</p>
+    <span class="caret"></span>
+  </a>
+  <div class="collapse" id="attendanceMenu">
+    <ul class="nav nav-collapse">
+      
+      <li><a href="attendance_report.php"><i class="fas fa-eye"></i> View Attendance</a></li>
+    </ul>
+  </div>
+</li>
+
+<!-- Mark -->
+<li class="nav-item">
+  <a data-bs-toggle="collapse" href="#markMenu" role="button" aria-expanded="false" aria-controls="markMenu">
+    <i class="fas fa-pen"></i>
+    <p>Mark</p>
+    <span class="caret"></span>
+  </a>
+  <div class="collapse" id="markMenu">
+    <ul class="nav nav-collapse">
+      
+      <li><a href="mark_report.php"><i class="fas fa-chart-bar"></i> View Marks</a></li>
+    </ul>
+  </div>
+</li>
+
+<!-- Announcements -->
+<li class="nav-item">
+  <a data-bs-toggle="collapse" href="#announcementMenu" role="button" aria-expanded="false" aria-controls="announcementMenu">
+    <i class="fas fa-bullhorn"></i>
+    <p>Announcements</p>
+    <span class="caret"></span>
+  </a>
+  <div class="collapse" id="announcementMenu">
+    <ul class="nav nav-collapse">
+      <li><a href="announcement.php"><i class="fas fa-bell"></i> View Announcements</a></li>
+    </ul>
+  </div>
+</li>
+
 <li class="nav-item">
    <a data-bs-toggle="collapse" href="#feedback"><i class="fas fa-comments"></i><p>Feedback</p><span class="caret"></span></a>
     <div class="collapse" id="feedback">
