@@ -71,28 +71,18 @@ include '../connection/function.php';
 </li>
 
 <li class="nav-item">
-<a data-bs-toggle="collapse" href="#cases"><i class="fas fa-balance-scale"></i><p>Students</p><span class="caret"></span></a>
-    <div class="collapse" id="cases">
-     <ul class="nav nav-collapse">
-    <li><a href="pending_case.php"><i class="fas fa-hourglass-half"></i>Pending Cases</a></li>
-    <li><a href="open_case.php"><i class="fas fa-folder-open"></i> Open Cases</a></li>
-    <li><a href="distributed_case.php"><i class="fas fa-gavel"></i> Distributed Cases</a></li>
-    <li><a href="pending_appointment.php"><i class="fas fa-hourglass-end"></i> Pending Appointment Cases</a></li>
-    <li><a href="appointed_case.php"><i class="fas fa-calendar-check"></i> Appointed Cases</a></li>
-    <li><a href="pending_decision.php"><i class="fas fa-hourglass-end"></i> Pending Decision Cases</a></li>
-    <li><a href="decided_case.php"><i class="fas fa-check-circle"></i> Decided Cases</a></li>
-     </ul>
-  </div>
-</li>
-<li class="nav-item">
-  <a data-bs-toggle="collapse" href="#casesManagement"><i class="fas fa-file-contract"></i><p>Academic Management</p><span class="caret"></span></a>
-  <div class="collapse" id="casesManagement">
-    <ul class="nav nav-collapse">
-      <li><a href="update_case.php"><i class="fas fa-edit"></i> Update Cases</a></li>
-      <li><a href="delete_case.php"><i class="fas fa-trash-alt"></i> Delete Cases</a></li>
-      <li><a href="view_AllCases.php"><i class="fas fa-folder-open"></i> View All Cases</a></li>
-    </ul>
-  </div>
+    <a data-bs-toggle="collapse" href="#settings">
+        <i class="fas fa-cogs"></i>
+        <p>System Settings</p>
+        <span class="caret"></span>
+    </a>
+    <div class="collapse" id="settings">
+        <ul class="nav nav-collapse">
+            <li><a href="school_profile.php"><i class="fas fa-school"></i> School Profile</a></li>
+            <li><a href="academic_year.php"><i class="fas fa-calendar-alt"></i> Academic Year Settings</a></li>
+            <li><a href="roles_permissions.php"><i class="fas fa-user-shield"></i> Roles & Permissions</a></li>
+        </ul>
+    </div>
 </li>
 <li class="nav-item">
    <a data-bs-toggle="collapse" href="#feedback"><i class="fas fa-comments"></i><p>Feedback</p><span class="caret"></span></a>
