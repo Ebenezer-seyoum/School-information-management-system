@@ -69,9 +69,10 @@ if (isset($_SESSION["uid"]) and ($roleName == "Director")) {
         <ul class="nav nav-collapse">
             <li><a href="register_student.php"><i class="fas fa-user-plus"></i> Register Student</a></li>
             <li><a href="view_studentForUpdate.php"><i class="fas fa-user-edit"></i> Update Student</a></li>
-            <li><a href="delete_user.php"><i class="fas fa-user-times"></i> Delete Account</a></li>
-            <li><a href="Deactive_user.php"><i class="fas fa-user-slash"></i> De-Active Account</a></li>
-            <li><a href="list_user.php"><i class="fas fa-users"></i> View All Students</a></li>
+            <li><a href="view_studentForDelete.php"><i class="fas fa-user-times"></i> Delete Student</a></li>
+            <li><a href="Assign_student.php"><i class="fas fa-user-slash"></i>Assign Student</a></li>
+            <li><a href="transfer_student.php"><i class="fas fa-user-slash"></i>Transfer Student</a></li>
+            <li><a href="view_allStudents.php"><i class="fas fa-users"></i> View All Students</a></li>
         </ul>
     </div>
 </li>
@@ -86,6 +87,7 @@ if (isset($_SESSION["uid"]) and ($roleName == "Director")) {
         <div class="collapse" id="teachers">
           <ul class="nav nav-collapse">
             <li><a href="register_teacher.php"><i class="fas fa-user-plus"></i> Assign Teacher</a></li>
+            <li><a href="transfer_teacher.php"><i class="fas fa-user-slash"></i>Transfer Teacher</a></li>
             <li><a href="view_teachers.php"><i class="fas fa-users"></i> View All Teachers</a></li>
           </ul>
         </div>
@@ -100,6 +102,7 @@ if (isset($_SESSION["uid"]) and ($roleName == "Director")) {
         <div class="collapse" id="instructors">
           <ul class="nav nav-collapse">
             <li><a href="register_instructor.php"><i class="fas fa-user-plus"></i> Assign Instructor</a></li>
+            <li><a href="transfer_instructor.php"><i class="fas fa-user-slash"></i>Transfer Instructor</a></li>
             <li><a href="view_instructors.php"><i class="fas fa-users"></i> View All Instructors</a></li>
           </ul>
         </div>
@@ -114,6 +117,7 @@ if (isset($_SESSION["uid"]) and ($roleName == "Director")) {
         <div class="collapse" id="academic">
           <ul class="nav nav-collapse">
             <li><a href="create_timetable.php"><i class="fas fa-calendar-alt"></i> Create Timetable</a></li>
+            <li><a href="create_timetable.php"><i class="fas fa-calendar-alt"></i> Update Timetable</a></li>
             <li><a href="view_timetable.php"><i class="fas fa-calendar-check"></i> View Timetable</a></li>
           </ul>
         </div>

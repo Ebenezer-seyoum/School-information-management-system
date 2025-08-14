@@ -1,5 +1,5 @@
 <?php
-include('adminHeader.php');
+include('directorHeader.php');
 ?>
 <!-- CSS for profile image -->
 <style>
@@ -45,7 +45,7 @@ include('adminHeader.php');
             $searchTerm = $_GET['search'];
             $users = searchUsers($searchTerm);
         } else {
-            $users = getAllUsers();
+            $users = getAllStudents();
         }
 ?>
 
@@ -55,9 +55,9 @@ include('adminHeader.php');
         foreach ($users as $user) {
     ?>
 <div class="col-xl-3 col-lg-4 col-sm-6 user-card"
-     data-idnumber="<?= strtolower($user['idNumber']) ?>"
-     data-username="<?= strtolower($user['username']) ?>"
-     data-usertype="<?= strtolower($user['user_type']) ?>"
+     data-idnumber="<?= strtolower($user['student_id']) ?>"
+     data-username="<?= strtolower($user['first_name']) ?>"
+     data-usertype="<?= strtolower($user['gender']) ?>"
      data-firstname="<?= strtolower($user['first_name']) ?>">
   
   <div class="card contact_list text-center">
@@ -65,15 +65,14 @@ include('adminHeader.php');
       <div class="user-content">
         <div class="user-info">
           <div class="user-img">
-            <img class="profile-images" src="<?php echo $user["profile_picture"]; ?>" alt="Profile Picture" width="100" height="100">
+            <img class="profile-images" src="<?php echo $user["student_photo"]; ?>" alt="Profile Picture" width="100" height="100">
           </div>
           <div class="user-details">
-            <h4 class="user-name mb-0"><?php echo $user["username"]; ?></h4>
-            <p><?php echo getRoleNameById($user["user_type"]); ?></p>
+            <h4 class="user-name mb-0"><?php echo $user["first_name"]; ?> <?php echo $user["father_name"]; ?></h4>
           </div>
         </div>
       </div>
-      <a href="profiledetail.php?uid=<?php echo $user['uid']; ?>" class="btn btn-primary btn-sm w-50 me-2"><i class="fa-solid fa-user me-2"></i>Detail</a>                                                       
+      <a href="view_AllStudentdetail.php?sid=<?php echo $user['sid']; ?>" class="btn btn-primary btn-sm w-50 me-2"><i class="fa-solid fa-user me-2"></i>Detail</a>                                                       
     </div>
   </div>
 </div>
@@ -94,5 +93,5 @@ include('adminHeader.php');
 </div>
 
 <?php
-include('footer.php');
+include('../Admin/footer.php');
 ?>

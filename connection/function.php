@@ -1176,6 +1176,17 @@ function getAllStudents()
     }
     return $result;
 }
+
+function getAllSections()
+{
+    global $conn;
+    $query = mysqli_query($conn, "select * from sections");
+    $result = array();
+    while ($row = mysqli_fetch_array($query)) {
+        array_push($result, $row);
+    }
+    return $result;
+}
 function getAllRegions()
 {
     global $conn;
