@@ -104,18 +104,45 @@ if (isset($_SESSION["uid"]) and ($roleName == "Director")) {
           </ul>
         </div>
       </li>
-
-      <!-- Academic Management -->
+    <!-- Manage Schedule -->
       <li class="nav-item">
         <a data-bs-toggle="collapse" href="#academic" role="button" aria-expanded="false" aria-controls="academic">
           <i class="fas fa-book"></i>
-          <p>Academic Management</p>
+          <p>Manage Schedule</p>
           <span class="caret"></span>
         </a>
         <div class="collapse" id="academic">
           <ul class="nav nav-collapse">
             <li><a href="create_timetable.php"><i class="fas fa-calendar-alt"></i> Create Timetable</a></li>
             <li><a href="view_timetable.php"><i class="fas fa-calendar-check"></i> View Timetable</a></li>
+          </ul>
+        </div>
+      </li>
+     <!-- Manage Class -->
+      <li class="nav-item">
+        <a data-bs-toggle="collapse" href="#class" role="button" aria-expanded="false" aria-controls="class">
+          <i class="fas fa-chalkboard"></i>
+          <p>Manage Class</p>
+          <span class="caret"></span>
+        </a>
+        <div class="collapse" id="class">
+          <ul class="nav nav-collapse">
+            <li><a href="add_class.php"><i class="fas fa-plus-circle"></i> Register Class</a></li>
+            <li><a href="view_class.php"><i class="fas fa-eye"></i> View Class</a></li>
+          </ul>
+        </div>
+      </li>
+        <!-- Manage subject -->
+      <li class="nav-item">
+        <a data-bs-toggle="collapse" href="#subject" role="button" aria-expanded="false" aria-controls="subject">
+          <i class="fas fa-book"></i>
+          <p>Manage Subject</p>
+          <span class="caret"></span>
+        </a>
+        <div class="collapse" id="subject">
+          <ul class="nav nav-collapse">
+            <li><a href="add_subject.php"><i class="fas fa-plus-circle"></i> Register Subject</a></li>
+            <li><a href="view_subject.php"><i class="fas fa-eye"></i> View Subject</a></li>
           </ul>
         </div>
       </li>

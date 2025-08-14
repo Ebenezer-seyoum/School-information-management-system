@@ -34,7 +34,7 @@ function basics($data)
 function validateIdNumber($data)
 {
     $data = basics($data);
-    if (preg_match("/^[a-zA-Z0-9 \/]*$/", $data))
+    if (preg_match("/^[a-zA-Z0-9 \/ `|]*$/", $data))
         return 1;
     else
         return 0;
@@ -573,13 +573,25 @@ function addReason( $appointment_reason)
         return 0;
 }
 
-function addCaseType( $name, $abbreviation_name)
+function add_section( $section_name, $role_type)
 {
     global $conn;
-    $name = mysqli_real_escape_string($conn, ucfirst($name));
+    $section_name = mysqli_real_escape_string($conn, ucfirst($section_name));
+    $role_type = mysqli_real_escape_string($conn, strtoupper($role_type));
+    $query = mysqli_query($conn, "INSERT INTO sections (section_name , class_type)
+    values('$section_name','$role_type')");
+    if ($query)
+        return 1;
+    else
+        return 0;
+}
+function add_subject( $subject_name, $abbreviation_name)
+{
+    global $conn;
+    $subject_name = mysqli_real_escape_string($conn, ucfirst($subject_name));
     $abbreviation_name = mysqli_real_escape_string($conn, strtoupper($abbreviation_name));
-    $query = mysqli_query($conn, "INSERT INTO case_type (name, abbreviation_name)
-    values('$name','$abbreviation_name')");
+    $query = mysqli_query($conn, "INSERT INTO subjects (subject_name , abbreviation_name)
+    values('$subject_name','$abbreviation_name')");
     if ($query)
         return 1;
     else
@@ -770,10 +782,17 @@ function caseExist($data)
     return $result;
 }
 
-function reasonExist($data)
+function sectionExist($data)
 {
     global $conn;
-    $query = mysqli_query($conn, "select rid from Reason where rid='$data'");
+    $query = mysqli_query($conn, "select cid from sections where cid='$data'");
+    $result = mysqli_num_rows($query);
+    return $result;
+}
+function subjectExist($data)
+{
+    global $conn;
+    $query = mysqli_query($conn, "select suid from subjects where suid='$data'");
     $result = mysqli_num_rows($query);
     return $result;
 }
@@ -1147,7 +1166,16 @@ function getAllUsers()
     }
     return $result;
 }
-
+function getAllStudents()
+{
+    global $conn;
+    $query = mysqli_query($conn, "select * from students");
+    $result = array();
+    while ($row = mysqli_fetch_array($query)) {
+        array_push($result, $row);
+    }
+    return $result;
+}
 function getAllRegions()
 {
     global $conn;

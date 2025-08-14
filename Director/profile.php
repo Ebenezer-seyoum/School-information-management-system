@@ -122,5 +122,5 @@ include('directorHeader.php');
 ?>
 
 <?php
-include('footer.php');
+include('../Admin/footer.php');
 ?>

@@ -163,5 +163,5 @@ if (empty($_POST["confirm_password"])) {
     </div>
 </div>
 <?php
- include 'footer.php'; 
+ include '../Admin/footer.php'; 
  ?>
