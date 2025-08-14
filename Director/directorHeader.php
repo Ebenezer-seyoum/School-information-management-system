@@ -70,7 +70,7 @@ if (isset($_SESSION["uid"]) and ($roleName == "Director")) {
             <li><a href="register_student.php"><i class="fas fa-user-plus"></i> Register Student</a></li>
             <li><a href="view_studentForUpdate.php"><i class="fas fa-user-edit"></i> Update Student</a></li>
             <li><a href="view_studentForDelete.php"><i class="fas fa-user-times"></i> Delete Student</a></li>
-            <li><a href="Assign_student.php"><i class="fas fa-user-slash"></i>Assign Student</a></li>
+            <li><a href="assign_student.php"><i class="fas fa-user-slash"></i>Assign Student</a></li>
             <li><a href="transfer_student.php"><i class="fas fa-user-slash"></i>Transfer Student</a></li>
             <li><a href="view_allStudents.php"><i class="fas fa-users"></i> View All Students</a></li>
         </ul>

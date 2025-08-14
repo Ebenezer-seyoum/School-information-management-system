@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Aug 13, 2025 at 04:53 PM
+-- Generation Time: Aug 14, 2025 at 02:22 PM
 -- Server version: 9.1.0
 -- PHP Version: 8.3.14
 
@@ -35,28 +35,28 @@ CREATE TABLE IF NOT EXISTS `announcements` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `assign_parent`
---
-
-DROP TABLE IF EXISTS `assign_parent`;
-CREATE TABLE IF NOT EXISTS `assign_parent` (
-  `apid` int NOT NULL,
-  `student_id` int NOT NULL,
-  `parent_id` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `assign_student`
 --
 
 DROP TABLE IF EXISTS `assign_student`;
 CREATE TABLE IF NOT EXISTS `assign_student` (
-  `asid` int NOT NULL,
+  `asid` int NOT NULL AUTO_INCREMENT,
   `student_id` int NOT NULL,
-  `section_id` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `section_id` int NOT NULL,
+  `academic_year` int NOT NULL,
+  PRIMARY KEY (`asid`),
+  KEY `student_ibpk_1` (`student_id`),
+  KEY `section_ibpk_1` (`section_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `assign_student`
+--
+
+INSERT INTO `assign_student` (`asid`, `student_id`, `section_id`, `academic_year`) VALUES
+(1, 2, 7, 2018),
+(2, 1, 14, 2018),
+(3, 4, 5, 2017);
 
 -- --------------------------------------------------------
 
@@ -68,7 +68,11 @@ DROP TABLE IF EXISTS `assign_teacher`;
 CREATE TABLE IF NOT EXISTS `assign_teacher` (
   `atid` int NOT NULL,
   `teacher_id` int NOT NULL,
-  `section_id` int NOT NULL
+  `section_id` int NOT NULL,
+  `subject_id` int NOT NULL,
+  KEY `sub_ibpk_1` (`subject_id`),
+  KEY `sec_ibpk_1` (`section_id`),
+  KEY `tec_ibpk_1` (`teacher_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -89,15 +93,23 @@ CREATE TABLE IF NOT EXISTS `feedback` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `mark`
+-- Table structure for table `marks`
 --
 
-DROP TABLE IF EXISTS `mark`;
-CREATE TABLE IF NOT EXISTS `mark` (
+DROP TABLE IF EXISTS `marks`;
+CREATE TABLE IF NOT EXISTS `marks` (
   `mid` int NOT NULL,
   `student_id` int NOT NULL,
+  `section_id` int NOT NULL,
+  `subject_id` int NOT NULL,
   `result` int NOT NULL,
-  `semester` int NOT NULL
+  `semester` int NOT NULL,
+  `academic_year` varchar(9) NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  KEY `stud_ibpk_1` (`student_id`),
+  KEY `class_ibpk_1` (`section_id`),
+  KEY `subj_ipbk_1` (`subject_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -201,15 +213,40 @@ CREATE TABLE IF NOT EXISTS `schedule` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `section`
+-- Table structure for table `sections`
 --
 
-DROP TABLE IF EXISTS `section`;
-CREATE TABLE IF NOT EXISTS `section` (
+DROP TABLE IF EXISTS `sections`;
+CREATE TABLE IF NOT EXISTS `sections` (
   `cid` int NOT NULL AUTO_INCREMENT,
   `section_name` varchar(30) NOT NULL,
+  `class_type` varchar(30) NOT NULL,
   PRIMARY KEY (`cid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `sections`
+--
+
+INSERT INTO `sections` (`cid`, `section_name`, `class_type`) VALUES
+(1, '9A', 'GENERAL'),
+(2, '9B', 'GENERAL'),
+(3, '9C', 'GENERAL'),
+(4, '10A', 'GENERAL'),
+(5, '10B', 'GENERAL'),
+(6, '10C', 'GENERAL'),
+(7, '11A', 'NATURAL'),
+(8, '11B', 'NATURAL'),
+(9, '11C', 'NATURAL'),
+(10, '11A', 'SOCIAL'),
+(11, '11B', 'SOCIAL'),
+(12, '11C', 'SOCIAL'),
+(13, '12A', 'NATURAL'),
+(14, '12B', 'NATURAL'),
+(15, '12C', 'NATURAL'),
+(16, '12A', 'SOCIAL'),
+(17, '12B', 'SOCIAL'),
+(18, '12C', 'SOCIAL');
 
 -- --------------------------------------------------------
 
@@ -236,7 +273,6 @@ CREATE TABLE IF NOT EXISTS `students` (
   `woreda` int DEFAULT NULL,
   `kebele` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   `username` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
-  `role_type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `mother_name` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `father_contact` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
@@ -250,35 +286,55 @@ CREATE TABLE IF NOT EXISTS `students` (
   `other_condition` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `disabilities` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `previous_school` varchar(150) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `academic_status` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `previous_documents` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`sid`),
   UNIQUE KEY `student_id` (`student_id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `students`
 --
 
-INSERT INTO `students` (`sid`, `student_photo`, `student_id`, `first_name`, `father_name`, `grand_father_name`, `gender`, `dob`, `email`, `phone`, `birth_place`, `nationality`, `region`, `zone`, `woreda`, `kebele`, `username`, `role_type`, `password`, `mother_name`, `father_contact`, `mother_contact`, `father_occupation`, `mother_occupation`, `emergency_contact_name`, `emergency_contact_phone`, `blood_group`, `medical_condition`, `other_condition`, `disabilities`, `previous_school`, `academic_status`, `previous_documents`, `created_at`) VALUES
-(1, '../assets/img/wallpaper.jpg', 'BSS/STU/0001/17', 'alem', 'Kebede', 'tefera', 'M', '2009-01-01', 'Abseyoum16@gmail.com', '+251909299398', 'bishoftu', 'ethiopia', 12, 89, 591, 'kebele 01', 'Mecry', 'general', 'igJzPdVP5cUymhx5zrs7NQ==', 'alem', '+251913865846', '+251913865846', 'doctor', 'doctur', 'seyoium', '+251909299398', 'A+', 'Epilepsy', '', 'Yes', 'ebenezer', 'Ongoing Studies', '', '2025-08-13 15:21:24'),
-(2, '', 'BSS/STU/0002/17', 'abenezer', 'seyoum', 'tefera', 'M', '2009-01-01', 'Abeniseyoum16@gmail.com', '+251909299378', 'bishoftu', 'ethiopia', 12, 89, 591, 'kebele 01', 'ab', 'natural', 'e3GsIIeW3jPNBqjoHG9rMw==', 'alem', '+251913865846', '+251913865846', 'doctor', 'doctur', 'seyoium', '+251909299398', 'A+', 'Diabetes', '', 'Yes', 'ebenezer', 'Dropped Out', '../assets/case_files/DS Outline.pdf', '2025-08-13 15:37:38'),
-(3, '../assets/img/wallpaper.jpg', 'BSS/STU/0003/17', 'alem', 'Abebe', 'tefera', 'M', '2009-01-01', 'abeniseyoum16@gmail.com', '+251909299378', 'bishoftu', 'ethiopia', 5, 34, 240, 'kebele 04', 'miki', 'social', '7JhZ6nTY0ZMD5g4DeE/W/Q==', 'alem', '+251913865846', '+251913865846', 'doctor', 'doctur', 'seyoium', '+251909299398', 'A+', 'Epilepsy', '', 'Yes', 'ebenezer', 'Dropped Out', '../assets/case_files/DS Outline.pdf', '2025-08-13 15:43:56');
+INSERT INTO `students` (`sid`, `student_photo`, `student_id`, `first_name`, `father_name`, `grand_father_name`, `gender`, `dob`, `email`, `phone`, `birth_place`, `nationality`, `region`, `zone`, `woreda`, `kebele`, `username`, `password`, `mother_name`, `father_contact`, `mother_contact`, `father_occupation`, `mother_occupation`, `emergency_contact_name`, `emergency_contact_phone`, `blood_group`, `medical_condition`, `other_condition`, `disabilities`, `previous_school`, `previous_documents`, `created_at`) VALUES
+(1, '../assets/img/wallpaper.jpg', 'BSS/STU/0001/17', 'alem', 'Kebede', 'tefera', 'M', '2009-01-01', 'Abseyoum16@gmail.com', '+251909299398', 'bishoftu', 'ethiopia', 12, 89, 591, 'kebele 01', 'Mecry', 'igJzPdVP5cUymhx5zrs7NQ==', 'alem', '+251913865846', '+251913865846', 'doctor', 'doctur', 'seyoium', '+251909299398', 'A+', 'Epilepsy', '', 'Yes', 'ebenezer', '../assets/case_files/DS Outline.pdf', '2025-08-13 15:21:24'),
+(2, '', 'BSS/STU/0002/17', 'abenezer', 'seyoum', 'tefera', 'M', '2009-01-01', 'Abeniseyoum16@gmail.com', '+251909299378', 'bishoftu', 'ethiopia', 12, 89, 591, 'kebele 01', 'ab', 'e3GsIIeW3jPNBqjoHG9rMw==', 'alem', '+251913865846', '+251913865846', 'doctor', 'doctur', 'seyoium', '+251909299398', 'A+', 'Diabetes', '', 'Yes', 'ebenezer', '../assets/case_files/DS Outline.pdf', '2025-08-13 15:37:38'),
+(3, '../assets/img/wallpaper.jpg', 'BSS/STU/0003/17', 'alem', 'Abebe', 'tefera', 'M', '2009-01-01', 'abeniseyoum16@gmail.com', '+251909299378', 'bishoftu', 'ethiopia', 5, 34, 240, 'kebele 04', 'miki', '7JhZ6nTY0ZMD5g4DeE/W/Q==', 'alem', '+251913865846', '+251913865846', 'doctor', 'doctur', 'seyoium', '+251909299398', 'A+', 'Epilepsy', '', 'Yes', 'ebenezer', '../assets/case_files/DS Outline.pdf', '2025-08-13 15:43:56'),
+(4, '../assets/img/profile.jpg', 'BSS/STU/0004/17', 'Natan', 'tes', 'ebenezer', 'M', '2005-01-01', 'abseyoum1634@gmail.com', '+251909299378', 'bishoftu', 'ethiopia', 1, 3, 21, 'kebele 05', 'nati', 'N2Wa28Ns9wvOFZ9feBSj1Q==', 'alem', '+251913865846', '+251913865846', 'doctor', 'doctur', 'tes', '+251909299398', 'A+', 'Heart Condition', '', 'No', 'ebenezer', '../assets/case_files/DS Outline.pdf', '2025-08-14 08:50:00');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `subject`
+-- Table structure for table `subjects`
 --
 
-DROP TABLE IF EXISTS `subject`;
-CREATE TABLE IF NOT EXISTS `subject` (
+DROP TABLE IF EXISTS `subjects`;
+CREATE TABLE IF NOT EXISTS `subjects` (
   `suid` int NOT NULL AUTO_INCREMENT,
   `subject_name` varchar(30) NOT NULL,
+  `abbreviation_name` varchar(30) NOT NULL,
   PRIMARY KEY (`suid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `subjects`
+--
+
+INSERT INTO `subjects` (`suid`, `subject_name`, `abbreviation_name`) VALUES
+(1, 'Sidaamu`Afoo', 'SID'),
+(2, 'Amharic ', 'AMH'),
+(3, 'English', 'ENG'),
+(4, 'Mathematics', 'MATH'),
+(5, 'Biology', 'BIO'),
+(6, 'Chemistry', 'CHEM'),
+(7, 'Physics', 'PHYS'),
+(8, 'Geography', 'GEO'),
+(9, 'History', 'HIST'),
+(10, 'Physical Education', 'PE'),
+(11, 'Citizenship', 'CIT'),
+(12, 'Information and Communication ', 'ICT'),
+(13, 'Economics', 'ECON');
 
 -- --------------------------------------------------------
 
@@ -310,7 +366,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 INSERT INTO `users` (`uid`, `idNumber`, `profile_picture`, `first_name`, `father_name`, `grandfather_name`, `gender`, `user_type`, `username`, `password`, `email`, `phone`, `user_status`) VALUES
 (2, 'BSS/ADM/0002/17 ', '../assets/img/pp.jpg', 'abenezer ', 'seyoum', 'mamo', 'M', '2', 'ab', 'nIvRPLWFfGH/pgidb0LY8A==', 'Abseyoum16@gmail.com', '+251909299398', 1),
-(3, 'BSS/DIR/0001/17', '../assets/img/profile.jpg', 'miki', 'Abebe', 'Mohamed', 'M', '3', 'miki', '7JhZ6nTY0ZMD5g4DeE/W/Q==', 'abseyoum1634@gmail.com', '+251909299378', 0),
+(3, 'BSS/DIR/0001/17', '../assets/img/profile.jpg', 'miki', 'Abebe', 'Mohamed', 'M', '3', 'miki', '7JhZ6nTY0ZMD5g4DeE/W/Q==', 'abseyoum1634@gmail.com', '+251909299378', 1),
 (4, 'BSS/TCH/0001/17', '../assets/img/man united.jpg', 'Eyu', 'tareke', 'Mohamed', 'M', '1', 'hamid', '3yFM88FVzw+XU0J2lPnUpA==', 'abseyoum1634@gmail.com', '+251909299378', 0),
 (5, 'BSS/INSTR/0001/17', '../assets/img/download.jpg', 'alem', 'Kebede', 'teferaa', 'F', '4', 'simo', 'KXCtygnqkBRg46jdWFl5yQ==', 'Abeniseyoum16@gmail.com', '+251909299378', 0);
 
@@ -1168,6 +1224,29 @@ INSERT INTO `zones` (`id`, `name`, `region_id`) VALUES
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `assign_student`
+--
+ALTER TABLE `assign_student`
+  ADD CONSTRAINT `section_ibpk_1` FOREIGN KEY (`section_id`) REFERENCES `sections` (`cid`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  ADD CONSTRAINT `student_ibpk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`sid`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+--
+-- Constraints for table `assign_teacher`
+--
+ALTER TABLE `assign_teacher`
+  ADD CONSTRAINT `sec_ibpk_1` FOREIGN KEY (`section_id`) REFERENCES `sections` (`cid`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  ADD CONSTRAINT `sub_ibpk_1` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`suid`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  ADD CONSTRAINT `tec_ibpk_1` FOREIGN KEY (`teacher_id`) REFERENCES `users` (`uid`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+--
+-- Constraints for table `marks`
+--
+ALTER TABLE `marks`
+  ADD CONSTRAINT `class_ibpk_1` FOREIGN KEY (`section_id`) REFERENCES `sections` (`cid`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  ADD CONSTRAINT `stud_ibpk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`sid`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  ADD CONSTRAINT `subj_ipbk_1` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`suid`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 --
 -- Constraints for table `woredas`

@@ -8,7 +8,7 @@ $password = $confirmPassword = $username = $phone = $role_type = $success = "";
 $dob = $birth_place = $emergency_contact_name = $emergency_contact_phone = "";
 $fatherName = $mother_name = $father_contact = $mother_contact = $father_occupation = $mother_occupation = "";
 $blood_group = $medical_condition = $other_condition = $disabilities = "";
-$previous_school = $academic_status = $previous_documents = "";
+$previous_school = $previous_documents = "";
 
 $student_id_err = $firstName_err = $father__full_name_err = $gFatherName_err = "";
 $region_err = $zone_err = $woreda_err = $kebele_err = $nationality_err = "";
@@ -17,7 +17,7 @@ $student_photo_err = $phone_err = $role_type_err = $allErr = "";
 $dob_err = $birth_place_err = $emergency_contact_name_err = $emergency_contact_phone_err = "";
 $fatherName_err = $mother_name_err = $father_contact_err = $mother_contact_err = "";
 $father_occupation_err = $mother_occupation_err = $blood_group_err = $medical_condition_err = "";
-$other_condition_err = $disabilities_err = $previous_school_err = $academic_status_err = $previous_documents_err = "";
+$other_condition_err = $disabilities_err = $previous_school_err = $previous_documents_err = "";
 $test = true;
 $generatedId = getNextIdNumber();
 
@@ -245,16 +245,7 @@ if (empty($_POST["email"])) {
     } else {
         $phone = trim($_POST["phone"]);
     }
-    // Validate class type
-    if (empty($_POST["role_type"])) {
-      $role_type_err = "Please select a class type";
-      $test = false;
-    } elseif (!validateClassType($_POST["role_type"])) {
-      $role_type_err = "Invalid class type";
-      $test = false;
-    } else {
-      $role_type = $_POST["role_type"];
-    }
+  
     // Validate father's full name
     if (empty($_POST["father_full_name"])) {
       $father__full_name_err = "please enter father's full name";
@@ -357,14 +348,6 @@ if (empty($_POST["email"])) {
       $previous_school = trim($_POST["previous_school"]);
     }
 
-    // Validate academic status
-    if (empty($_POST["academic_status"])) {
-      $academic_status_err = "please enter academic status";
-      $test = false;
-    } else {
-      $academic_status = trim($_POST["academic_status"]);
-    }
-
     // Validate previous documents
     if (isset($_FILES["file"]) && $_FILES["file"]["error"] == 0) {
     $allowed = ["pdf" => "application/pdf", "doc" => "application/msword", "docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
@@ -394,7 +377,6 @@ if (empty($_POST["email"])) {
 if ($test) {
     if (!studentExist($student_id)) {
         $encryptedPassword = encryptPassword($password);
-
         // Call registerStudent with all required and optional fields
         $result = registerStudent(
             $student_photo,
@@ -413,7 +395,6 @@ if ($test) {
             $woreda,
             $kebele,
             $username,
-            $role_type,
             $encryptedPassword,
             $mother_name ?? null,
             $father_contact ?? null,
@@ -427,7 +408,6 @@ if ($test) {
             $other_condition ?? null,
             $disabilities ?? null,
             $previous_school ?? null,
-            $academic_status ?? null,
             $previous_documents ?? null
         );
         if ($result) {
@@ -438,9 +418,8 @@ if ($test) {
     } else {
         $allErr = "Student with this ID already exists";
     }
+ }
 }
-}
-
 ?>
 <!-- Page content start -->
 <div class="container">
@@ -600,17 +579,7 @@ if ($test) {
                     <input id="username" type="text" class="form-control" name="username" value="<?php echo htmlspecialchars($username); ?>" />
                     <span class="text-danger"><?php echo htmlspecialchars($username_err); ?></span>
                   </div>
-                  <div class="form-group col-12 col-md-6 mb-3">
-                    <label for="role_type">Class Type<span class="text-danger">*</span></label>
-                    <select name="role_type" id="role_type" class="form-control">
-                      <option value="">Select Class Type</option>
-                      <option value="general" <?php echo $role_type == 'general' ? 'selected' : ''; ?>>General</option>
-                      <option value="natural" <?php echo $role_type == 'natural' ? 'selected' : ''; ?>>Natural</option>
-                      <option value="social" <?php echo $role_type == 'social' ? 'selected' : ''; ?>>Social</option>
-                    </select>
-                    <span class="text-danger"><?php echo htmlspecialchars($role_type_err); ?></span>
-                  </div>
-                </div>
+                  
       <!-- Username / Password -->
                 <div class="row">
                   <div class="form-group col-12 col-md-6 mb-3">                     
@@ -781,27 +750,13 @@ if ($test) {
   <div class="collapse" id="academicInfo">
     <div class="card-body">
       <div class="row">
-        <!-- Previous School -->
-        <div class="form-group col-md-6 mb-3">
+        <!-- Previous School -->    
+          <div class="form-group col-md-6 mb-3">
           <label for="previous_school">Previous School / Institution <span class="text-danger">*</span></label>
           <input type="text" name="previous_school" id="previous_school" class="form-control">
           <span class="text-danger"><?php echo htmlspecialchars($previous_school_err); ?></span>
         </div>
-
-        <!-- Academic Status Before Joining -->
-        <div class="form-group col-md-6 mb-3">
-          <label for="academic_status">Academic Status Before Joining <span class="text-danger">*</span></label>
-          <select name="academic_status" id="academic_status" class="form-control">
-            <option value="">-- Select Status --</option>
-            <option value="Completed Previous Grade">Completed Previous Grade</option>
-            <option value="Ongoing Studies">Ongoing Studies</option>
-            <option value="Dropped Out">Dropped Out</option>
-            <option value="Other">Other</option>
-          </select>
-          <span class="text-danger"><?php echo htmlspecialchars($academic_status_err); ?></span>
-        </div>
-      </div>
-
+      
       <div class="row">
         <!-- Files from Previous Learning -->
         <div class="form-group col-md-6 mb-3">

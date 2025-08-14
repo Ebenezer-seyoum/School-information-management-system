@@ -475,12 +475,12 @@ function studentExist($student_id)
 // Function to register a new student
 function registerStudent( $student_photo, $student_id, $first_name, $father_name, $grand_father_name,
     $gender, $dob, $email, $phone, $birth_place, $nationality,
-    $region, $zone, $woreda, $kebele, $username, $role_type, $password,
+    $region, $zone, $woreda, $kebele, $username, $password,
     $mother_name = null, $father_contact = null, $mother_contact = null,
     $father_occupation = null, $mother_occupation = null,
     $emergency_contact_name = null, $emergency_contact_phone = null,
     $blood_group = null, $medical_condition = null, $other_condition = null,
-    $disabilities = null, $previous_school = null, $academic_status = null,
+    $disabilities = null, $previous_school = null,
     $previous_documents = null)
 {
     global $conn;
@@ -500,7 +500,6 @@ function registerStudent( $student_photo, $student_id, $first_name, $father_name
     $woreda = mysqli_real_escape_string($conn, $woreda);
     $kebele = mysqli_real_escape_string($conn, $kebele);
     $username = mysqli_real_escape_string($conn, $username);
-    $role_type = mysqli_real_escape_string($conn, $role_type);
     $password = mysqli_real_escape_string($conn, $password);
     $mother_name = mysqli_real_escape_string($conn, $mother_name);
     $father_contact = mysqli_real_escape_string($conn, $father_contact);
@@ -514,22 +513,21 @@ function registerStudent( $student_photo, $student_id, $first_name, $father_name
     $other_condition = mysqli_real_escape_string($conn, $other_condition);
     $disabilities = mysqli_real_escape_string($conn, $disabilities);
     $previous_school = mysqli_real_escape_string($conn, $previous_school);
-    $academic_status = mysqli_real_escape_string($conn, $academic_status);
     $previous_documents = mysqli_real_escape_string($conn, $previous_documents);
 
     // INSERT query matching your table columns
     $query = "
         INSERT INTO students (
             student_photo, student_id, first_name, father_name, grand_father_name, gender, dob, email, phone, birth_place, nationality,
-            region, zone, woreda, kebele, username, role_type, password, mother_name, father_contact, mother_contact,
+            region, zone, woreda, kebele, username password, mother_name, father_contact, mother_contact,
             father_occupation, mother_occupation, emergency_contact_name, emergency_contact_phone, blood_group, medical_condition,
-            other_condition, disabilities, previous_school, academic_status, previous_documents
+            other_condition, disabilities, previous_school,, previous_documents
         ) VALUES (
             '$student_photo', '$student_id', '$first_name', '$father_name', '$grand_father_name', '$gender', '$dob', '$email', '$phone',
-            '$birth_place', '$nationality', '$region', '$zone', '$woreda', '$kebele', '$username', '$role_type', '$password',
+            '$birth_place', '$nationality', '$region', '$zone', '$woreda', '$kebele', '$username','$password',
             '$mother_name', '$father_contact', '$mother_contact', '$father_occupation', '$mother_occupation', '$emergency_contact_name',
             '$emergency_contact_phone', '$blood_group', '$medical_condition', '$other_condition', '$disabilities', '$previous_school',
-            '$academic_status', '$previous_documents'
+             '$previous_documents'
         )
     ";
     $query = mysqli_query($conn, $query);
@@ -541,25 +539,28 @@ function registerStudent( $student_photo, $student_id, $first_name, $father_name
     }
 }
 
-function addCase($case_id, $plaintiff, $defendant, $case_type, $decision, $case_status)
-{
-    global $conn;
-    $case_id = mysqli_real_escape_string($conn, $case_id);
-    $plaintiff = mysqli_real_escape_string($conn, ucfirst($plaintiff));
-    $defendant = mysqli_real_escape_string($conn, ucfirst($defendant));
-    $decision = $decision !== NULL ? mysqli_real_escape_string($conn, ucfirst($decision)) : NULL;
-    // Use DateTimeFactory to get the current Ethiopian DateTime object
-    $ethiopian = \Andegna\DateTimeFactory::now();
-    $ethiopian_date = $ethiopian->format('Y-m-d');
-    $query = mysqli_query($conn, "INSERT INTO `case` (case_id, plaintiff, defendant, case_type, decision, case_status, ethiopian_date)
-        VALUES ('$case_id', '$plaintiff', '$defendant', '$case_type', '$decision', '$case_status', '$ethiopian_date')");
-     if ($query)
-        return 1;
-    else
-        return 0;
+// Function to get students not yet assigned
+function getUnassignedStudents($conn) {
+    $query = "
+        SELECT * 
+        FROM students 
+        WHERE sid NOT IN (SELECT student_id FROM assign_student)
+        ORDER BY first_name ASC
+    ";
+    $result = mysqli_query($conn, $query);
+
+    if (!$result) {
+        echo "MySQL Error: " . mysqli_error($conn);
+        return []; // return empty array on error
+    }
+
+    $students = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $students[] = $row;
+    }
+
+    return $students;
 }
-
-
 
 function addReason( $appointment_reason)
 {

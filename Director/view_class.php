@@ -5,116 +5,148 @@ include('directorHeader.php');
 $success = $allErr = "";
 $profile = getUserByID($_SESSION["uid"]);
 $roleName = getRoleNameById($profile["user_type"]);
+
 if (isset($_SESSION["uid"]) && ($roleName == "Director")) {
 ?>
 <!-- CSS for profile image -->
 <style>
-  .profile-img {
-    width: 30px; 
-    height: 30px;
-    border-radius: 50%; 
-    object-fit: cover; 
-}
+  .profile-img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
+  .modal-body { max-height: 400px; overflow-y: auto; }
 </style>
-<!-- end CSS for profile image -->
- 
-<!-- Page Header -->
+
 <div class="container">
-         <div class="page-inner">
-            <div class="page-header">
-              <h3 class="fw-bold mb-3">Update class</h3>
-    <ul class="breadcrumbs mb-3">
+  <div class="page-inner">
+    <div class="page-header">
+      <h3 class="fw-bold mb-3">View Classes</h3>
+      <ul class="breadcrumbs mb-3">
         <li class="nav-home"><a href="#"><i class="icon-home"></i></a></li>
-         <li class="separator"><i class="icon-arrow-right"></i></li>
-         <li class="nav-item"><a href="#">Manage class</a></li>
         <li class="separator"><i class="icon-arrow-right"></i></li>
-         <li class="nav-item"><a href="#">View class</a></li>
-    </ul>
- </div>
-<!-- End Page Header -->
-
- <!-- Main Content -->
-<div class="main-content">
-<section class="section">
- <div class="row">
-  <div class="col-12">
-   <div class="card">
-    <div class="card-header">
-     <div class="row w-100 align-items-center">
-    <div class="col-12 col-md-6 mb-2 mb-md-0">
-      <h4 class="mb-0">View all Class</h4>
+        <li class="nav-item"><a href="#">Manage Class</a></li>
+        <li class="separator"><i class="icon-arrow-right"></i></li>
+        <li class="nav-item"><a href="#">View Class</a></li>
+      </ul>
     </div>
-  <div class="col-12 col-md-6">
-    <form method="GET">
-      <div class="input-group">
-        
-          
-<input type="text" name="search" id="userSearch" class="form-control" 
-       style="font-weight: bold;" placeholder="Search by IdNumber, Name or user_type....">
-      </div>
-    </form>
-  </div>
-</div> 
-</div>
-<?php if (!empty($success)) { ?>
-  <div class=" form-control bg-success">
-<?php echo $success; ?>
-  </div>
-<?php  } ?>
-<?php if (!empty($allErr)) { ?>
-  <div class=" form-control bg-danger">
-<?php echo $allErr; ?>
-  </div>
-<?php  } ?>
-       
-<?php
-            $users = getAllSections();
-        
- ?>
-<div class="card-body">
-  <div class="table-responsive">
-    <table class="table table-hover align-middle text-center" id="userTable"  style="border: 2px solid black; border-collapse: collapse; width: 60%; background-color: white;">
-  <thead class="table-secondary">
-      <tr>
-    <th style="border: 2px solid black;">#</th>
-    <th style="border: 2px solid black;">Section_name</th>
-    <th style="border: 2px solid black;">class_type</th>
-     </tr>
-    </thead>
-   <tbody>  
-   <?php
-      $no = 1; 
-     if (!empty($users)) {
-       foreach ($users as $user) { 
-      ?>                                                                  
-   <tr>
-    <td style="border: 2px solid black;"><?php echo $no; ?></td>
-    <td style="border: 2px solid black;"><?php echo $user["section_name"]; ?></td>
-    <td style="border: 2px solid black;"><?php echo $user["class_type"]; ?></td>
-   
-</tr>
-<?php  
-  $no++; }
-  }
-?>       
-   <?php if (empty($users)) { ?>
-  <tr><td colspan="13" class="text-center text-danger" style="border: 2px solid black;">No users found.</td></tr>
-<?php } ?>                               
-</tbody>
-</table>
-</div>                         
-      </div>
+
+    <div class="main-content">
+      <section class="section">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">All Classes</h4>
+                <form method="GET" class="d-flex">
+                  <input type="text" name="search" id="userSearch" class="form-control" 
+                    placeholder="Search by section name or class type...">
+                </form>
+              </div>
+
+              <div class="card-body table-responsive">
+                <table class="table table-hover align-middle text-center" id="classTable">
+                  <thead class="table-secondary">
+                    <tr>
+                      <th>#</th>
+                      <th>Section Name</th>
+                      <th>Class Type</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php
+                    $classes = getAllSections();
+                    $no = 1;
+                    if (!empty($classes)) {
+                      foreach ($classes as $cls) {
+                        ?>
+                        <tr>
+                          <td><?= $no ?></td>
+                          <td><?= $cls['section_name'] ?></td>
+                          <td><?= $cls['class_type'] ?></td>
+                          <td>
+                            <button class="btn btn-info btn-sm view-students-btn" 
+                              data-section-id="<?= $cls['cid'] ?>" 
+                              data-section-name="<?= $cls['section_name'] ?>">
+                              View Students
+                            </button>
+                          </td>
+                        </tr>
+                        <?php
+                        $no++;
+                      }
+                    } else {
+                      echo '<tr><td colspan="4" class="text-center text-danger">No classes found.</td></tr>';
+                    }
+                    ?>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   </div>
 </div>
-</section>
-</div>
-</div>
+
+<!-- Modal -->
+<div class="modal fade" id="studentsModal" tabindex="-1" aria-labelledby="studentsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="studentsModalLabel">Students in Class</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="academicYearModal" class="form-label">Select Academic Year</label>
+          <input type="text" id="academicYearModal" class="form-control" placeholder="e.g. 2024/2025">
+        </div>
+        <div id="studentsList">Loading students...</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
 </div>
 
+<script>
+// Event listener for "View Students" button
+document.querySelectorAll('.view-students-btn').forEach(button => {
+  button.addEventListener('click', function() {
+    const sectionId = this.dataset.sectionId;
+    const sectionName = this.dataset.sectionName;
+    const modalTitle = document.getElementById('studentsModalLabel');
+    modalTitle.textContent = `Students in Class: ${sectionName}`;
+    const studentsList = document.getElementById('studentsList');
+
+    // Show modal
+    var studentsModal = new bootstrap.Modal(document.getElementById('studentsModal'));
+    studentsModal.show();
+
+    // Listen for academic year input change
+    const academicYearInput = document.getElementById('academicYearModal');
+    academicYearInput.value = ''; // reset
+    studentsList.innerHTML = 'Please select an academic year...';
+
+    academicYearInput.oninput = function() {
+      const year = this.value.trim();
+      if (year.length > 0) {
+        // Fetch students via AJAX
+        fetch(`fetch_students.php?section_id=${sectionId}&academic_year=${year}`)
+          .then(response => response.text())
+          .then(data => { studentsList.innerHTML = data; })
+          .catch(err => { studentsList.innerHTML = 'Error fetching students'; });
+      } else {
+        studentsList.innerHTML = 'Please select an academic year...';
+      }
+    }
+  });
+});
+</script>
+
 <?php
- } else echo "You are not authorized to view this page.";
-?>
-<?php
+} else {
+  echo "You are not authorized to view this page.";
+}
 include('../Admin/footer.php');
 ?>
