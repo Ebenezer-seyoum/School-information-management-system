@@ -103,8 +103,8 @@ if (isset($_SESSION["uid"]) && ($roleName == "Director")) {
         </a>
       </td>
    <td style="border: 2px solid black;"> 
-    <a href="#" class="btn btn-danger shadow btn-xs sharp" onclick="deleteCase(<?php echo $user['sid']; ?>)"><i class="fa fa-trash"></i></a>
-    <a href="delete_student.php?sid=<?php echo $user['sid']; ?>">
+    <a href="#" class="btn btn-danger shadow btn-xs sharp" onclick="deleteCase(<?= $user['sid']; ?>)"><i class="fa fa-trash"></i></a>
+    <a href="delete_student.php?sid=<?= $user['sid']; ?>"><i class="fa fa-trash"></i></a>
     
     </td>
 </tr>
