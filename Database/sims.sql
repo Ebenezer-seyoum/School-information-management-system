@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Aug 14, 2025 at 02:22 PM
+-- Generation Time: Aug 15, 2025 at 03:18 PM
 -- Server version: 9.1.0
 -- PHP Version: 8.3.14
 
@@ -35,6 +35,30 @@ CREATE TABLE IF NOT EXISTS `announcements` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `assign_instructor`
+--
+
+DROP TABLE IF EXISTS `assign_instructor`;
+CREATE TABLE IF NOT EXISTS `assign_instructor` (
+  `hid` int NOT NULL AUTO_INCREMENT,
+  `instructor_id` int NOT NULL,
+  `section_id` int NOT NULL,
+  `academic_year` int NOT NULL,
+  PRIMARY KEY (`hid`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `assign_instructor`
+--
+
+INSERT INTO `assign_instructor` (`hid`, `instructor_id`, `section_id`, `academic_year`) VALUES
+(1, 5, 7, 2017),
+(2, 5, 7, 2017),
+(3, 5, 7, 2017);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `assign_student`
 --
 
@@ -54,9 +78,9 @@ CREATE TABLE IF NOT EXISTS `assign_student` (
 --
 
 INSERT INTO `assign_student` (`asid`, `student_id`, `section_id`, `academic_year`) VALUES
-(1, 2, 7, 2018),
-(2, 1, 14, 2018),
-(3, 4, 5, 2017);
+(1, 2, 9, 2018),
+(2, 1, 9, 2018),
+(3, 4, 7, 2017);
 
 -- --------------------------------------------------------
 
@@ -66,14 +90,24 @@ INSERT INTO `assign_student` (`asid`, `student_id`, `section_id`, `academic_year
 
 DROP TABLE IF EXISTS `assign_teacher`;
 CREATE TABLE IF NOT EXISTS `assign_teacher` (
-  `atid` int NOT NULL,
+  `atid` int NOT NULL AUTO_INCREMENT,
   `teacher_id` int NOT NULL,
   `section_id` int NOT NULL,
   `subject_id` int NOT NULL,
+  `academic_year` int NOT NULL,
+  PRIMARY KEY (`atid`),
   KEY `sub_ibpk_1` (`subject_id`),
   KEY `sec_ibpk_1` (`section_id`),
   KEY `tec_ibpk_1` (`teacher_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `assign_teacher`
+--
+
+INSERT INTO `assign_teacher` (`atid`, `teacher_id`, `section_id`, `subject_id`, `academic_year`) VALUES
+(1, 4, 7, 4, 2017),
+(2, 4, 9, 4, 2018);
 
 -- --------------------------------------------------------
 
@@ -98,19 +132,31 @@ CREATE TABLE IF NOT EXISTS `feedback` (
 
 DROP TABLE IF EXISTS `marks`;
 CREATE TABLE IF NOT EXISTS `marks` (
-  `mid` int NOT NULL,
+  `mid` int NOT NULL AUTO_INCREMENT,
   `student_id` int NOT NULL,
   `section_id` int NOT NULL,
   `subject_id` int NOT NULL,
+  `teacher_id` int NOT NULL,
   `result` int NOT NULL,
   `semester` int NOT NULL,
   `academic_year` varchar(9) NOT NULL,
+  `mark_status` int NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`mid`),
   KEY `stud_ibpk_1` (`student_id`),
   KEY `class_ibpk_1` (`section_id`),
-  KEY `subj_ipbk_1` (`subject_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `subj_ipbk_1` (`subject_id`),
+  KEY `teacher_ibpk_1` (`teacher_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `marks`
+--
+
+INSERT INTO `marks` (`mid`, `student_id`, `section_id`, `subject_id`, `teacher_id`, `result`, `semester`, `academic_year`, `mark_status`, `created_at`, `updated_at`) VALUES
+(32, 2, 9, 4, 4, 20, 1, '2018', 2, '2025-08-15 14:36:09', '2025-08-15 14:36:09'),
+(33, 1, 9, 4, 4, 25, 1, '2018', 2, '2025-08-15 14:36:09', '2025-08-15 14:36:09');
 
 -- --------------------------------------------------------
 
@@ -366,8 +412,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 INSERT INTO `users` (`uid`, `idNumber`, `profile_picture`, `first_name`, `father_name`, `grandfather_name`, `gender`, `user_type`, `username`, `password`, `email`, `phone`, `user_status`) VALUES
 (2, 'BSS/ADM/0002/17 ', '../assets/img/pp.jpg', 'abenezer ', 'seyoum', 'mamo', 'M', '2', 'ab', 'nIvRPLWFfGH/pgidb0LY8A==', 'Abseyoum16@gmail.com', '+251909299398', 1),
-(3, 'BSS/DIR/0001/17', '../assets/img/profile.jpg', 'miki', 'Abebe', 'Mohamed', 'M', '3', 'miki', '7JhZ6nTY0ZMD5g4DeE/W/Q==', 'abseyoum1634@gmail.com', '+251909299378', 1),
-(4, 'BSS/TCH/0001/17', '../assets/img/man united.jpg', 'Eyu', 'tareke', 'Mohamed', 'M', '1', 'hamid', '3yFM88FVzw+XU0J2lPnUpA==', 'abseyoum1634@gmail.com', '+251909299378', 0),
+(3, 'BSS/DIR/0001/17', '../assets/img/profile.jpg', 'miki', 'Abebe', 'Mohamed', 'M', '3', 'miki', '7JhZ6nTY0ZMD5g4DeE/W/Q==', 'abseyoum1634@gmail.com', '+251909299378', 0),
+(4, 'BSS/TCH/0001/17', '../assets/img/man united.jpg', 'Eyu', 'tareke', 'Mohamed', 'M', '1', 'hamid', '3yFM88FVzw+XU0J2lPnUpA==', 'abseyoum1634@gmail.com', '+251909299378', 1),
 (5, 'BSS/INSTR/0001/17', '../assets/img/download.jpg', 'alem', 'Kebede', 'teferaa', 'F', '4', 'simo', 'KXCtygnqkBRg46jdWFl5yQ==', 'Abeniseyoum16@gmail.com', '+251909299378', 0);
 
 -- --------------------------------------------------------
@@ -1246,7 +1292,8 @@ ALTER TABLE `assign_teacher`
 ALTER TABLE `marks`
   ADD CONSTRAINT `class_ibpk_1` FOREIGN KEY (`section_id`) REFERENCES `sections` (`cid`) ON DELETE RESTRICT ON UPDATE CASCADE,
   ADD CONSTRAINT `stud_ibpk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`sid`) ON DELETE RESTRICT ON UPDATE CASCADE,
-  ADD CONSTRAINT `subj_ipbk_1` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`suid`) ON DELETE RESTRICT ON UPDATE CASCADE;
+  ADD CONSTRAINT `subj_ipbk_1` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`suid`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  ADD CONSTRAINT `teacher_ibpk_1` FOREIGN KEY (`teacher_id`) REFERENCES `users` (`uid`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 --
 -- Constraints for table `woredas`
