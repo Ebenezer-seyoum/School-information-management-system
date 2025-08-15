@@ -15,75 +15,403 @@ if (isset($_GET["sid"])) {
     exit;
 }
 
-// Handle form submission
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Collect and sanitize form data
-    $first_name = basics($_POST['first_name']);
-    $father_name = basics($_POST['father_name']);
-    $grand_father_name = basics($_POST['grand_father_name']);
-    $gender = basics($_POST['gender']);
-    $dob = basics($_POST['dob']);
-    $email = basics($_POST['email']);
-    $phone = basics($_POST['phone']);
-    $birth_place = basics($_POST['birth_place']);
-    $nationality = basics($_POST['nationality']);
-    $region = basics($_POST['region']);
-    $zone = basics($_POST['zone']);
-    $woreda = basics($_POST['woreda']);
-    $kebele = basics($_POST['kebele']);
-    $username = basics($_POST['username']);
 
-    $mother_name = basics($_POST['mother_name']);
-    $father_contact = basics($_POST['father_contact']);
-    $mother_contact = basics($_POST['mother_contact']);
-    $father_occupation = basics($_POST['father_occupation']);
-    $mother_occupation = basics($_POST['mother_occupation']);
-    $emergency_contact_name = basics($_POST['emergency_contact_name']);
-    $emergency_contact_phone = basics($_POST['emergency_contact_phone']);
-    $blood_group = basics($_POST['blood_group']);
-    $medical_condition = basics($_POST['medical_condition']);
-    $other_condition = basics($_POST['other_condition']);
-    $disabilities = basics($_POST['disabilities']);
-    $previous_school = basics($_POST['previous_school']);
+// Declare variables for all inputs and their corresponding error messages
+$student_id = $student_photo = $firstName = $father_full_name = $gFatherName = $gender = $email = "";
+$region = $zone = $woreda = $kebele = $nationality = "";
+$password = $confirmPassword = $username = $phone = $role_type = $success = "";
+$dob = $birth_place = $emergency_contact_name = $emergency_contact_phone = "";
+$fatherName = $mother_name = $father_contact = $mother_contact = $father_occupation = $mother_occupation = "";
+$blood_group = $medical_condition = $other_condition = $disabilities = "";
+$previous_school = $previous_documents = "";
 
+$student_id_err = $firstName_err = $father__full_name_err = $gFatherName_err = "";
+$region_err = $zone_err = $woreda_err = $kebele_err = $nationality_err = "";
+$gender_err = $email_err = $password_err = $confirmPassword_err = $username_err = "";
+$student_photo_err = $phone_err = $role_type_err = $allErr = "";
+$dob_err = $birth_place_err = $emergency_contact_name_err = $emergency_contact_phone_err = "";
+$fatherName_err = $mother_name_err = $father_contact_err = $mother_contact_err = "";
+$father_occupation_err = $mother_occupation_err = $blood_group_err = $medical_condition_err = "";
+$other_condition_err = $disabilities_err = $previous_school_err = $previous_documents_err = "";
+$test = true;
+$generatedId = getNextIdNumber();
 
-    // Update student information in the database (assuming a function exists)
-    $updateResult = updateStudentProfile($sid, [
-        'first_name' => $first_name,
-        'father_name' => $father_name,
-        'grand_father_name' => $grand_father_name,
-        'gender' => $gender,
-        'dob' => $dob,
-        'email' => $email,
-        'phone' => $phone,
-        'birth_place' => $birth_place,
-        'nationality' => $nationality,
-        'region' => $region,
-        'zone' => $zone,
-        'woreda' => $woreda,
-        'kebele' => $kebele,
-        'username' => $username,
-        'mother_name' => $mother_name,
-        'father_contact' => $father_contact,
-        'mother_contact' => $mother_contact,
-        'father_occupation' => $father_occupation,
-        'mother_occupation' => $mother_occupation,
-        'emergency_contact_name' => $emergency_contact_name,
-        'emergency_contact_phone' => $emergency_contact_phone,
-        'blood_group' => $blood_group,
-        'medical_condition' => $medical_condition,
-        'other_condition' => $other_condition,
-        'disabilities' => $disabilities,
-        'previous_school' => $previous_school
-   
-    ]);
-
-    if ($updateResult) {
-        echo "<div class='alert alert-success'>Student information updated successfully.</div>";
-        // Refresh userProfile data
-        $userProfile = getStudentSidByID($sid);
+if (isset($_POST["update"]) && ($_SERVER["REQUEST_METHOD"] == "POST")) {
+    // Validate student ID
+    if (empty($_POST["student_id"])) {
+        $student_id_err = "Please enter a student ID";
+        $test = false;
     } else {
-        echo "<div class='alert alert-danger'>Failed to update student information.</div>";
+        $student_id = trim($_POST["student_id"]);
+    }
+
+    // Validate profile picture
+    if (empty($_FILES["profile_picture"]["name"])) {
+        $student_photo_err = "Please select your profile picture";
+        $test = false;
+    } else if ($_FILES["profile_picture"]["error"] !== UPLOAD_ERR_OK) {
+        $student_photo_err = "Error uploading file. Error code: " . $_FILES["profile_picture"]["error"];
+        $test = false;
+    } else if (validateProfilePicture($_FILES["profile_picture"]) !== true) {
+        $student_photo_err = validateProfilePicture($_FILES["profile_picture"]);
+        $test = false;
+    } else {
+        $uploadDir = '../assets/img/';
+        $uploadFile = $uploadDir . basename($_FILES["profile_picture"]["name"]);
+        if (move_uploaded_file($_FILES["profile_picture"]["tmp_name"], $uploadFile)) {
+            $student_photo = $uploadFile;
+        } else {
+            $student_photo_err = "Failed to upload the profile picture.";
+            $test = false;
+        }
+    }
+
+    // Validate first name
+    if (empty($_POST["first_name"])) {
+        $firstName_err = "Please enter a first name";
+        $test = false;
+    } elseif (validateName($_POST["first_name"]) == 0) {
+        $firstName_err = "Invalid first name";
+        $test = false;
+    } else {
+        $firstName = trim($_POST["first_name"]);
+    }
+
+    // Validate father name
+    if (empty($_POST["father_name"])) {
+        $fatherName_err = "Please enter a father name";
+        $test = false;
+    } elseif (validateName($_POST["father_name"]) == 0) {
+        $fatherName_err = "Invalid father name";
+        $test = false;
+    } else {
+        $fatherName = trim($_POST["father_name"]);
+    }
+
+    // Validate grand father name
+    if (empty($_POST["grand_father_name"])) {
+        $gFatherName_err = "Please enter a grand father name";
+        $test = false;
+    } elseif (validateName($_POST["grand_father_name"]) == 0) {
+        $gFatherName_err = "Invalid grand father name";
+        $test = false;
+    } else {
+        $gFatherName = trim($_POST["grand_father_name"]);
+    }
+
+    // Validate gender
+    if (empty($_POST["gender"])) {
+        $gender_err = "Please select a gender";
+        $test = false;
+    } elseif (validateGender($_POST["gender"]) == 0) {
+        $gender_err = "Invalid gender selection";
+        $test = false;
+    } else {
+        $gender = $_POST["gender"];
+    }
+
+    // Validate email
+    if (empty($_POST["email"])) {
+        $email_err = "Please enter your email";
+        $test = false;
+    } else {
+        $email = trim($_POST["email"]);
+        if (!validateEmail($email)) {
+            $email_err = "Please enter a valid email address (example: user@domain.com)";
+            $test = false;
+        }
+    }
+
+    // Validate nationality
+    if (empty($_POST["nationality"])) {
+        $nationality_err = "Please enter a nationality";
+        $test = false;
+    } elseif (validateName($_POST["nationality"]) == 0) {
+        $nationality_err = "Invalid nationality";
+        $test = false;
+    } else {
+        $nationality = trim($_POST["nationality"]);
+    }
+
+    // Validate region
+    if (empty($_POST["region"])) {
+        $region_err = "Please select a region";
+        $test = false;
+    } else {
+        $region = trim($_POST["region"]);
+    }
+
+    // Validate zone
+    if (empty($_POST["zone"])) {
+        $zone_err = "Please select a zone";
+        $test = false;
+    } else {
+        $zone = trim($_POST["zone"]);
+    }
+
+    // Validate woreda
+    if (empty($_POST["woreda"])) {
+        $woreda_err = "Please select a woreda";
+        $test = false;
+    } else {
+        $woreda = trim($_POST["woreda"]);
+    }
+
+    // Validate kebele
+    if (empty($_POST["kebele"])) {
+        $kebele_err = "Please select a kebele";
+        $test = false;
+    } else {
+        $kebele = trim($_POST["kebele"]);
+    }
+
+    // Validate Date of Birth
+    if (empty($_POST["dob"])) {
+        $dob_err = "Please enter a date of birth";
+        $test = false;
+    } elseif (checkDateOfBirth($_POST["dob"]) == 0) {
+        $dob_err = "Invalid date format";
+        $test = false;
+    } else {
+        $dob = $_POST["dob"];
+    }
+
+    // Validate Place of Birth
+    if (empty($_POST["birth_place"])) {
+        $birth_place_err = "Please enter a place of birth";
+        $test = false;
+    } elseif (validateName($_POST["birth_place"]) == 0) {
+        $birth_place_err = "Invalid place of birth";
+        $test = false;
+    } else {
+        $birth_place = trim($_POST["birth_place"]);
+    }
+
+    // Validate Emergency Contact Name
+    if (empty($_POST["emergency_contact_name"])) {
+        $emergency_contact_name_err = "Please enter an emergency contact name";
+        $test = false;
+    } elseif (validateName($_POST["emergency_contact_name"]) == 0) {
+        $emergency_contact_name_err = "Invalid emergency contact name";
+        $test = false;
+    } else {
+        $emergency_contact_name = trim($_POST["emergency_contact_name"]);
+    }
+
+    // Validate Emergency Contact Phone
+    if (empty($_POST["emergency_contact_phone"])) {
+        $emergency_contact_phone_err = "Please enter an emergency contact phone number";
+        $test = false;
+    } elseif (!validatePhoneNumber($_POST["emergency_contact_phone"])) {
+        $emergency_contact_phone_err = "Invalid emergency contact phone number";
+        $test = false;
+    } else {
+        $emergency_contact_phone = trim($_POST["emergency_contact_phone"]);
+    }
+
+    // Validate username
+    if (empty($_POST["username"])) {
+        $username_err = "Please enter a username";
+        $test = false;
+    } elseif (!validateName($_POST["username"])) {
+        $username_err = "Invalid username";
+        $test = false;
+    } else {
+        $username = trim($_POST["username"]);
+    }
+
+    // Validate password
+    if (empty($_POST["password"])) {
+        $password_err = "Please enter your new password";
+        $test = false;
+    } else if (validatePassword($_POST["password"]) == 0) {
+        $password_err = "Please enter a valid password (no invalid symbols)";
+        $test = false;
+    } else {
+        $password = $_POST["password"];
+        $strongPassword = isStrongPassword($password);
+        if ($strongPassword !== true) {
+            $password_err = $strongPassword;
+            $test = false;
+        }
+    }
+
+    // Validate password confirmation
+    if (empty($_POST["confirm_password"])) {
+        $confirmPassword_err = "Please enter your new password";
+        $test = false;
+    } else if (validatePassword($_POST["confirm_password"]) == 0) {
+        $confirmPassword_err = "Please enter valid password";
+        $test = false;
+    } else if (comparePasswords($_POST["password"], $_POST["confirm_password"]) == 0) {
+        $confirmPassword_err = "Password did not match";
+        $test = false;
+    } else {
+        $confirmPassword = $_POST["confirm_password"];
+    }
+
+    // Validate phone
+    if (empty($_POST["phone"])) {
+        $phone_err = "Please enter a phone number";
+        $test = false;
+    } elseif (!validatePhoneNumber($_POST["phone"])) {
+        $phone_err = "Invalid phone number format";
+        $test = false;
+    } else {
+        $phone = trim($_POST["phone"]);
+    }
+
+    // Validate father's full name
+    if (empty($_POST["father_full_name"])) {
+        $father__full_name_err = "Please enter father's full name";
+        $test = false;
+    } else if (validateName($_POST["father_full_name"]) == 0) {
+        $father_full_name_err = "Invalid father's full name";
+        $test = false;
+    } else {
+        $father_full_name = trim($_POST["father_full_name"]);
+    }
+
+    // Validate mother's full name
+    if (empty($_POST["mother_name"])) {
+        $mother_name_err = "Please enter mother's full name";
+        $test = false;
+    } else if (validateName($_POST["mother_name"]) == 0) {
+        $mother_name_err = "Invalid mother's full name";
+        $test = false;
+    } else {
+        $mother_name = trim($_POST["mother_name"]);
+    }
+
+    // Validate father's contact number
+    if (empty($_POST["father_contact"])) {
+        $father_contact_err = "Please enter father's contact number";
+        $test = false;
+    } elseif (validatePhoneNumber($_POST["father_contact"]) == 0) {
+        $father_contact_err = "Invalid father's contact number";
+        $test = false;
+    } else {
+        $father_contact = trim($_POST["father_contact"]);
+    }
+
+    // Validate mother's contact number
+    if (empty($_POST["mother_contact"])) {
+        $mother_contact_err = "Please enter mother's contact number";
+        $test = false;
+    } elseif (validatePhoneNumber($_POST["mother_contact"]) == 0) {
+        $mother_contact_err = "Invalid mother's contact number";
+        $test = false;
+    } else {
+        $mother_contact = trim($_POST["mother_contact"]);
+    }
+
+    // Validate father's occupation
+    if (empty($_POST["father_occupation"])) {
+        $father_occupation_err = "Please enter father's occupation";
+        $test = false;
+    } else if (validateName($_POST["father_occupation"]) == 0) {
+        $father_occupation_err = "Invalid father's occupation";
+        $test = false;
+    } else {
+        $father_occupation = trim($_POST["father_occupation"]);
+    }
+
+    // Validate mother's occupation
+    if (empty($_POST["mother_occupation"])) {
+        $mother_occupation_err = "Please enter mother's occupation";
+        $test = false;
+    } else if (validateName($_POST["mother_occupation"]) == 0) {
+        $mother_occupation_err = "Invalid mother's occupation";
+        $test = false;
+    } else {
+        $mother_occupation = trim($_POST["mother_occupation"]);
+    }
+
+    // Validate blood group
+    if (empty($_POST["blood_group"])) {
+        $blood_group_err = "Please enter blood group";
+        $test = false;
+    } else if (validateBloodGroup($_POST["blood_group"]) == 0) {
+        $blood_group_err = "Invalid blood group";
+        $test = false;
+    } else {
+        $blood_group = trim($_POST["blood_group"]);
+    }
+
+    // Validate medical condition
+    if (!empty($_POST["medical_condition"]) && $_POST["medical_condition"] === "Other" && empty($_POST["other_condition"])) {
+        $other_condition_err = "Please specify the medical condition";
+        $test = false;
+    } else {
+        $medical_condition = trim($_POST["medical_condition"]);
+        $other_condition = trim($_POST["other_condition"]);
+    }
+
+    // Validate disabilities
+    if (!empty($_POST["disabilities"]) && !in_array($_POST["disabilities"], ["Yes", "No"])) {
+        $disabilities_err = "Invalid selection for disabilities";
+        $test = false;
+    } else {
+        $disabilities = trim($_POST["disabilities"]);
+    }
+
+    // Validate previous school
+    if (empty($_POST["previous_school"])) {
+        $previous_school_err = "Please enter previous school name";
+        $test = false;
+    } else {
+        $previous_school = trim($_POST["previous_school"]);
+    }
+
+    // Validate previous documents
+    if (isset($_FILES["file"]) && $_FILES["file"]["error"] == 0) {
+        $allowed = ["pdf" => "application/pdf", "doc" => "application/msword", "docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
+        $file_name = $_FILES["file"]["name"];
+        $file_type = $_FILES["file"]["type"];
+        $file_size = $_FILES["file"]["size"];
+        $ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+
+        if (!array_key_exists($ext, $allowed) || $file_size > 5 * 1024 * 1024 || !in_array($file_type, $allowed)) {
+            $previous_documents_err = "Invalid file. Allowed: PDF, DOC, DOCX under 5MB.";
+            $test = false;
+        } else {
+            $destination = "../assets/case_files/" . $file_name;
+            if (!move_uploaded_file($_FILES["file"]["tmp_name"], $destination)) {
+                $previous_documents_err = "Failed to upload the file.";
+                $test = false;
+            } else {
+                $previous_documents = $destination;
+            }
+        }
+    } else {
+        $previous_documents_err = "Please upload a file.";
+        $test = false;
+    }
+
+    // Check if all validations passed
+    if ($test == true) {
+        if (studentExist($student_id) == 1) {
+            $encryptedPassword = encryptPassword($password);
+            // Update student-specific function
+            if (updateStudent(
+                $student_id, $student_photo, $firstName, $fatherName, $gFatherName, $gender,
+                $email, $nationality, $region, $zone, $woreda, $kebele, $dob, $birth_place,
+                $emergency_contact_name, $emergency_contact_phone, $username, $encryptedPassword,
+                $phone, $father_full_name, $mother_name, $father_contact, $mother_contact,
+                $father_occupation, $mother_occupation, $blood_group,
+                $other_condition, $disabilities, $previous_school, $previous_documents
+            ) == 1) {
+                $success = "Student account successfully updated";
+                header('refresh:2');
+                $Notif_msg = "Student account details updated.";
+                $sql_Notif = "INSERT INTO notifications (user_id, message) VALUES ('$student_id', '$Notif_msg')";
+                mysqli_query($conn, $sql_Notif);
+            } else {
+                $allErr = "Something went wrong while updating the student account";
+            }
+        } else {
+            $allErr = "No student found with the provided information";
+        }
     }
 }
 ?>
@@ -325,7 +653,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
           
           <div class="row mb-3">
-            <div class="col-md-12">
+            <div class="col-md-6">
               <label class="form-label">Previous Documents</label>
               <?php if (!empty($userProfile['previous_documents'])): ?>
                 <a href="<?php echo htmlspecialchars($userProfile['previous_documents']); ?>" target="_blank" class="form-control d-block">View Document</a>
@@ -337,11 +665,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           </div>
         </div>
       </div>
-    </div>
+
 
     <!-- Buttons -->
     <div class="text-center mt-4">
-      <button type="submit" class="btn btn-primary">Save Changes</button>
+      <button type="update" class="btn btn-primary">Update Students</button>
       <a href="view_studentForUpdate.php" class="btn btn-secondary">Back</a>
     </div>
     </form>
