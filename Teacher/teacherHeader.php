@@ -58,7 +58,7 @@ if (isset($_SESSION["uid"]) and ($roleName == "Teacher")) {
   <div class="sidebar-content">
 	<ul class="nav nav-secondary">
 	  <li class="nav-item">
-    <a href="director.php" class="collapsed"><i class="fas fa-home"></i><p><?php echo $roleName = getRoleNameById($profile["user_type"]); ?></p></a></li>   
+    <a href="teacher.php" class="collapsed"><i class="fas fa-home"></i><p><?php echo $roleName = getRoleNameById($profile["user_type"]); ?></p></a></li>   
  <!-- My Classes -->
       <li class="nav-item">
         <a data-bs-toggle="collapse" href="#myClasses" role="button" aria-expanded="false" aria-controls="myClasses">
