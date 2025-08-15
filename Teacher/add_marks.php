@@ -41,11 +41,20 @@ $selectedYear = $_GET['academic_year'] ?? ($years[0]??null);
 $classes = $selectedYear ? fetchAssignedClasses($conn,$uid,$selectedYear) : [];
 ?>
 
+<!-- page header -->
 <div class="container">
   <div class="page-inner">
     <div class="page-header">
-      <h3 class="fw-bold mb-3">My Classes</h3>
-    </div>
+      <h3 class="fw-bold mb-3"> Add Marks</h3>
+      <ul class="breadcrumbs mb-3">
+        <li class="nav-home"><a href="#"><i class="icon-home"></i></a></li>
+        <li class="separator"><i class="icon-arrow-right"></i></li>
+        <li class="nav-item"><a href="#">Manage Marks</a></li>
+        <li class="separator"><i class="icon-arrow-right"></i></li>
+        <li class="nav-item"><a href="#">Add Marks</a></li>
+      </ul>
+  </div>
+<!-- end page header -->
 
     <form method="GET" class="mb-3">
       <label>Academic Year:</label>

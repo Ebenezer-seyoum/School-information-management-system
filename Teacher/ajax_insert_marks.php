@@ -41,8 +41,8 @@ for($i=0;$i<count($student_ids);$i++){
             SET result=$mark, mark_status=2, updated_at=NOW() 
             WHERE mid=$mid");
     } else {
-        mysqli_query($conn,"INSERT INTO marks(student_id,section_id,subject_id,result,semester,academic_year,mark_status,created_at,updated_at)
-            VALUES($sid,$section_id,$subject_id,$mark,$semester,'$academic_year',2,NOW(),NOW())");
+        mysqli_query($conn,"INSERT INTO marks(student_id,section_id,subject_id,teacher_id,result,semester,academic_year,mark_status,created_at,updated_at)
+            VALUES($sid,$section_id,$subject_id,$uid,$mark,$semester,'$academic_year',2,NOW(),NOW())");
     }
 }
 
