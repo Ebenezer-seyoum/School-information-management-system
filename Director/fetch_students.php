@@ -14,24 +14,51 @@ if (isset($_GET['section_id'], $_GET['academic_year'])) {
     $result = mysqli_query($conn, $query);
 
     if ($result && mysqli_num_rows($result) > 0) {
-        echo '<table class="table table-bordered">';
-        echo '<thead><tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Action</th>
-              </tr></thead><tbody>';
-        while ($row = mysqli_fetch_assoc($result)) {
-            echo '<tr>
-                    <td>' . $row['student_id'] . '</td>
-                    <td>' . $row['first_name'] . ' ' . $row['father_name'] . '</td>
-                    <td>
-                      <a href="fetch_studentDetail.php?sid=' . htmlspecialchars($row['sid']) . '" class="btn btn-sm btn-primary">View Details</a>
-                    </td>
-                  </tr>';
-        }
-        echo '</tbody></table>';
+        ?>
+        <!-- Search Bar -->
+        <div class="mb-3">
+            <input type="text" id="studentSearch" class="form-control" placeholder="Search student by name or ID...">
+        </div>
+
+        <!-- Student Table -->
+        <table class="table table-bordered table-striped" id="studentTable">
+            <thead class="table-primary">
+                <tr>
+                    <th>Student ID</th>
+                    <th>Full Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php
+            while ($row = mysqli_fetch_assoc($result)) {
+                echo '<tr>
+                        <td>' . htmlspecialchars($row['student_id']) . '</td>
+                        <td>' . htmlspecialchars($row['first_name'] . ' ' . $row['father_name']) . '</td>
+                        <td>
+                          <a href="fetch_studentDetail.php?sid=' . urlencode($row['sid']) . '" 
+                             class="btn btn-sm btn-primary">View Details</a>
+                        </td>
+                      </tr>';
+            }
+            ?>
+            </tbody>
+        </table>
+
+        <!-- Search Script -->
+        <script>
+            document.getElementById('studentSearch').addEventListener('keyup', function() {
+                let filter = this.value.toLowerCase();
+                let rows = document.querySelectorAll('#studentTable tbody tr');
+                rows.forEach(row => {
+                    let text = row.innerText.toLowerCase();
+                    row.style.display = text.includes(filter) ? '' : 'none';
+                });
+            });
+        </script>
+        <?php
     } else {
-        echo '<div class="text-danger">No students assigned for this academic year.</div>';
+        echo '<div class="alert alert-warning">No students assigned for this academic year.</div>';
     }
 }
 ?>

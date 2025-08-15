@@ -1177,6 +1177,26 @@ function getAllStudents()
     }
     return $result;
 }
+function getAllTeachers()
+{
+    global $conn;
+    $query = mysqli_query($conn, "select * from users where user_type = 1");
+    $result = array();
+    while ($row = mysqli_fetch_array($query)) {
+        array_push($result, $row);
+    }
+    return $result;
+}
+function getAllInstructors()
+{
+    global $conn;
+    $query = mysqli_query($conn, "select * from users where user_type = 4");
+    $result = array();
+    while ($row = mysqli_fetch_array($query)) {
+        array_push($result, $row);
+    }
+    return $result;
+}
 
 function getAllSections()
 {
@@ -1222,24 +1242,20 @@ function getRoleNameById($role_id) {
 }
 
 
-function getAllJudges() {
-    global $conn;
-    $query = mysqli_query($conn, "SELECT * FROM users WHERE user_type = 'judge'"); 
-    $result = array();
-    while ($row = mysqli_fetch_array($query)) {
-        array_push($result, $row);
-    }
-    return $result;
-}
-
-function isJudgeAlreadyAssigned($conn, $case_id, $judge_id) {
-    $query = "SELECT 1 FROM assigned_judges WHERE user_id = '$judge_id' AND case_id = '$case_id' LIMIT 1";
+function getStudentCurrentSection($conn, $sid) {
+    $query = "
+        SELECT  a.section_id AS current_section_id, sec.section_name 
+        FROM students s
+        LEFT JOIN assign_student a ON s.sid = a.student_id 
+        LEFT JOIN sections sec ON a.section_id = sec.cid
+        WHERE s.sid = '$sid'
+    ";
     $result = mysqli_query($conn, $query);
-    return mysqli_num_rows($result) > 0;
+    return mysqli_fetch_assoc($result);
 }
 
-function transferCaseToJudge($conn, $case_id, $old_judge_id, $new_judge_id) {
-    $update_query = "UPDATE assigned_judges SET user_id = '$new_judge_id' WHERE case_id = '$case_id' AND user_id = '$old_judge_id'";
+function transferStudent($conn, $sid, $old_section_id, $new_section_id) {
+    $update_query = "UPDATE assign_student SET section_id = '$new_section_id' WHERE student_id = '$sid'";
     if (mysqli_query($conn, $update_query)) {
         if (mysqli_affected_rows($conn) > 0) {
             return true;
@@ -1247,411 +1263,126 @@ function transferCaseToJudge($conn, $case_id, $old_judge_id, $new_judge_id) {
     }
     return false;
 }
+function fetchAssignedStudents($conn, $search = '') {
 
-function getAllAssignedJudges() {
-    global $conn;
-    $query = mysqli_query($conn, " SELECT DISTINCT
-            u.uid,
-            u.idNumber,
-            u.profile_pic,
-            u.first_name,
-            u.father_name,
-            u.username
-        FROM users u
-        JOIN assigned_judges aj ON u.uid = aj.user_id
-        WHERE u.user_type = 'judge'
-    ");
-
-    $result = [];
-    while ($row = mysqli_fetch_assoc($query)) {
-        $result[] = $row;
-    }
-
-    return $result;
-}
-
-function getAssignedCasesByJudge($data) {
-    global $conn;
-
-    $query = mysqli_query($conn, " SELECT 
-            c.case_id,
-            c.plaintiff,
-            c.defendant,
-            c.case_status,
-            c.cid,
-            aj.judge_type
-        FROM assigned_judges aj
-        JOIN `case` c ON c.cid = aj.case_id
-        JOIN users u ON u.uid = aj.user_id
-        WHERE aj.user_id = '$data'
-    ");
-
-    $cases = [];
-    while ($row = mysqli_fetch_assoc($query)) {
-        $cases[] = $row;
-    }
-
-    return $cases;
-}
-
-function getAllCases() {
-    global $conn;
-    $query = mysqli_query($conn, "SELECT * FROM `case`");
-    $result = array();
-    while ($row = mysqli_fetch_array($query)) {
-        array_push($result, $row);
-    }
-    return $result;
-}
-
-function getAllCasesByID($data) {
-    global $conn;
-    $query = mysqli_query($conn, "SELECT * FROM `case` WHERE cid = '$data' ");
-    $result = array();
-    while ($row = mysqli_fetch_array($query)) {
-        array_push($result, $row);
-    }
-    return $result;
-}
-function getPendingCases() {
-    global $conn;
-    $query = mysqli_query($conn, "SELECT * FROM `case` WHERE case_status = 0 ");
-    $result = array();
-    while ($row = mysqli_fetch_array($query)) {
-        array_push($result, $row);
-    }
-    return $result;
-}
-function getOpenCases() {
-    global $conn;
-    $query = mysqli_query($conn, "SELECT * FROM `case` WHERE case_status = 1 ");
-    $result = array();
-    while ($row = mysqli_fetch_array($query)) {
-        array_push($result, $row);
-    }
-    return $result;
-}
-function getDistributedCases() {
-    global $conn;
-    $query = mysqli_query($conn, "SELECT * FROM `case` WHERE case_status = 2 ");
-    $result = array();
-    while ($row = mysqli_fetch_array($query)) {
-        array_push($result, $row);
-    }
-    return $result;
-}
-function getPendingAppointmentCases() {
-    global $conn;
-    $query = mysqli_query($conn, "SELECT * FROM `case` WHERE case_status = 3 || case_status = 4");
-    $result = array();
-    while ($row = mysqli_fetch_array($query)) {
-        array_push($result, $row);
-    }
-    return $result;
-}
-function getAppointedCases() {
-    global $conn;
-    $query = mysqli_query($conn, "SELECT * FROM `case` WHERE case_status = 5 ");
-    $result = array();
-    while ($row = mysqli_fetch_array($query)) {
-        array_push($result, $row);
-    }
-    return $result;
-}
-function getPendingDecisionCases() {
-    global $conn;
-    $query = mysqli_query($conn, "SELECT * FROM `case` WHERE case_status = 6 || case_status = 7 ");
-    $result = array();
-    while ($row = mysqli_fetch_array($query)) {
-        array_push($result, $row);
-    }
-    return $result;
-}
-function getDecidedCases() {
-    global $conn;
-    $query = mysqli_query($conn, "SELECT * FROM `case` WHERE case_status = 8 ");
-    $result = array();
-    while ($row = mysqli_fetch_array($query)) {
-        array_push($result, $row);
-    }
-    return $result;
-}
-function getAssignedCasesByIdPendingAppointmentStatus($data) {
-        global $conn;   
-        $query = mysqli_query($conn, "
-            SELECT aj.case_id, aj.user_id, aj.judge_type, c.plaintiff, c.defendant,c.cid,
-                   j.first_name, j.father_name, j.profile_pic, c.case_id, j.idNumber , j.username,
-                   c.case_status ,c.cid
-            FROM assigned_judges aj
-            JOIN `case` c ON aj.case_id = c.cid
-            JOIN users j ON aj.user_id = j.uid
-            WHERE j.uid = '$data' AND c.case_status = 3 || c.case_status = 4
-            ORDER BY aj.case_id ASC");
-        $result = array();
-        while ($row = mysqli_fetch_array($query)) {
-            array_push($result, $row);
-        }
-        return $result;
-    }
-function getAssignedCasesByIdAppointedStatus($data) {
-    global $conn;   
-    $query = mysqli_query($conn, "
-        SELECT aj.case_id, aj.user_id, aj.judge_type, c.plaintiff, c.defendant, c.cid,
-               j.first_name, j.father_name, j.profile_pic, c.case_id, j.idNumber, j.username, c.case_status
-        FROM assigned_judges aj
-        JOIN `case` c ON aj.case_id = c.cid
-        JOIN users j ON aj.user_id = j.uid
-        WHERE j.uid = '$data' 
-        AND c.case_status = 5
-        ORDER BY aj.case_id ASC
-    ");
-    
-    $result = array();
-    while ($row = mysqli_fetch_array($query)) {
-        array_push($result, $row);
-    }
-    return $result;
-}
-
-    function getAssignedCasesByIdPendingDecisionStatus($data) {
-        global $conn;   
-        $query = mysqli_query($conn, "
-            SELECT aj.case_id, aj.user_id, aj.judge_type, c.plaintiff, c.defendant,c.cid,
-                   j.first_name, j.father_name, j.profile_pic, c.case_id, j.idNumber , j.username,c.case_status
-                   ,c.cid
-            FROM assigned_judges aj
-            JOIN `case` c ON aj.case_id = c.cid
-            JOIN users j ON aj.user_id = j.uid
-            WHERE j.uid = '$data' AND c.case_status = 6 || c.case_status = 7
-            ORDER BY aj.case_id ASC");
-        $result = array();
-        while ($row = mysqli_fetch_array($query)) {
-            array_push($result, $row);
-        }
-        return $result;
-    }
-  function getAssignedCasesByIdDecidedStatus($data) {
-        global $conn;   
-        $query = mysqli_query($conn, "
-            SELECT aj.case_id, aj.user_id, aj.judge_type, c.plaintiff, c.defendant,c.cid,
-                   j.first_name, j.father_name, j.profile_pic, c.case_id, j.idNumber , j.username,c.case_status
-                   ,c.cid
-            FROM assigned_judges aj
-            JOIN `case` c ON aj.case_id = c.cid
-            JOIN users j ON aj.user_id = j.uid
-            WHERE j.uid = '$data'
-             AND c.case_status = 8
-            ORDER BY aj.case_id ASC");
-        $result = array();
-        while ($row = mysqli_fetch_array($query)) {
-            array_push($result, $row);
-        }
-        return $result;
-    }
-function getAssignedCases() {
-    global $conn;   
-    $query = mysqli_query($conn, "  SELECT aj.case_id, aj.user_id, aj.judge_type, c.plaintiff, c.defendant,
-        j.first_name, j.father_name, j.profile_pic,c.case_id, j.idNumber , j.username,  c.case_status, c.cid
-        FROM assigned_judges aj
-        JOIN `case` c ON aj.case_id = c.cid
-        JOIN users j ON aj.user_id = j.uid
-        ORDER BY aj.case_id ASC ");
-        $result = array();
-        while ($row = mysqli_fetch_array($query)) {
-            array_push($result, $row);
-        }
-        return $result;
-    } 
-   function getAssignedJUdgesByCaseId($data) {
-    global $conn;   
-    $query = mysqli_query($conn, "  SELECT aj.case_id, aj.user_id, aj.judge_type, c.plaintiff, c.defendant,
-        j.first_name, j.father_name, j.profile_pic,c.case_id, j.idNumber , j.username,  c.case_status, c.cid
-        FROM assigned_judges aj
-        JOIN `case` c ON aj.case_id = c.cid
-        JOIN users j ON aj.user_id = j.uid
-        WHERE aj.case_id ='$data'");
-        $result = array();
-        while ($row = mysqli_fetch_array($query)) {
-            array_push($result, $row);
-        }
-        return $result;
-    } 
-
-    function getAssignedCaseCount($judge_id) {
-    global $conn; 
-    $judge_id = (int)$judge_id; 
-    $query = "SELECT COUNT(*) as case_count FROM assigned_judges WHERE user_id = $judge_id";
-    $result = mysqli_query($conn, $query);
-    if ($result && mysqli_num_rows($result) > 0) {
-        $row = mysqli_fetch_assoc($result);
-        return $row['case_count'];
-    }
-    return 0;
-}
-
-function getAssignedCasesDisplayOnce() {
-    global $conn;
-    $query = mysqli_query($conn, "
-        SELECT DISTINCT c.cid, c.case_id, c.plaintiff, c.defendant, c.case_status
-        FROM `case` c
-        JOIN assigned_judges aj ON aj.case_id = c.cid
-        ORDER BY c.cid ASC
-    ");
-    $result = array();
-    while ($row = mysqli_fetch_array($query)) {
-        array_push($result, $row);
-    }
-    return $result;
-}
- 
-
-    function getAssignedCasesById($data) {
-        global $conn;   
-        $query = mysqli_query($conn, "
-            SELECT aj.case_id, aj.user_id, aj.judge_type, c.plaintiff, c.defendant,c.cid,
-                   j.first_name, j.father_name, j.profile_pic, c.case_id, j.idNumber , j.username,c.case_status
-                   ,c.cid
-            FROM assigned_judges aj
-            JOIN `case` c ON aj.case_id = c.cid
-            JOIN users j ON aj.user_id = j.uid
-            WHERE j.uid = '$data'
-            ORDER BY aj.case_id ASC");
-        $result = array();
-        while ($row = mysqli_fetch_array($query)) {
-            array_push($result, $row);
-        }
-        return $result;
-    }
-    
-    function getAllCaseInfo()
-    {
-        global $conn;
-        $query = mysqli_query($conn, " SELECT case_info.*, case.case_id AS case_id 
-        FROM case_info  JOIN `case` ON case_info.case_id = case.cid ");     
-        $result = array();
-        while ($row = mysqli_fetch_array($query)) {
-            array_push($result, $row);
-        }
-        return $result;
-    }
-    function getAttachFilesByCaseId($case_id) {
-        global $conn;
-        $query = mysqli_query($conn, "SELECT af.*
-         FROM attach_files af 
-         JOIN `case` c ON af.case_id = c.cid
-          WHERE c.case_id = '$case_id'");
-        $files = array();
-        while ($row = mysqli_fetch_assoc($query)) {
-            $files[] = $row;
-        }
-        return $files;
-    }    
-   
-
-
-    function getAllCaseInfoById($data)
-    {
-        global $conn;
-        $query = mysqli_query($conn, " SELECT cf.*, c.* 
-            FROM case_info cf
-            JOIN `case` c ON cf.case_id = c.cid 
-            WHERE c.case_id = '$data'
-            ");
-        $result = array();
-        while ($row = mysqli_fetch_array($query)) {
-            array_push($result, $row);
-        }
-        return $result;
-    }
-function getAllCasesByCid($cid) {
-    global $conn;
-    $query = mysqli_query($conn, "SELECT cf.*, c.* 
-        FROM case_info cf
-        JOIN `case` c ON cf.case_id = c.cid 
-        WHERE cf.kid = '$cid'");
-    $result = [];
-    while ($row = mysqli_fetch_assoc($query)) {
-        $result[] = $row;
-    }
-    return $result;
-}
-
-
-
-
-    function getFilePagesByCaseInfoId($cid) {
-        global $conn;
-        $file_pages = "";
-        $cid = mysqli_real_escape_string($conn, $cid);       
-        $query = "SELECT file_pages FROM case_info WHERE case_id = '$cid'";
-        $result = mysqli_query($conn, $query);
-        
-        if ($result && mysqli_num_rows($result) > 0) {
-            $row = mysqli_fetch_assoc($result);
-            $file_pages = $row['file_pages'];
-        }    
-        return $file_pages;
-    }
-    
-function getCaseInfoForUpdateId($data)
-{
-    global $conn;
-    $query = mysqli_query($conn, "SELECT cf.*, c.* 
-        FROM case_info cf
-        JOIN `case` c ON cf.case_id = c.cid
-        WHERE cf.kid = '$data'");
-    return mysqli_fetch_assoc($query); 
-}
-
-function getAllReasons()
-{
-    global $conn;
-    $query = mysqli_query($conn, "select * from Reason");
-    $result = array();
-    while ($row = mysqli_fetch_array(result: $query)) {
-        array_push($result, $row);
-    }
-    return $result;
-}
-
-function getAllFeedbacks()
-{
-    global $conn;
-    $query = mysqli_query($conn, "select * from feedback");
-    $result = array();
-    while ($row = mysqli_fetch_array($query)) {
-        array_push($result, $row);
-    }
-    return $result;
-}
-
-function getConfirmAppointment($judge_id) {
-    global $conn;
-
-    $query = "
-        SELECT ap.aid, ap.case_id, ap.appointment_date, ap.record_date, ap.is_confirmed,
-               r.appointment_reason, 
-               c.plaintiff, c.defendant, c.case_status, c.cid, c.case_id AS id
-        FROM appointment ap
-        JOIN `case` c ON ap.case_id = c.cid
-        JOIN assigned_judges aj ON aj.case_id = c.cid
-        JOIN reason r ON ap.reason_id = r.rid
-        WHERE aj.user_id = '$judge_id'
-        ORDER BY ap.record_date DESC
+    $students_query = "
+    SELECT s.*,
+           sec.section_name,
+           sec.class_type,
+           a.section_id AS current_section_id
+    FROM students s
+    INNER JOIN assign_student a 
+           ON s.sid = a.student_id
+    INNER JOIN sections sec 
+           ON a.section_id = sec.cid
+    WHERE 1
     ";
 
-    $result = mysqli_query($conn, $query);
+    if ($search) {
+        $search_esc = mysqli_real_escape_string($conn, $search);
+        $students_query .= " AND (s.student_id LIKE '%$search_esc%' 
+                                 OR s.first_name LIKE '%$search_esc%' 
+                                 OR s.father_name LIKE '%$search_esc%')";
+    }
 
-    if ($result && mysqli_num_rows($result) > 0) {
-        $appointments = [];
-        while ($row = mysqli_fetch_assoc($result)) {
-            $appointments[] = $row;
-        }
-        return $appointments;
-    } else {
-        return false;
+    $students_query .= " ORDER BY s.first_name ASC";
+    return mysqli_query($conn, $students_query);
+}
+
+
+
+
+
+// Get current assignment for an instructor
+function getInstructorCurrentAssignment($conn, $instructor_id) {
+    $instructor_id = intval($instructor_id);
+    $query = "
+        SELECT ai.section_id AS current_section_id
+        FROM assign_instructor ai
+        WHERE ai.instructor_id = '$instructor_id'
+        LIMIT 1
+    ";
+    $res = mysqli_query($conn, $query);
+    return mysqli_fetch_assoc($res);
+}
+
+// Function to transfer section only
+function transferInstructorSectionOnly($conn, $instructor_id, $old_section, $new_section) {
+    $instructor_id = intval($instructor_id);
+    $new_section = intval($new_section);
+    $old_section = intval($old_section);
+
+    $update = "
+        UPDATE assign_instructor
+        SET section_id = '$new_section'
+        WHERE instructor_id = '$instructor_id'
+          AND section_id = '$old_section'
+    ";
+    if (!mysqli_query($conn, $update)) {
+        throw new Exception("Failed to transfer instructor");
     }
 }
+
+ 
+// Fetch class info by atid
+function getClassInfo($conn, $atid) {
+    $atid = (int)$atid; // cast to int for safety
+    $sql = "
+        SELECT at.section_id, s.section_name, s.class_type, at.academic_year, sub.subject_name
+        FROM assign_teacher at
+        LEFT JOIN sections s ON at.section_id = s.cid
+        LEFT JOIN subjects sub ON at.subject_id = sub.suid
+        WHERE at.atid = $atid
+        LIMIT 1
+    ";
+    $res = mysqli_query($conn, $sql);
+    if ($res) {
+        return mysqli_fetch_assoc($res);
+    }
+    return null;
+}
+//class info for instructor
+function getClassInfoInstructor($conn, $hid) {
+    $hid = (int)$hid; // cast to int for safety
+    $sql = "
+        SELECT at.section_id, s.section_name, s.class_type, at.academic_year
+        FROM assign_instructor at
+        LEFT JOIN sections s ON at.section_id = s.cid
+        
+        WHERE at.hid = $hid
+        LIMIT 1
+    ";
+    $res = mysqli_query($conn, $sql);
+    if ($res) {
+        return mysqli_fetch_assoc($res);
+    }
+    return null;
+}
+// Fetch students by section and academic year
+function getStudentsBySection($conn, $section_id, $academic_year) {
+    $section_id = (int)$section_id;
+    $academic_year = (int)$academic_year;
+
+    $sql = "
+        SELECT u.sid, u.first_name, u.father_name, u.gender
+        FROM assign_student ast
+        LEFT JOIN students u ON ast.student_id = u.sid
+        WHERE ast.section_id = $section_id AND ast.academic_year = $academic_year
+        ORDER BY u.first_name ASC
+    ";
+    $res = mysqli_query($conn, $sql);
+    $students = [];
+    if ($res) {
+        while($r = mysqli_fetch_assoc($res)) {
+            $students[] = $r;
+        }
+    }
+    return $students;
+}
+
+  
+    
+
 
 
 function getConfirmDecision($judge_id) {
