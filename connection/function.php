@@ -1431,6 +1431,56 @@ function updateUser($uid, $idNumber, $profile_pic, $firstName, $fatherName, $gFa
 }
 
 
+function updateStudent($student_id, $student_photo, $firstName, $fatherName, $gFatherName, $gender,
+    $email, $nationality, $region, $zone, $woreda, $kebele, $dob, $birth_place,
+    $emergency_contact_name, $emergency_contact_phone, $username, $encryptedPassword,
+    $phone, $father_full_name, $mother_name, $father_contact, $mother_contact,
+    $father_occupation, $mother_occupation, $blood_group, $medical_condition,
+    $other_condition, $disabilities, $previous_school, $previous_documents)
+{
+    global $conn;
+    $query = mysqli_query($conn, "UPDATE studens SET 
+        profile_picture='$student_photo', 
+        first_name='$firstName',
+        father_name='$fatherName', 
+        grandfather_name='$gFatherName', 
+        gender='$gender',
+        email='$email', 
+        nationality='$nationality',
+        region='$region',
+        zone='$zone',
+        woreda='$woreda',
+        kebele='$kebele',
+        date_of_birth='$dob',
+        birth_place='$birth_place',
+        emergency_contact_name='$emergency_contact_name',
+        emergency_contact_phone='$emergency_contact_phone',
+        username='$username',
+        password='$encryptedPassword',
+        phone='$phone',
+        father_full_name='$father_full_name',
+        mother_name='$mother_name',
+        father_contact='$father_contact',
+        mother_contact='$mother_contact',
+        father_occupation='$father_occupation',
+        mother_occupation='$mother_occupation',
+        blood_group='$blood_group',
+        medical_condition='$medical_condition',
+        other_condition='$other_condition',
+        disabilities='$disabilities',
+        previous_school='$previous_school',
+        previous_documents='$previous_documents'
+        WHERE student_id='$student_id'
+    ");
+
+    if ($query) {
+        return 1;
+    } else {
+        echo "MySQL Error: " . mysqli_error($conn);
+        return 0;
+    }
+}
+
 
     function updateCaseInfo($kid, $first_name, $father_name, $gfather_name, $gender, $email, $region,
     $zone, $woreda, $kebele, $wogen, $argument_money, $judgement_money,
