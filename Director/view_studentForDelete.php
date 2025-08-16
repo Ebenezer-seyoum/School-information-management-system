@@ -1,11 +1,10 @@
 <?php
-include('directorHeader.php');// or directorHeader.php if director login
+include('directorHeader.php'); // or directorHeader.php if director login
 
 $profile = getUserByID($_SESSION["uid"]);
 $roleName = getRoleNameById($profile["user_type"]);
 
 if (isset($_SESSION["uid"]) && ($roleName == "Director")) { // Director role
-
 ?>
 
 <!-- CSS for profile image -->
@@ -59,7 +58,7 @@ $success = $allErr = "";
 
 // Delete student
 if (isset($_GET["dsid"])) {
-    $dsid = basics($_GET["dsid"]);
+    $dsid = mysqli_real_escape_string($conn, $_GET["dsid"]); // Use mysqli_real_escape_string for security
     $studentQuery = mysqli_query($conn, "SELECT sid, first_name, father_name FROM students WHERE sid = '$dsid'");
     $studentData = mysqli_fetch_assoc($studentQuery);
 
@@ -67,24 +66,58 @@ if (isset($_GET["dsid"])) {
         $sidDisplay = $studentData['sid'];
         $studentName = $studentData['first_name'] . " " . $studentData['father_name'];
 
-        // Check if student has linked records (marks, assignments, etc.)
-        $checkQuery = mysqli_query($conn, "SELECT * FROM marks WHERE student_id = '$dsid' LIMIT 1");
-        if (mysqli_num_rows($checkQuery) > 0) {
-            $allErr = "Student ({$studentName}, ID: {$sidDisplay}) cannot be deleted because they have linked records.";
-        } else {
-            $deleteQuery = mysqli_query($conn, "DELETE FROM students WHERE sid = '$dsid'");
-            if ($deleteQuery) {
+        // Check for linked records in marks and assign_student tables
+        $checkMarksQuery = mysqli_query($conn, "SELECT * FROM marks WHERE student_id = '$dsid' LIMIT 1");
+        $checkAssignQuery = mysqli_query($conn, "SELECT * FROM assign_student WHERE student_id = '$dsid' LIMIT 1");
+
+        if (mysqli_num_rows($checkMarksQuery) > 0) {
+            $allErr = "Student ({$studentName}, ID: {$sidDisplay}) cannot be deleted because they have linked records in the marks table.";
+        } elseif (mysqli_num_rows($checkAssignQuery) > 0) {
+            // Use transaction to ensure data integrity
+            mysqli_begin_transaction($conn);
+            try {
+                // Delete related records in assign_student table
+                $deleteAssignQuery = mysqli_query($conn, "DELETE FROM assign_student WHERE student_id = '$dsid'");
+                if (!$deleteAssignQuery) {
+                    throw new Exception("Failed to delete related records in assign_student table.");
+                }
+
+                // Delete student record
+                $deleteQuery = mysqli_query($conn, "DELETE FROM students WHERE sid = '$dsid'");
+                if (!$deleteQuery) {
+                    throw new Exception("Failed to delete student record.");
+                }
+
+                // Commit transaction
+                mysqli_commit($conn);
                 $success = "Student ({$studentName}, ID: {$sidDisplay}) has been deleted successfully.";
-            } else {
-                $allErr = "Unable to delete student ({$studentName}, ID: {$sidDisplay}).";
+            } catch (Exception $e) {
+                mysqli_rollback($conn);
+                $allErr = "Unable to delete student ({$studentName}, ID: {$sidDisplay}). Error: " . $e->getMessage();
+            }
+        } else {
+            // No linked records, delete student directly
+            mysqli_begin_transaction($conn);
+            try {
+                $deleteQuery = mysqli_query($conn, "DELETE FROM students WHERE sid = '$dsid'");
+                if (!$deleteQuery) {
+                    throw new Exception("Failed to delete student record.");
+                }
+                mysqli_commit($conn);
+                $success = "Student ({$studentName}, ID: {$sidDisplay}) has been deleted successfully.";
+            } catch (Exception $e) {
+                mysqli_rollback($conn);
+                $allErr = "Unable to delete student ({$studentName}, ID: {$sidDisplay}). Error: " . $e->getMessage();
             }
         }
+    } else {
+        $allErr = "Student with ID {$dsid} not found.";
     }
 }
 
 // Fetch students for table
 if (isset($_GET['search']) && !empty(trim($_GET['search']))) {
-    $searchTerm = basics($_GET['search']);
+    $searchTerm = mysqli_real_escape_string($conn, $_GET['search']); // Use mysqli_real_escape_string for security
     $studentsQuery = mysqli_query($conn, "SELECT * FROM students WHERE sid LIKE '%$searchTerm%' OR first_name LIKE '%$searchTerm%' OR father_name LIKE '%$searchTerm%' ORDER BY sid DESC");
 } else {
     $studentsQuery = mysqli_query($conn, "SELECT * FROM students ORDER BY sid DESC");
@@ -112,14 +145,14 @@ if (mysqli_num_rows($studentsQuery) > 0) {
 ?>
         <tr>
           <td style="border: 2px solid black;"><?php echo $no; ?></td>
-          <td style="border: 2px solid black;"><?php echo $student['sid']; ?></td>
-          <td style="border: 2px solid black;"><?php echo $student['first_name']; ?></td>
-          <td style="border: 2px solid black;"><?php echo $student['father_name']; ?></td>
+          <td style="border: 2px solid black;"><?php echo htmlspecialchars($student['sid']); ?></td>
+          <td style="border: 2px solid black;"><?php echo htmlspecialchars($student['first_name']); ?></td>
+          <td style="border: 2px solid black;"><?php echo htmlspecialchars($student['father_name']); ?></td>
           <td style="border: 2px solid black;">
-            <a href="delete_student.php?sid=<?= $student['sid']; ?>" class="btn btn-sm btn-info"><i class="fa fa-eye"></i></a>
+            <a href="delete_student.php?sid=<?= htmlspecialchars($student['sid']); ?>" class="btn btn-sm btn-info"><i class="fa fa-eye"></i></a>
           </td>
           <td style="border: 2px solid black;">
-            <a href="#" class="btn btn-danger shadow btn-xs sharp" onclick="deleteStudent(<?php echo $student['sid']; ?>)">
+            <a href="#" class="btn btn-danger shadow btn-xs sharp" onclick="deleteStudent(<?php echo htmlspecialchars($student['sid']); ?>)">
               <i class="fa fa-trash fa-lg"></i>
             </a>
           </td>
@@ -157,7 +190,7 @@ function deleteStudent(id) {
     cancelButtonText: 'Cancel'
   }).then((result) => {
     if (result.isConfirmed) {
-      window.location.href = "?dsid=" + id;
+      window.location.href = "?dsid=" + encodeURIComponent(id);
     }
   });
 }
@@ -185,8 +218,6 @@ Swal.fire({
 } else {
     echo "You are not authorized to view this page.";
 }
-
-
-
 ?>
+
 <?php include('../Admin/footer.php'); ?>
