@@ -1364,7 +1364,7 @@ function getStudentsBySection($conn, $section_id, $academic_year) {
     $academic_year = (int)$academic_year;
 
     $sql = "
-        SELECT u.sid, u.first_name, u.father_name, u.gender
+        SELECT u.sid, u.first_name, u.father_name, u.gender,u.student_id, u.student_photo
         FROM assign_student ast
         LEFT JOIN students u ON ast.student_id = u.sid
         WHERE ast.section_id = $section_id AND ast.academic_year = $academic_year

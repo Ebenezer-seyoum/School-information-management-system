@@ -1,74 +1,68 @@
 <?php
-include('teacherHeader.php'); // adjust path
+session_start();
+include('../connection/connection.php');
+include('../connection/function.php');
 
-// --- Check teacher login ---
-$profile = getUserByID($_SESSION["uid"]);
+// --- Auth check ---
+if (!isset($_SESSION["uid"])) {
+    exit("<div class='alert alert-danger'>Not authorized</div>");
+}
+
+$profile  = getUserByID($_SESSION["uid"]);
 $roleName = getRoleNameById($profile["user_type"]);
-if(!isset($_SESSION["uid"]) || $roleName != "Teacher"){
-    echo "You are not authorized to view this page.";
-    exit;
+
+if ($roleName !== "Teacher") {
+    exit("<div class='alert alert-danger'>Not authorized</div>");
 }
 
-
-// --- Main Logic ---
-$atid = isset($_GET['class_id']) ? (int)$_GET['class_id'] : 0;
-if($atid <= 0){
-    echo "<div class='alert alert-danger'>Invalid class selected.</div>";
-    exit;
+// --- Inputs ---
+$atid = (int)($_GET['class_id'] ?? 0);
+if ($atid <= 0) {
+    exit("<div class='alert alert-danger'>Invalid class</div>");
 }
 
+// --- Fetch Class Info ---
 $classInfo = getClassInfo($conn, $atid);
-if(!$classInfo){
-    echo "<div class='alert alert-danger'>Class not found.</div>";
-    exit;
+if (!$classInfo) {
+    exit("<div class='alert alert-danger'>Class not found</div>");
 }
 
+// --- Fetch Students ---
 $students = getStudentsBySection($conn, $classInfo['section_id'], $classInfo['academic_year']);
-
 ?>
 
-<div class="container">
-  <div class="page-inner">
-    <div class="page-header">
-      <h3 class="fw-bold mb-3">
-        Students in Class: <?= htmlspecialchars($classInfo['section_name'] . ' - ' . $classInfo['class_type']) ?> 
-        (<?= $classInfo['academic_year'] ?>)
-      </h3>
-    </div>
-
-    <div class="card">
-      <div class="card-body table-responsive">
-        <table class="table table-hover text-center align-middle">
-          <thead class="table-secondary">
-            <tr>
-              <th>#</th>
-              <th>First Name</th>
-              <th>Father Name</th>
-              <th>Gender</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php if(count($students) > 0): $no=1; ?>
-              <?php foreach($students as $s): ?>
-                <tr>
-                  <td><?= $no++ ?></td>
-                  <td><?= htmlspecialchars($s['first_name']) ?></td>
-                  <td><?= htmlspecialchars($s['father_name']) ?></td>
-                  <td><?= htmlspecialchars($s['gender']) ?></td>
-                  <td>
-                    <a href="student_profile.php?sid=<?= $s['sid'] ?>" class="btn btn-info btn-sm">View Profile</a>
-                  </td>
-                </tr>
-              <?php endforeach; ?>
-            <?php else: ?>
-              <tr><td colspan="5" class="text-danger">No students assigned to this class and year.</td></tr>
-            <?php endif; ?>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
-
-<?php include('../Admin/footer.php'); ?>
+<table class="table table-bordered table-striped align-middle" id="studentsTable">
+  <thead class="table-dark text-center">
+    <tr>
+      <th>#</th>
+      <th>Profile</th>
+      <th>Student ID</th>
+      <th>First Name</th>
+      <th>Father Name</th>
+      <th>Gender</th>
+    </tr>
+  </thead>
+  <tbody class="text-center">
+    <?php if ($students && count($students) > 0): $no=1; ?>
+      <?php foreach ($students as $s): ?>
+        <tr>
+          <td><?= $no++ ?></td>
+          <td>
+            <a href="student_profile.php?sid=<?= urlencode($s['sid']) ?>" target="_blank">
+              <img src="<?= htmlspecialchars($s['student_photo']) ?>" 
+                   alt="Profile" 
+                   class="rounded-circle border border-dark shadow-sm"
+                   style="width: 80px; height: 80px; object-fit: cover;">
+            </a>
+          </td>
+          <td><strong><?= htmlspecialchars($s['student_id']) ?></strong></td>
+          <td><?= htmlspecialchars($s['first_name']) ?></td>
+          <td><?= htmlspecialchars($s['father_name']) ?></td>
+          <td><?= htmlspecialchars($s['gender']) ?></td>
+        </tr>
+      <?php endforeach; ?>
+    <?php else: ?>
+      <tr><td colspan="6" class="text-danger">No students assigned to this class and year.</td></tr>
+    <?php endif; ?>
+  </tbody>
+</table>
