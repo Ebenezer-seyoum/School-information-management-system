@@ -53,11 +53,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['sid'])) {
         // Basic validation
         if (!filter_var($email, FILTER_VALIDATE_EMAIL) && !empty($email)) {
             $allErr = "Invalid email format.";
-        } elseif (!preg_match("/^\d{10}$/", $phone) && !empty($phone)) {
-            $allErr = "Phone number must be 10 digits.";
-        } elseif (!preg_match("/^\d{10}$/", $emergency_contact_phone) && !empty($emergency_contact_phone)) {
-            $allErr = "Emergency contact phone must be 10 digits.";
-        } else {
+        }
+     // Validate phone number (+251XXXXXXXXX)
+elseif (!preg_match("/^\+251\d{9}$/", $phone) && !empty($phone)) {
+    $allErr = "Phone number must start with +251 and be followed by 9 digits.";
+} elseif (!preg_match("/^\+251\d{9}$/", $emergency_contact_phone) && !empty($emergency_contact_phone)) {
+    $allErr = "Emergency contact phone must start with +251 and be followed by 9 digits.";
+}
+
+         else {
             // Handle file uploads
             $student_photo = $studentData['profile_picture'];
             if (isset($_FILES['student_photo']) && $_FILES['student_photo']['error'] == UPLOAD_ERR_OK) {
