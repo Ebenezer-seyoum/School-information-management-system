@@ -63,42 +63,28 @@ if (isset($_SESSION["uid"]) and ($roleName == "Teacher")) {
       <li class="nav-item">
         <a data-bs-toggle="collapse" href="#myClasses" role="button" aria-expanded="false" aria-controls="myClasses">
           <i class="fas fa-chalkboard"></i>
-          <p>My Classes</p>
+          <p>Class Management</p>
           <span class="caret"></span>
         </a>
         <div class="collapse" id="myClasses">
           <ul class="nav nav-collapse">
-            <li><a href="view_my_classes.php"><i class="fas fa-list"></i> View Assigned Classes</a></li>
-            <li><a href="view_students_in_class.php"><i class="fas fa-users"></i> View Students</a></li>
+            <li><a href="view_my_classes.php"><i class="fas fa-list"></i>Assigned Classes</a></li>
+            <li><a href="view_students_in_class.php"><i class="fas fa-users"></i>Enrolled Students</a></li>
+            <li><a href="view_students_in_class.php"><i class="fas fa-users"></i>Attendance Records</a></li>
           </ul>
         </div>
       </li>
-
- <!-- Attendance -->
+<!-- Assessments -->
       <li class="nav-item">
-        <a data-bs-toggle="collapse" href="#attendance" role="button" aria-expanded="false" aria-controls="attendance">
-          <i class="fas fa-user-check"></i>
-          <p>Attendance</p>
-          <span class="caret"></span>
-        </a>
-        <div class="collapse" id="attendance">
-          <ul class="nav nav-collapse">
-            <li><a href="add_attendance.php"><i class="fas fa-plus-circle"></i> Add Attendance</a></li>
-            <li><a href="view_attendance.php"><i class="fas fa-eye"></i> View Attendance</a></li>
-          </ul>
-        </div>
-      </li>
-<!-- Marks -->
-      <li class="nav-item">
-        <a data-bs-toggle="collapse" href="#marks" role="button" aria-expanded="false" aria-controls="marks">
+        <a data-bs-toggle="collapse" href="#Assessments" role="button" aria-expanded="false" aria-controls="Assessments">
           <i class="fas fa-pen"></i>
-          <p>Marks</p>
+          <p>Assessments</p>
           <span class="caret"></span>
         </a>
-        <div class="collapse" id="marks">
+        <div class="collapse" id="Assessments">
           <ul class="nav nav-collapse">
-            <li><a href="add_marks.php"><i class="fas fa-plus-circle"></i> Add Marks</a></li>
-            <li><a href="view_marks.php"><i class="fas fa-eye"></i> View Marks</a></li>
+            <li><a href="add_marks.php"><i class="fas fa-plus-circle"></i> Manage Grades</a></li>
+            <li><a href="view_marks.php"><i class="fas fa-eye"></i> Assessment Results</a></li>
           </ul>
         </div>
       </li>
@@ -107,12 +93,13 @@ if (isset($_SESSION["uid"]) and ($roleName == "Teacher")) {
       <li class="nav-item">
         <a data-bs-toggle="collapse" href="#academic" role="button" aria-expanded="false" aria-controls="academic">
           <i class="fas fa-book"></i>
-          <p>schedule</p>
+          <p>Academic Schedule</p>
           <span class="caret"></span>
         </a>
         <div class="collapse" id="academic">
           <ul class="nav nav-collapse">
-            <li><a href="view_timetable.php"><i class="fas fa-calendar-check"></i> View Schedule</a></li>
+            <li><a href="view_timetable.php"><i class="fas fa-calendar-check"></i>Class Schedule</a></li>
+            <li><a href="view_timetable.php"><i class="fas fa-calendar-check"></i>Academic Sessions</a></li>
           </ul>
         </div>
       </li>
@@ -129,20 +116,26 @@ if (isset($_SESSION["uid"]) and ($roleName == "Teacher")) {
     </ul>
   </div>
 </li>
+<!-- Feedback -->
 <li class="nav-item">
-   <a data-bs-toggle="collapse" href="#feedback"><i class="fas fa-comments"></i><p>Feedback</p><span class="caret"></span></a>
-    <div class="collapse" id="feedback">
-    <ul class="nav nav-collapse"><li><a href="view_feedback.php">  <i class="fas fa-comments"></i>Customer Feedback</a></li></ul>
- </div>
+  <a data-bs-toggle="collapse" href="#feedback" role="button" aria-expanded="false" aria-controls="feedback">
+    <i class="fas fa-bullhorn"></i>
+    <p>Feedback Management</p>
+    <span class="caret"></span>
+  </a>
+  <div class="collapse" id="feedback">
+    <ul class="nav nav-collapse">
+      <li><a href="view_feedback.php"><i class="fas fa-eye"></i> View Feedback</a></li>
+      <li><a href="view_feedback.php"><i class="fas fa-eye"></i> Send Feedback</a></li>
+    </ul>
+  </div>
 </li>
 <li class="nav-item">
   <a data-bs-toggle="collapse" href="#reports"><i class="fas fa-chart-bar"></i><p>Reports</p><span class="caret"></span></a>
     <div class="collapse" id="reports">
-      <ul class="nav nav-collapse"><li><a href="general_report.php"><i class="fas fa-file-alt me-2"></i>general report</span> </a></li>
-      <li><a href="litigant_report.php"><i class="fas fa-file-alt me-2"></i> litigant report</a></li>
-    
-    
-    
+      <ul class="nav nav-collapse">
+      <li><a href="general_report.php"><i class="fas fa-file-alt me-2"></i>general report</span> </a></li>
+      <li><a href="litigant_report.php"><i class="fas fa-file-alt me-2"></i> litigant report</a></li>    
         </ul>
       </div>
      </li>

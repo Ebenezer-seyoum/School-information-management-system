@@ -68,8 +68,9 @@ if (isset($_SESSION["uid"]) and ($roleName == "Instructor")) {
         </a>
         <div class="collapse" id="myClasses">
           <ul class="nav nav-collapse">
-            <li><a href="view_my_classes.php"><i class="fas fa-list"></i> View Assigned Classes</a></li>
+            <li><a href="view_my_classes.php"><i class="fas fa-list"></i> Assigned Classes</a></li>
             <li><a href="view_students_in_class.php"><i class="fas fa-users"></i> View Students</a></li>
+            <li><a href="view_students_in_class.php"><i class="fas fa-users"></i> Class Schedule</a></li>
           </ul>
         </div>
       </li>
@@ -77,12 +78,12 @@ if (isset($_SESSION["uid"]) and ($roleName == "Instructor")) {
       <li class="nav-item">
         <a data-bs-toggle="collapse" href="#attendance" role="button" aria-expanded="false" aria-controls="attendance">
           <i class="fas fa-user-check"></i>
-          <p>Attendance</p>
+          <p>Attendance Management</p>
           <span class="caret"></span>
         </a>
         <div class="collapse" id="attendance">
           <ul class="nav nav-collapse">
-            <li><a href="add_attendance.php"><i class="fas fa-plus-circle"></i> Add Attendance</a></li>
+            <li><a href="add_attendance.php"><i class="fas fa-plus-circle"></i> Mark Attendance</a></li>
             <li><a href="view_attendance.php"><i class="fas fa-eye"></i> View Attendance</a></li>
           </ul>
         </div>
@@ -102,24 +103,14 @@ if (isset($_SESSION["uid"]) and ($roleName == "Instructor")) {
   </div>
 </li>
 
-<!-- Schedule -->
-<li class="nav-item">
-  <a data-bs-toggle="collapse" href="#schedule" role="button" aria-expanded="false" aria-controls="schedule">
-    <i class="fas fa-bullhorn"></i>
-    <p>Schedule</p>
-    <span class="caret"></span>
-  </a>
-  <div class="collapse" id="schedule">
-    <ul class="nav nav-collapse">
-      <li><a href="view_schedule.php"><i class="fas fa-eye"></i> View Schedule</a></li>
-    </ul>
-  </div>
-</li>
 <li class="nav-item">
    <a data-bs-toggle="collapse" href="#feedback"><i class="fas fa-comments"></i><p>Feedback</p><span class="caret"></span></a>
     <div class="collapse" id="feedback">
-    <ul class="nav nav-collapse"><li><a href="view_feedback.php">  <i class="fas fa-comments"></i>Customer Feedback</a></li></ul>
- </div>
+      <ul class="nav nav-collapse">
+        <li><a href="view_feedback.php">  <i class="fas fa-comments"></i>Customer Feedback</a></li>
+        <li><a href="send_feedback.php">  <i class="fas fa-comments"></i>Send Feedback</a></li>
+      </ul>
+    </div>
 </li>
 <li class="nav-item">
   <a data-bs-toggle="collapse" href="#reports"><i class="fas fa-chart-bar"></i><p>Reports</p><span class="caret"></span></a>

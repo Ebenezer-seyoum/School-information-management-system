@@ -62,7 +62,7 @@ if (isset($_SESSION["uid"]) and ($roleName == "Director")) {
 <li class="nav-item">
     <a data-bs-toggle="collapse" href="#users" role="button" aria-expanded="false" aria-controls="users">
         <i class="fas fa-users-cog"></i>
-        <p>Manage Students</p>
+        <p>Student Management</p>
         <span class="caret"></span>
     </a>
     <div class="collapse" id="users">
@@ -72,16 +72,16 @@ if (isset($_SESSION["uid"]) and ($roleName == "Director")) {
             <li><a href="view_studentForDelete.php"><i class="fas fa-user-times"></i> Delete Student</a></li>
             <li><a href="assign_student.php"><i class="fas fa-user-slash"></i>Assign Student</a></li>
             <li><a href="view_transfer_student.php"><i class="fas fa-user-slash"></i>Transfer Student</a></li>
+                <li><a href="report_card.php"><i class="fas fa-file-alt"></i> Generate Report Cards</a></li>
             <li><a href="view_allStudents.php"><i class="fas fa-users"></i> View All Students</a></li>
         </ul>
     </div>
 </li>
-
 <!-- Manage Teachers -->
       <li class="nav-item">
         <a data-bs-toggle="collapse" href="#teachers" role="button" aria-expanded="false" aria-controls="teachers">
           <i class="fas fa-chalkboard-teacher"></i>
-          <p>Manage Teachers</p>
+          <p>Teacher Management</p>
           <span class="caret"></span>
         </a>
         <div class="collapse" id="teachers">
@@ -96,7 +96,7 @@ if (isset($_SESSION["uid"]) and ($roleName == "Director")) {
       <li class="nav-item">
         <a data-bs-toggle="collapse" href="#instructors" role="button" aria-expanded="false" aria-controls="instructors">
           <i class="fas fa-user-tie"></i>
-          <p>Manage Instructors</p>
+          <p>Instructor Management</p>
           <span class="caret"></span>
         </a>
         <div class="collapse" id="instructors">
@@ -107,26 +107,11 @@ if (isset($_SESSION["uid"]) and ($roleName == "Director")) {
           </ul>
         </div>
       </li>
-    <!-- Manage Schedule -->
-      <li class="nav-item">
-        <a data-bs-toggle="collapse" href="#academic" role="button" aria-expanded="false" aria-controls="academic">
-          <i class="fas fa-book"></i>
-          <p>Manage Schedule</p>
-          <span class="caret"></span>
-        </a>
-        <div class="collapse" id="academic">
-          <ul class="nav nav-collapse">
-            <li><a href="create_timetable.php"><i class="fas fa-calendar-alt"></i> Create Timetable</a></li>
-            <li><a href="create_timetable.php"><i class="fas fa-calendar-alt"></i> Update Timetable</a></li>
-            <li><a href="view_timetable.php"><i class="fas fa-calendar-check"></i> View Timetable</a></li>
-          </ul>
-        </div>
-      </li>
      <!-- Manage Class -->
       <li class="nav-item">
         <a data-bs-toggle="collapse" href="#class" role="button" aria-expanded="false" aria-controls="class">
           <i class="fas fa-chalkboard"></i>
-          <p>Manage Class</p>
+          <p>Class Management</p>
           <span class="caret"></span>
         </a>
         <div class="collapse" id="class">
@@ -140,7 +125,7 @@ if (isset($_SESSION["uid"]) and ($roleName == "Director")) {
       <li class="nav-item">
         <a data-bs-toggle="collapse" href="#subject" role="button" aria-expanded="false" aria-controls="subject">
           <i class="fas fa-book"></i>
-          <p>Manage Subject</p>
+          <p>Subject Management</p>
           <span class="caret"></span>
         </a>
         <div class="collapse" id="subject">
@@ -150,41 +135,85 @@ if (isset($_SESSION["uid"]) and ($roleName == "Director")) {
           </ul>
         </div>
       </li>
-      <!-- Student Report Cards -->
-<li class="nav-item">
-  <a data-bs-toggle="collapse" href="#reportCard" role="button" aria-expanded="false" aria-controls="reportCard">
-    <i class="fas fa-file-alt"></i>
-    <p>Student Report Cards</p>
-    <span class="caret"></span>
-  </a>
-  <div class="collapse" id="reportCard">
-    <ul class="nav nav-collapse">
-      <li><a href="generate_report_card.php"><i class="fas fa-plus-circle"></i> Generate Report Card</a></li>
-      <li><a href="view_report_cards.php"><i class="fas fa-eye"></i> View Report Cards</a></li>
-    </ul>
-  </div>
-</li>
 
-<!-- Announcements -->
-<li class="nav-item">
-  <a data-bs-toggle="collapse" href="#announcements" role="button" aria-expanded="false" aria-controls="announcements">
-    <i class="fas fa-bullhorn"></i>
-    <p>Announcements</p>
-    <span class="caret"></span>
-  </a>
-  <div class="collapse" id="announcements">
-    <ul class="nav nav-collapse">
-      <li><a href="create_announcement.php"><i class="fas fa-plus-circle"></i> Create Announcement</a></li>
-      <li><a href="view_announcements.php"><i class="fas fa-eye"></i> View Announcements</a></li>
-    </ul>
-  </div>
-</li>
-<li class="nav-item">
-   <a data-bs-toggle="collapse" href="#feedback"><i class="fas fa-comments"></i><p>Feedback</p><span class="caret"></span></a>
-    <div class="collapse" id="feedback">
-    <ul class="nav nav-collapse"><li><a href="view_feedback.php">  <i class="fas fa-comments"></i>Customer Feedback</a></li></ul>
- </div>
-</li>
+ <!-- Attendance Management -->
+          <li class="nav-item">
+            <a data-bs-toggle="collapse" href="#attendance" role="button" aria-expanded="false" aria-controls="attendance">
+              <i class="fas fa-calendar-check"></i>
+              <p>Attendance Management</p>
+              <span class="caret"></span>
+            </a>
+            <div class="collapse" id="attendance">
+              <ul class="nav nav-collapse">
+                <li><a href="view_attendance.php"><i class="fas fa-eye"></i> View Attendance</a></li>
+                <li><a href="update_attendance.php"><i class="fas fa-edit"></i> Update Attendance</a></li>
+              </ul>
+            </div>
+          </li>
+
+          <!-- Grade Management -->
+          <li class="nav-item">
+            <a data-bs-toggle="collapse" href="#grades" role="button" aria-expanded="false" aria-controls="grades">
+              <i class="fas fa-graduation-cap"></i>
+              <p>Grade Management</p>
+              <span class="caret"></span>
+            </a>
+            <div class="collapse" id="grades">
+              <ul class="nav nav-collapse">
+                <li><a href="add_grade.php"><i class="fas fa-plus"></i> Add Grade</a></li>
+                <li><a href="edit_grade.php"><i class="fas fa-edit"></i> Edit Grade</a></li>
+                <li><a href="role_edit_grade.php"><i class="fas fa-user-cog"></i> Role to Edit</a></li>
+                <li><a href="view_grades.php"><i class="fas fa-eye"></i> View Grades</a></li>
+              </ul>
+            </div>
+          </li>
+
+          <!-- Schedule Management -->
+          <li class="nav-item">
+            <a data-bs-toggle="collapse" href="#schedule" role="button" aria-expanded="false" aria-controls="schedule">
+              <i class="fas fa-calendar-alt"></i>
+              <p>Schedule Management</p>
+              <span class="caret"></span>
+            </a>
+            <div class="collapse" id="schedule">
+              <ul class="nav nav-collapse">
+                <li><a href="create_schedule.php"><i class="fas fa-plus-circle"></i> Create Schedule</a></li>
+                <li><a href="view_schedule.php"><i class="fas fa-eye"></i> View Schedule</a></li>
+                <li><a href="edit_schedule.php"><i class="fas fa-edit"></i> Edit Schedule</a></li>
+              </ul>
+            </div>
+          </li>
+            <!-- Announcements -->
+          <li class="nav-item">
+            <a data-bs-toggle="collapse" href="#announcement" role="button" aria-expanded="false" aria-controls="announcement">
+              <i class="fas fa-bullhorn"></i>
+              <p>Announcement Management</p>
+              <span class="caret"></span>
+            </a>
+            <div class="collapse" id="announcement">
+              <ul class="nav nav-collapse">
+                <li><a href="create_announcement.php"><i class="fas fa-plus-circle"></i> Create Announcement</a></li>
+                <li><a href="view_announcement.php"><i class="fas fa-eye"></i> View Announcements</a></li>
+                <li><a href="edit_announcement.php"><i class="fas fa-edit"></i> Edit Announcement</a></li>
+              </ul>
+            </div>
+          </li>
+
+          <!-- Feedback -->
+          <li class="nav-item">
+            <a data-bs-toggle="collapse" href="#feedback" role="button" aria-expanded="false" aria-controls="feedback">
+              <i class="fas fa-comments"></i>
+              <p>Feedback Management</p>
+              <span class="caret"></span>
+            </a>
+            <div class="collapse" id="feedback">
+              <ul class="nav nav-collapse">
+                <li><a href="teacher_feedback.php"><i class="fas fa-chalkboard-teacher"></i> Teacher Feedback</a></li>
+                <li><a href="student_feedback.php"><i class="fas fa-user-graduate"></i> Student Feedback</a></li>
+                <li><a href="customer_feedback.php"><i class="fas fa-users"></i> Customer Feedback</a></li>
+              </ul>
+            </div>
+          </li>
 <li class="nav-item">
   <a data-bs-toggle="collapse" href="#reports"><i class="fas fa-chart-bar"></i><p>Reports</p><span class="caret"></span></a>
     <div class="collapse" id="reports">

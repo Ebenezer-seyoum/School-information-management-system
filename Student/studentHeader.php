@@ -61,12 +61,12 @@ if (isset($_SESSION["sid"])) {
 <li class="nav-item">
   <a data-bs-toggle="collapse" href="#classMenu" role="button" aria-expanded="false" aria-controls="classMenu">
     <i class="fas fa-chalkboard-teacher"></i>
-    <p>Class</p>
+    <p>My Class</p>
     <span class="caret"></span>
   </a>
   <div class="collapse" id="classMenu">
     <ul class="nav nav-collapse">
-      <li><a href="class.php"><i class="fas fa-list"></i> My Classes</a></li>
+      <li><a href="class.php"><i class="fas fa-list"></i>View Class</a></li>
       <li><a href="class_schedule.php"><i class="fas fa-calendar-alt"></i> Class Schedule</a></li>
     </ul>
   </div>
@@ -91,13 +91,13 @@ if (isset($_SESSION["sid"])) {
 <li class="nav-item">
   <a data-bs-toggle="collapse" href="#markMenu" role="button" aria-expanded="false" aria-controls="markMenu">
     <i class="fas fa-pen"></i>
-    <p>Mark</p>
+    <p>Assessment</p>
     <span class="caret"></span>
   </a>
   <div class="collapse" id="markMenu">
-    <ul class="nav nav-collapse">
-      
-      <li><a href="mark_report.php"><i class="fas fa-chart-bar"></i> View Marks</a></li>
+    <ul class="nav nav-collapse">   
+      <li><a href="mark_report.php"><i class="fas fa-chart-bar"></i> View Results</a></li>
+      <li><a href="mark_report.php"><i class="fas fa-chart-bar"></i> Grade Report</a></li>
     </ul>
   </div>
 </li>
@@ -119,7 +119,9 @@ if (isset($_SESSION["sid"])) {
 <li class="nav-item">
    <a data-bs-toggle="collapse" href="#feedback"><i class="fas fa-comments"></i><p>Feedback</p><span class="caret"></span></a>
     <div class="collapse" id="feedback">
-    <ul class="nav nav-collapse"><li><a href="view_feedback.php">  <i class="fas fa-comments"></i>Customer Feedback</a></li></ul>
+    <ul class="nav nav-collapse">
+      <li><a href="view_feedback.php"><i class="fas fa-comments"></i>View Feedback</a></li>
+     <a href="view_feedback.php">  <i class="fas fa-comments"></i>Send Feedback</a></li></ul>
  </div>
 </li>
 <li class="nav-item">
