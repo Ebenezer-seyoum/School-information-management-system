@@ -1431,6 +1431,7 @@ function updateUser($uid, $idNumber, $profile_pic, $firstName, $fatherName, $gFa
 }
 
 
+
 function updateStudent($student_id, $student_photo, $firstName, $fatherName, $gFatherName, $gender,
     $email, $nationality, $region, $zone, $woreda, $kebele, $dob, $birth_place,
     $emergency_contact_name, $emergency_contact_phone, $username, $encryptedPassword,

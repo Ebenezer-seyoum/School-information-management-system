@@ -103,7 +103,7 @@ if (isset($_SESSION["uid"]) && ($roleName == "Director")) {
         </a>
       </td>
     <td style="border: 2px solid black;">
-  <a href="update_studet.php?sid=<?php echo $user['sid']; ?>">
+  <a href="updateStudent.php?sid=<?php echo $user['sid']; ?>">
     <i class="fas fa-file-signature fa-lg"></i> 
     </a>
    </td>
