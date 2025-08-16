@@ -66,35 +66,11 @@ if (isset($_GET["dsid"])) {
         $sidDisplay = $studentData['sid'];
         $studentName = $studentData['first_name'] . " " . $studentData['father_name'];
 
-        // Check for linked records in marks and assign_student tables
-        $checkMarksQuery = mysqli_query($conn, "SELECT * FROM marks WHERE student_id = '$dsid' LIMIT 1");
-        $checkAssignQuery = mysqli_query($conn, "SELECT * FROM assign_student WHERE student_id = '$dsid' LIMIT 1");
+        // Check for linked records in assign_student table
+        $checkAssignQuery = mysqli_query($conn, "SELECT * FROM assign_student WHERE student_id = '$dsid'");
 
-        if (mysqli_num_rows($checkMarksQuery) > 0) {
-            $allErr = "Student ({$studentName}, ID: {$sidDisplay}) cannot be deleted because they have linked records in the marks table.";
-        } elseif (mysqli_num_rows($checkAssignQuery) > 0) {
-            // Use transaction to ensure data integrity
-            mysqli_begin_transaction($conn);
-            try {
-                // Delete related records in assign_student table
-                $deleteAssignQuery = mysqli_query($conn, "DELETE FROM assign_student WHERE student_id = '$dsid'");
-                if (!$deleteAssignQuery) {
-                    throw new Exception("Failed to delete related records in assign_student table.");
-                }
-
-                // Delete student record
-                $deleteQuery = mysqli_query($conn, "DELETE FROM students WHERE sid = '$dsid'");
-                if (!$deleteQuery) {
-                    throw new Exception("Failed to delete student record.");
-                }
-
-                // Commit transaction
-                mysqli_commit($conn);
-                $success = "Student ({$studentName}, ID: {$sidDisplay}) has been deleted successfully.";
-            } catch (Exception $e) {
-                mysqli_rollback($conn);
-                $allErr = "Unable to delete student ({$studentName}, ID: {$sidDisplay}). Error: " . $e->getMessage();
-            }
+        if (mysqli_num_rows($checkAssignQuery) > 0) {
+            $allErr = "Student ({$studentName}, ID: {$sidDisplay}) cannot be deleted because they are assigned to a section.";
         } else {
             // No linked records, delete student directly
             mysqli_begin_transaction($conn);
@@ -145,7 +121,7 @@ if (mysqli_num_rows($studentsQuery) > 0) {
 ?>
         <tr>
           <td style="border: 2px solid black;"><?php echo $no; ?></td>
-          <td style="border: 2px solid black;"><?php echo htmlspecialchars($student['sid']); ?></td>
+          <td style="border: 2px solid black;"><?php echo htmlspecialchars($student['student_id']); ?></td>
           <td style="border: 2px solid black;"><?php echo htmlspecialchars($student['first_name']); ?></td>
           <td style="border: 2px solid black;"><?php echo htmlspecialchars($student['father_name']); ?></td>
           <td style="border: 2px solid black;">
