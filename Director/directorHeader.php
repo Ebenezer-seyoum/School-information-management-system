@@ -72,7 +72,8 @@ if (isset($_SESSION["uid"]) and ($roleName == "Director")) {
             <li><a href="view_studentForDelete.php"><i class="fas fa-user-times"></i> Delete Student</a></li>
             <li><a href="assign_student.php"><i class="fas fa-user-slash"></i>Assign Student</a></li>
             <li><a href="view_transfer_student.php"><i class="fas fa-user-slash"></i>Transfer Student</a></li>
-                <li><a href="report_card.php"><i class="fas fa-file-alt"></i> Generate Report Cards</a></li>
+            <li><a href="promote_student.php"><i class="fas fa-user-graduate"></i>Promote Student</a></li>
+            <li><a href="report_card.php"><i class="fas fa-file-alt"></i> Generate Report Cards</a></li>
             <li><a href="view_allStudents.php"><i class="fas fa-users"></i> View All Students</a></li>
         </ul>
     </div>

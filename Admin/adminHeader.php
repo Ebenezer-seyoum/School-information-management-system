@@ -92,6 +92,7 @@ include '../connection/function.php';
                 <li><a href="delete_student.php"><i class="fas fa-user-times"></i> Delete Student</a></li>                
                 <li><a href="assign_class.php"><i class="fas fa-chalkboard-teacher"></i> Assign Student</a></li>
                 <li><a href="view_transfer_student.php"><i class="fas fa-user-slash"></i>Transfer Student</a></li>
+                <li><a href="promote_student.php"><i class="fas fa-user-graduate"></i>Promote Student</a></li>
                 <li><a href="report_card.php"><i class="fas fa-file-alt"></i> Generate Report Cards</a></li>
                 <li><a href="view_student.php"><i class="fas fa-users"></i> View Students</a></li>
               </ul>
