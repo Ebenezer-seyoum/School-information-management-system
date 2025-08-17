@@ -1,119 +1,42 @@
 <?php
 include('directorHeader.php'); 
 
-// Handle form submission
-if (isset($_POST['assign'])) {
-    $instructor_id = $_POST['instructor_id'] ?? '';
-    $section_id    = $_POST['section_id'] ?? '';
-    $academic_year = $_POST['academic_year'] ?? '';
-
-    if ($instructor_id && $section_id && $academic_year) {
-        // Check for duplicate assignment
-        $check = mysqli_query($conn, "SELECT * FROM assign_instructor 
-                                      WHERE instructor_id='$instructor_id' 
-                                      AND section_id='$section_id' 
-                                      AND academic_year='$academic_year'");
-        if (mysqli_num_rows($check) == 0) {
-            // Insert new assignment
-            if (mysqli_query($conn, "INSERT INTO assign_instructor (instructor_id, section_id, academic_year) 
-                                     VALUES ('$instructor_id', '$section_id', '$academic_year')")) {
-                echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
-                <script>
-                Swal.fire({
-                    title: '✅ Success!',
-                    text: 'Instructor assigned successfully.',
-                    icon: 'success',
-                    confirmButtonText: 'OK'
-                }).then(() => { window.location.reload(); });
-                </script>";
-                exit();
-            } else {
-                echo "<div class='alert alert-danger'>Database Error: " . mysqli_error($conn) . "</div>";
-            }
-        } else {
-            echo "<div class='alert alert-warning'>⚠ This instructor is already assigned to that class for this academic year.</div>";
-        }
-    } else {
-        echo "<div class='alert alert-danger'>⚠ Please fill in all required fields.</div>";
-    }
+// Fetch all instructors
+$instructors_q = mysqli_query($conn, "SELECT uid, CONCAT(first_name,' ',father_name) AS full_name FROM users WHERE user_type=4 ORDER BY first_name ASC");
+$instructors_array = [];
+while($t = mysqli_fetch_assoc($instructors_q)) {
+    $instructors_array[$t['uid']] = htmlspecialchars($t['full_name']);
 }
-
-// Load data
-$instructors = mysqli_query($conn, "SELECT * FROM users WHERE user_type = 4 ORDER BY first_name ASC");
-$sections    = mysqli_query($conn, "SELECT * FROM sections ORDER BY section_name ASC, class_type ASC");
 ?>
 
 <div class="container">
     <div class="page-inner">
         <div class="page-header">
-            <h3 class="fw-bold mb-3">Assign Instructor</h3>
-            <ul class="breadcrumbs mb-3">
-                <li class="nav-home"><a href="#"><i class="icon-home"></i></a></li>
-                <li class="separator"><i class="icon-arrow-right"></i></li>
-                <li class="nav-item"><a href="#">Manage Instructor</a></li>
-                <li class="separator"><i class="icon-arrow-right"></i></li>
-                <li class="nav-item"><a href="#">Assign Instructor</a></li>
-            </ul>
+            <h3 class="fw-bold mb-3">Assign Instructors to Sections</h3>
         </div>
 
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div class="card shadow-lg border-0 rounded-4">
-                    <div class="card-header bg-primary text-white rounded-top-4 py-3">
-                        <h4 class="mb-0"><i class="bi bi-person-check"></i> Assign Instructor to Class</h4>
+        <!-- Class Type & Academic Year Selection -->
+        <div class="d-flex justify-content-center mb-4">
+            <div class="card shadow-lg border-0 rounded-4 p-4" style="max-width:700px; width:100%;">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Class Type</label>
+                        <select id="classTypeSelect" class="form-select form-select-lg">
+                            <option value="">-- Select Class --</option>
+                            <option value="9">9 General</option>
+                            <option value="10">10 General</option>
+                            <option value="11S">11 Social</option>
+                            <option value="11N">11 Natural</option>
+                            <option value="12S">12 Social</option>
+                            <option value="12N">12 Natural</option>
+                        </select>
                     </div>
-                    <div class="card-body p-4">
-                        <form method="post" class="needs-validation" novalidate>
-                            <div class="row g-3">
-                                <!-- Instructor -->
-                                <div class="col-md-6">
-                                    <label class="form-label fw-semibold"><i class="bi bi-person-badge"></i> Instructor</label>
-                                    <select name="instructor_id" class="form-select select2" required>
-                                        <option value="">-- Search & Select Instructor --</option>
-                                        <?php while ($t = mysqli_fetch_assoc($instructors)): ?>
-                                            <option value="<?= $t['uid'] ?>">
-                                                <?= htmlspecialchars($t['first_name']) . ' ' . htmlspecialchars($t['father_name']) ?>
-                                            </option>
-                                        <?php endwhile; ?>
-                                    </select>
-                                </div>
-
-                                <!-- Section -->
-                                <div class="col-md-6">
-                                    <label class="form-label fw-semibold"><i class="bi bi-people"></i> Class / Section</label>
-                                    <select name="section_id" class="form-select select2" required>
-                                        <option value="">-- Search & Select Section --</option>
-                                        <?php 
-                                        $grouped_sections = [];
-                                        while ($sec = mysqli_fetch_assoc($sections)) {
-                                            $grouped_sections[$sec['class_type']][] = $sec;
-                                        }
-                                        foreach ($grouped_sections as $class_type => $secs): ?>
-                                            <optgroup label="<?= htmlspecialchars($class_type) ?>">
-                                                <?php foreach ($secs as $sec): ?>
-                                                    <option value="<?= $sec['cid'] ?>">
-                                                        <?= htmlspecialchars($sec['section_name']) ?>
-                                                    </option>
-                                                <?php endforeach; ?>
-                                            </optgroup>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-
-                                <!-- Academic Year -->
-                                <div class="col-md-6">
-                                    <label class="form-label fw-semibold"><i class="bi bi-calendar-event"></i> Academic Year</label>
-                                    <input type="text" name="academic_year" id="academicYear" class="form-control" placeholder="e.g. 2024-2025" required>
-                                </div>
-
-                                <!-- Submit -->
-                                <div class="col-12 mt-3">
-                                    <button type="submit" name="assign" class="btn btn-primary w-100 py-2 fw-bold">
-                                        <i class="bi bi-check-circle"></i> Assign Instructor
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Academic Year</label>
+                        <input type="text" id="academicYear" class="form-control form-control-lg" placeholder="e.g. 2017">
+                    </div>
+                    <div class="col-md-2 d-grid">
+                        <button type="button" id="showSectionsBtn" class="btn btn-primary btn-md">Show Sections</button>
                     </div>
                 </div>
             </div>
@@ -121,17 +44,121 @@ $sections    = mysqli_query($conn, "SELECT * FROM sections ORDER BY section_name
     </div>
 </div>
 
+<!-- Sections Modal -->
+<div class="modal fade" id="sectionsModal" tabindex="-1" aria-labelledby="sectionsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="sectionsModalLabel">Sections & Assign Instructors</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="assignInstructorsForm">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Section Name</th>
+                                <th>Assign Instructor</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sectionsTableBody"></tbody>
+                    </table>
+                    <div class="text-end">
+                        <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Assign Selected</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JS Libraries -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    $('.select2').select2({
-        placeholder: "Search...",
-        allowClear: true,
-        width: '100%'
+$(function(){
+    const instructors = <?php echo json_encode($instructors_array); ?>;
+
+   
+
+    // Show Sections Modal
+    $('#showSectionsBtn').click(function(){
+        const selectedClass = $('#classTypeSelect').val();
+        const classText = $('#classTypeSelect option:selected').text();
+        const year = $('#academicYear').val();
+
+        if(!selectedClass || !year){
+            Swal.fire('Warning','Please select class and academic year','warning');
+            return;
+        }
+
+        $.post('fetch_sections_instructor.php', { class_type: selectedClass, academic_year: year }, function(res){
+            let html = '';
+            if(res.length === 0){
+                html = '<tr><td colspan="3" class="text-center">No sections found.</td></tr>';
+            } else {
+                res.forEach((item,index)=>{
+                    if(item.assigned_instructor){
+                        html += `<tr>
+                            <td>${index+1}</td>
+                            <td>${item.section_name}</td>
+                            <td>${instructors[item.assigned_instructor]}</td>
+                        </tr>`;
+                    } else {
+                        html += `<tr>
+                            <td>${index+1}</td>
+                            <td>${item.section_name}</td>
+                            <td>
+                              <select name="instructor_id[${item.cid}]" class="form-select select2">
+                                <option value="">Assign Instructor</option>
+                                ${Object.entries(instructors).map(([id,name])=>`<option value="${id}">${name}</option>`).join('')}
+                              </select>
+                            </td>
+                        </tr>`;
+                    }
+                });
+            }
+
+            // Update modal title dynamically
+            $('#sectionsModalLabel').text(`Sections & Assign Instructors (${classText} - ${year})`);
+
+            $('#sectionsTableBody').html(html);
+            $('#sectionsModal').modal('show');
+            $('.select2').select2({placeholder:"Select Instructor...", width:'100%'});
+        }, 'json');
     });
-    const now = new Date();
-    const year1 = now.getFullYear();
-    const year2 = now.getMonth() >= 8 ? year1 + 1 : year1; 
-    document.getElementById("academicYear").value = `${year1}-${year2}`;
+
+    // Assign Selected Instructors
+    $('#assignInstructorsForm').submit(function(e){
+        e.preventDefault();
+        let unassignedCount = 0;
+        $('#sectionsTableBody select').each(function(){ if(!$(this).val()) unassignedCount++; });
+
+        const submitForm = function(){
+            const formData = $(this).serialize() + `&academic_year=${$('#academicYear').val()}`;
+            $.post('assign_instructor_action.php', formData, function(res){
+                Swal.fire(res.status?'Success':'Error', res.message, res.status?'success':'error')
+                    .then(()=> { if(res.status) $('#sectionsModal').modal('hide'); });
+            }.bind(this), 'json');
+        }.bind(this);
+
+        if(unassignedCount>0){
+            Swal.fire({
+                title:'Some sections have no instructor!',
+                text:`${unassignedCount} sections are unassigned. Assign only selected?`,
+                icon:'warning',
+                showCancelButton:true,
+                confirmButtonText:'Yes, assign selected',
+                cancelButtonText:'No, go back'
+            }).then((result)=>{ if(result.isConfirmed) submitForm(); });
+        } else { submitForm(); }
+    });
 });
 </script>
 

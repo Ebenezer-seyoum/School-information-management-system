@@ -172,8 +172,7 @@ if (empty($_POST["email"])) {
 if ($test == true) {
     $userStatus = 0;
     if (userExist($idNumber) == 0) {
-        $encryptedPassword = encryptPassword($password);
-        
+        $encryptedPassword = encryptPassword($password);        
        if (addUser($idNumber, $profile_pic, $firstName, $fatherName, $gFatherName, $gender, $role_type, $username, 
     $encryptedPassword, $email, $phone, $userStatus) == 1) {
     $success = "User Successfully registered";

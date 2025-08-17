@@ -70,10 +70,10 @@ include '../connection/function.php';
             </a>
             <div class="collapse" id="account">
               <ul class="nav nav-collapse">
-                <li><a href="register_user.php"><i class="fas fa-user-plus"></i> Register Account</a></li>
-                <li><a href="update_user.php"><i class="fas fa-user-edit"></i> Update Account</a></li>
+                <li><a href="add_user.php"><i class="fas fa-user-plus"></i> Register Account</a></li>
+                <li><a href="view_userForUpdate.php"><i class="fas fa-user-edit"></i> Update Account</a></li>
                 <li><a href="delete_user.php"><i class="fas fa-user-times"></i> Delete Account</a></li>
-                <li><a href="view_user.php"><i class="fas fa-users"></i> View Accounts</a></li>
+                <li><a href="list_user.php"><i class="fas fa-users"></i> View Accounts</a></li>
               </ul>
             </div>
           </li>

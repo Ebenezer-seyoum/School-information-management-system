@@ -450,18 +450,40 @@ function getNextSchoolId($roleType) {
     return "BSS/$roleTypeName/$paddedNumber/" . substr($ethiopianYear, -2);
 }
 
-// Function to add a new user
 function addUser($idNumber, $profile_pic, $firstName, $fatherName, $gFatherName, $gender, 
 $role_type, $username, $encrypted_password, $email, $phone, $userStatus)
 {
     global $conn;
-    $query = "INSERT INTO users (idNumber, profile_picture, first_name, father_name, grandfather_name, gender,
-     user_type, username, password, email, phone, user_status)
-    VALUES 
-    ('$idNumber', '$profile_pic', '$firstName', '$fatherName', '$gFatherName', '$gender',
-     '$role_type', '$username', '$encrypted_password', '$email', '$phone', $userStatus)";
-  
+
+    // Make sure to properly quote strings and escape special characters
+    $idNumber = mysqli_real_escape_string($conn, $idNumber);
+    $profile_pic = mysqli_real_escape_string($conn, $profile_pic);
+    $firstName = mysqli_real_escape_string($conn, $firstName);
+    $fatherName = mysqli_real_escape_string($conn, $fatherName);
+    $gFatherName = mysqli_real_escape_string($conn, $gFatherName);
+    $gender = mysqli_real_escape_string($conn, $gender);
+    $role_type = mysqli_real_escape_string($conn, $role_type);
+    $username = mysqli_real_escape_string($conn, $username);
+    $encrypted_password = mysqli_real_escape_string($conn, $encrypted_password);
+    $email = mysqli_real_escape_string($conn, $email);
+    $phone = mysqli_real_escape_string($conn, $phone);
+
+    $query = "INSERT INTO users 
+        (idNumber, profile_picture, first_name, father_name, grandfather_name, gender,
+         user_type, username, password, email, phone, user_status)
+        VALUES 
+        ('$idNumber', '$profile_pic', '$firstName', '$fatherName', '$gFatherName', '$gender',
+         '$role_type', '$username', '$encrypted_password', '$email', '$phone', $userStatus)";
+
+    if (mysqli_query($conn, $query)) {
+        return 1; // success
+    } else {
+        // optional: for debugging
+        // echo "Error: " . mysqli_error($conn);
+        return 0; // failure
+    }
 }
+
 
 // Function to check if a student exists by ID
 function studentExist($student_id)
@@ -817,7 +839,7 @@ function caseinfoExist($data)
 function userExist($data)
 {
     global $conn;
-    $query = mysqli_query($conn, "select uid from users where uid='$data'");
+    $query = mysqli_query($conn, "select idNumber from users where idNumber ='$data'");
     $result = mysqli_num_rows($query);
     return $result;
 }

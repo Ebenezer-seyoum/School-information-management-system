@@ -1,115 +1,197 @@
 <?php
-include('directorHeader.php'); 
+include('directorHeader.php');
 
-// Handle assignment form submission
-if (isset($_POST['assign'])) {
-    if (!empty($_POST['selected_students']) && !empty($_POST['section_id']) && !empty($_POST['academic_year'])) {
-        $selected_students = $_POST['selected_students'];
-        $section_id = $_POST['section_id'];
-        $academic_year = $_POST['academic_year'];
-
-        foreach ($selected_students as $student_id) {
-            // Check if already assigned
-            $check = mysqli_query($conn, "SELECT * FROM assign_student WHERE student_id='$student_id' AND section_id='$section_id' AND academic_year='$academic_year'");
-            if (mysqli_num_rows($check) == 0) {
-                $query = "INSERT INTO assign_student (student_id, section_id, academic_year) VALUES ('$student_id', '$section_id', '$academic_year')";
-                if (!mysqli_query($conn, $query)) {
-                    echo "Error assigning student ID $student_id: " . mysqli_error($conn) . "<br>";
-                }
-            }
-        }
-
-        echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
-        <script>
-        Swal.fire({
-            title: 'Success!',
-            text: 'Students successfully assigned to section.',
-            icon: 'success',
-            confirmButtonText: 'OK'
-        }).then(() => { window.location.href = window.location.href; });
-        </script>";
-        exit();
-    } else {
-        echo "Please select students, section, and academic year.";
-    }
+// Fetch sections
+$sections_q = mysqli_query($conn, "SELECT * FROM sections ORDER BY section_name ASC");
+$sections_array = [];
+while($s = mysqli_fetch_assoc($sections_q)) {
+    $sections_array[$s['cid']] = $s['section_name'] . ' - ' . $s['class_type'];
 }
-
-$sections = mysqli_query($conn, "SELECT * FROM sections ORDER BY section_name ASC");
 ?>
 
 <div class="container">
-  <div class="page-inner">
-    <div class="page-header">
-       <h3 class="fw-bold mb-3">Assign Students to Class</h3>
-    </div>
+    <div class="page-inner">
+        <div class="page-header">
+            <h3 class="fw-bold mb-3">Assign Students to Class</h3>
+        </div>
 
-    <form method="post">
-      <div class="row">
-        <!-- Left column: students -->
-        <div class="col-6">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">Students</div>
-              <input type="text" id="studentSearch" class="form-control" placeholder="Search by Name or ID..." />
+        <div class="card shadow-lg p-4 mb-4">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-5">
+                    <label class="form-label fw-semibold">Select Section</label>
+                    <select id="sectionSelect" class="form-select">
+                        <option value="">-- Select Section --</option>
+                        <?php foreach($sections_array as $cid => $name): ?>
+                        <option value="<?= $cid ?>"><?= $name ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="col-md-5">
+                    <label class="form-label fw-semibold">Academic Year</label>
+                    <input type="text" id="academicYear" class="form-control" placeholder="e.g. 2017">
+                </div>
+                <div class="col-md-2 d-grid">
+                    <button type="button" id="showCountsBtn" class="btn btn-primary">Show Students</button>
+                </div>
             </div>
-            <div class="card-body scrollable-table">
-              <table class="table table-hover align-middle text-center">
-                <thead class="table-secondary">
-                  <tr>
-                    <th>#</th>
-                    <th>Select</th>
-                    <th>Student ID</th>
-                    <th>Full Name</th>               
-                  </tr>
-                </thead>
-                <tbody>
-                <?php 
- $no = 1;
-$students = getUnassignedStudents($conn);
-if (is_array($students) || is_object($students)) {
-    foreach ($students as $student): 
-?>
-                  <tr>
-                    <td><?= $no ?></td>
-                    <td><input type="checkbox" name="selected_students[]" value="<?= $student['sid'] ?>"></td>
-                    <td><?= $student['student_id'] ?></td>
-                    <td><?= $student['first_name'] . ' ' . $student['father_name'] ?></td>          
-                  <?php $no++; endforeach; } else { ?>
-                  <tr>
-                      <td colspan="4">No students found or an error occurred.</td>
-                  </tr>
-                  <?php } ?>
-                  <?php $no++; ?>
-                </tbody>
-              </table>
-            </div>
-          </div>
         </div>
-        <!-- Right column: section & year selection -->
-        <div class="col-6">
-          <div class="card">
-            <div class="card-header"><div class="card-title">Assign Class</div></div>
-            <div class="card-body">
-              <div class="mb-3">
-                <label for="section_id" class="form-label">Select Section</label>
-                <select name="section_id" id="section_id" class="form-control" >
-                  <option value="">-- Select Section --</option>
-                  <?php while ($section = mysqli_fetch_assoc($sections)): ?>
-                    <option value="<?= $section['cid'] ?>"><?= $section['section_name'] . ' - ' . $section['class_type'] ?></option>
-                  <?php endwhile; ?>
-                </select>
-              </div>
-              <div class="mb-3">
-                <label for="academic_year" class="form-label">Academic Year</label>
-                <input type="text" name="academic_year" id="academic_year" class="form-control" placeholder="e.g. 2012" required>
-              </div>
-              <button type="submit" name="assign" class="btn btn-primary">Assign Students</button>
+
+        <div id="studentCounts" class="mb-4" style="display:none;">
+            <div class="card p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Students in Selected Section</h5>
+                    <div>
+                        <button class="btn btn-info me-2" id="viewAllBtn">View All</button>
+                        <button class="btn btn-success" id="assignStudentsBtn">Assign Students</button>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <span id="totalStudents">Total: 0</span> | 
+                    <span id="maleStudents">Male: 0</span> | 
+                    <span id="femaleStudents">Female: 0</span>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-    </form>
-  </div>
+    </div>
 </div>
 
-<?php include('../admin/footer.php'); ?>
+<!-- View All Students Modal -->
+<div class="modal fade" id="viewAllModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold">All Students in Section</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Student ID</th>
+                            <th>Full Name</th>
+                            <th>Gender</th>
+                        </tr>
+                    </thead>
+                    <tbody id="allStudentsBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Assign Students Modal -->
+<div class="modal fade" id="assignModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold">Assign Students to Section</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="assignStudentsForm">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Select</th>
+                                <th>Student ID</th>
+                                <th>Full Name</th>
+                                <th>Gender</th>
+                            </tr>
+                        </thead>
+                        <tbody id="assignStudentsBody"></tbody>
+                    </table>
+                    <div class="text-end mt-2">
+                        <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Assign Selected</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JS Libraries -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+$(function(){
+
+    // Show counts
+    $('#showCountsBtn').click(function(){
+        const sectionId = $('#sectionSelect').val();
+        const year = $('#academicYear').val();
+        if(!sectionId || !year){
+            Swal.fire('Warning','Please select section and academic year','warning');
+            return;
+        }
+
+        $.post('fetch_student_counts.php',{section_id:sectionId, academic_year:year}, function(res){
+            if(res.status){
+                $('#studentCounts').show();
+                $('#totalStudents').text('Total: '+res.total);
+                $('#maleStudents').text('Male: '+res.male);
+                $('#femaleStudents').text('Female: '+res.female);
+            } else {
+                Swal.fire('Info','No students found','info');
+            }
+        },'json');
+    });
+
+    // View All Students
+    $('#viewAllBtn').click(function(){
+        const sectionId = $('#sectionSelect').val();
+        const year = $('#academicYear').val();
+        $.post('fetch_all_students.php',{section_id:sectionId, academic_year:year}, function(res){
+            let html = '';
+            res.forEach((s,i)=>{
+                html += `<tr>
+                    <td>${i+1}</td>
+                    <td>${s.student_id}</td>
+                    <td>${s.first_name} ${s.father_name}</td>
+                    <td>${s.gender}</td>
+                </tr>`;
+            });
+            $('#allStudentsBody').html(html);
+            $('#viewAllModal').modal('show');
+        },'json');
+    });
+
+    // Assign Students
+    $('#assignStudentsBtn').click(function(){
+        const sectionId = $('#sectionSelect').val();
+        const year = $('#academicYear').val();
+        $.post('fetch_unassigned_students.php',{section_id:sectionId, academic_year:year}, function(res){
+            let html = '';
+            res.forEach((s,i)=>{
+                html += `<tr>
+                    <td>${i+1}</td>
+                    <td><input type="checkbox" name="student_ids[]" value="${s.sid}"></td>
+                    <td>${s.student_id}</td>
+                    <td>${s.first_name} ${s.father_name}</td>
+                    <td>${s.gender}</td>
+                </tr>`;
+            });
+            $('#assignStudentsBody').html(html);
+            $('#assignModal').modal('show');
+        },'json');
+    });
+
+    // Submit assign form
+    $('#assignStudentsForm').submit(function(e){
+        e.preventDefault();
+        const sectionId = $('#sectionSelect').val();
+        const year = $('#academicYear').val();
+        const formData = $(this).serialize() + '&section_id='+sectionId+'&academic_year='+year;
+
+        $.post('assign_students_action.php', formData, function(res){
+            Swal.fire(res.status?'Success':'Error', res.message, res.status?'success':'error')
+            .then(()=> { if(res.status) $('#assignModal').modal('hide'); });
+        },'json');
+    });
+
+});
+</script>
