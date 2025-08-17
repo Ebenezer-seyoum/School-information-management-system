@@ -24,7 +24,7 @@ if (isset($_GET["sid"])) {
 $firstName_err = $fatherName_err = $gFatherName_err = $gender_err = $email_err = $phone_err = "";
 $birth_place_err = $nationality_err = $region_err = $zone_err = $woreda_err = $kebele_err = "";
 $mother_name_err = $father_contact_err = $mother_contact_err = $father_occupation_err = "";
-$mother_occupation_err = $emergency_contact_name_err = $emergency_contact_phone_err = "";
+$mother_occupation_err = $emergency_contact_name_err = $emergency_contact_phone_err = $dob_err="";
 $blood_group_err = $medical_condition_err = $other_condition_err = $disabilities_err = "";
 $previous_school_err = $academic_status_err = $profile_pic_err = $documents_err = $allErr = $success = "";
 $test = true;
@@ -549,10 +549,6 @@ if (isset($_POST["update"]) && $_SERVER["REQUEST_METHOD"] == "POST") {
                        <label class="form-label">Username</label>
                        <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['username']); ?>" disabled>
                      </div>
-                     <div class="col-md-6">
-                       <label class="form-label">Class Type</label>
-                       <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['role_type']); ?>" disabled>
-                     </div>
                    </div>
                  </div>
                </div>
@@ -690,12 +686,7 @@ if (isset($_POST["update"]) && $_SERVER["REQUEST_METHOD"] == "POST") {
                    <input type="text" class="form-control" name="previous_school" value="<?php echo htmlspecialchars($userProfile['previous_school']); ?>" required>
                    <?php if ($previous_school_err): ?><div class="text-danger"><?php echo $previous_school_err; ?></div><?php endif; ?>
                  </div>
-                 <div class="col-md-6">
-                   <label class="form-label">Academic Status Before Joining</label>
-                   <input type="text" class="form-control" name="academic_status" value="<?php echo htmlspecialchars($userProfile['academic_status']); ?>" required>
-                   <?php if ($academic_status_err): ?><div class="text-danger"><?php echo $academic_status_err; ?></div><?php endif; ?>
-                 </div>
-               </div>
+             
                <div class="row mb-3">
                  <div class="col-md-12">
                    <label class="form-label">Previous Documents</label>
