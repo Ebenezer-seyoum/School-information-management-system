@@ -346,54 +346,83 @@ if (isset($_POST["update"]) && $_SERVER["REQUEST_METHOD"] == "POST") {
         $previous_documents = $userProfile['previous_documents'];
     }
 
-    // If all validations pass, update the profile
-    if ($test) {
-        if (userExist($sid) == 1) {
-            $update_success = updateStudentProfile($sid, [
-                'first_name' => $first_name,
-                'father_name' => $father_name,
-                'grand_father_name' => $grand_father_name,
-                'gender' => $gender,
-                'dob' => $dob,
-                'email' => $email,
-                'phone' => $phone,
-                'birth_place' => $birth_place,
-                'nationality' => $nationality,
-                'region' => $region,
-                'zone' => $zone,
-                'woreda' => $woreda,
-                'kebele' => $kebele,
-                'mother_name' => $mother_name,
-                'father_contact' => $father_contact,
-                'mother_contact' => $mother_contact,
-                'father_occupation' => $father_occupation,
-                'mother_occupation' => $mother_occupation,
-                'emergency_contact_name' => $emergency_contact_name,
-                'emergency_contact_phone' => $emergency_contact_phone,
-                'blood_group' => $blood_group,
-                'medical_condition' => $medical_condition,
-                'other_condition' => $other_condition,
-                'disabilities' => $disabilities,
-                'previous_school' => $previous_school,
-                'academic_status' => $academic_status,
-                'student_photo' => $student_photo,
-                'previous_documents' => $previous_documents
-            ]);
+    // // If all validations pass, update the profile
+    // if ($test) {
+    //     if (userExist($sid) == 1) {
+    //         $update_success = updateStudentProfile($sid, [
+    //             'first_name' => $first_name,
+    //             'father_name' => $father_name,
+    //             'grand_father_name' => $grand_father_name,
+    //             'gender' => $gender,
+    //             'dob' => $dob,
+    //             'email' => $email,
+    //             'phone' => $phone,
+    //             'birth_place' => $birth_place,
+    //             'nationality' => $nationality,
+    //             'region' => $region,
+    //             'zone' => $zone,
+    //             'woreda' => $woreda,
+    //             'kebele' => $kebele,
+    //             'mother_name' => $mother_name,
+    //             'father_contact' => $father_contact,
+    //             'mother_contact' => $mother_contact,
+    //             'father_occupation' => $father_occupation,
+    //             'mother_occupation' => $mother_occupation,
+    //             'emergency_contact_name' => $emergency_contact_name,
+    //             'emergency_contact_phone' => $emergency_contact_phone,
+    //             'blood_group' => $blood_group,
+    //             'medical_condition' => $medical_condition,
+    //             'other_condition' => $other_condition,
+    //             'disabilities' => $disabilities,
+    //             'previous_school' => $previous_school,
+    //             'academic_status' => $academic_status,
+    //             'student_photo' => $student_photo,
+    //             'previous_documents' => $previous_documents
+    //         ]);
 
-            if ($update_success) {
-                $success = "Student profile updated successfully!";
-                $Notif_msg = "Student profile updated.";
-                $sql_Notif = "INSERT INTO notifications (user_id, message) VALUES ('$sid', '$Notif_msg')";
-                mysqli_query($conn, $sql_Notif);
+    //         if ($update_success) {
+    //             $success = "Student profile updated successfully!";
+    //             $Notif_msg = "Student profile updated.";
+    //             $sql_Notif = "INSERT INTO notifications (user_id, message) VALUES ('$sid', '$Notif_msg')";
+    //             mysqli_query($conn, $sql_Notif);
+    //             header('refresh:2');
+    //             $userProfile = getStudentSidByID($sid);
+    //         } else {
+    //             $allErr = "Something went wrong during update";
+    //         }
+    //     } else {
+    //         $allErr = "No student found with the given ID";
+    //     }
+    // }
+
+
+    if ($test == true) {
+     if (studentExist($sid) == 1) {
+         $encryptedPassword = encryptPassword($password);
+      if (updateStudent($sid, $idNumber, $student_photo, $first_name, $father_name, $grand_father_name, $gender,
+       $dob, $email, $phone, $birth_place, $nationality, $region,$zone,$woreda,$kebele,$mother_name,
+       $father_contact,$mother_contact,$mother_occupation,$emergency_contact_name,$blood_group,$medical_condition,$other_condition,
+       $disabilities,$previous_school,$academic_status,$previous_documents) == 1) {
+                $success = "Successfully updated";
                 header('refresh:2');
-                $userProfile = getStudentSidByID($sid);
+                  $Notif_msg = "your account detail updated.";
+              $sql_Notif = "INSERT INTO notifications (sid, message) 
+                  VALUES ('$sid', '$Notif_msg')";
+                     mysqli_query($conn, $sql_Notif);             
             } else {
-                $allErr = "Something went wrong during update";
+                $allErr = " Something went wrong";
             }
         } else {
-            $allErr = "No student found with the given ID";
+            $allErr = "There is no user associated with the given information";
         }
     }
+
+
+
+
+
+
+
 }
 ?>
 
@@ -703,7 +732,7 @@ if (isset($_POST["update"]) && $_SERVER["REQUEST_METHOD"] == "POST") {
 
          <!-- Submit and Cancel Buttons -->
          <div class="text-center mt-4">
-           <button type="submit" name="update" class="btn btn-primary">Update Profile</button>
+           <button type="submit" name="update" class="btn btn-primary">Update Student</button>
            <a href="view_studentForUpdate.php" class="btn btn-secondary">Cancel</a>
          </div>
        </form>
