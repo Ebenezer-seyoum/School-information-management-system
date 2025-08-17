@@ -96,7 +96,7 @@ if (isset($_SESSION["sid"])) {
   </a>
   <div class="collapse" id="markMenu">
     <ul class="nav nav-collapse">   
-      <li><a href="mark_report.php"><i class="fas fa-chart-bar"></i> View Results</a></li>
+      <li><a href="view_marks.php"><i class="fas fa-chart-bar"></i> View Results</a></li>
       <li><a href="mark_report.php"><i class="fas fa-chart-bar"></i> Grade Report</a></li>
     </ul>
   </div>
