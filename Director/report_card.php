@@ -12,18 +12,19 @@ if (isset($_SESSION["uid"]) && ($roleName == "Director")) {
 <style>
   .profile-img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
   .modal-body { max-height: 400px; overflow-y: auto; }
+  .form-inline { display: flex; gap: 10px; align-items: center; }
 </style>
 
 <div class="container">
   <div class="page-inner">
     <div class="page-header">
-      <h3 class="fw-bold mb-3">View Classes</h3>
+      <h3 class="fw-bold mb-3">Generate Report Card</h3>
       <ul class="breadcrumbs mb-3">
         <li class="nav-home"><a href="#"><i class="icon-home"></i></a></li>
         <li class="separator"><i class="icon-arrow-right"></i></li>
-        <li class="nav-item"><a href="#">Manage Class</a></li>
+        <li class="nav-item"><a href="#">Manage Student</a></li>
         <li class="separator"><i class="icon-arrow-right"></i></li>
-        <li class="nav-item"><a href="#">View Class</a></li>
+        <li class="nav-item"><a href="#">Generate Report card</a></li>
       </ul>
     </div>
 
@@ -96,11 +97,21 @@ if (isset($_SESSION["uid"]) && ($roleName == "Director")) {
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <div class="mb-3">
-          <label for="academicYearModal" class="form-label">Select Academic Year</label>
-          <input type="text" id="academicYearModal" class="form-control" placeholder="e.g. 2024/2025">
+        <div class="form-inline mb-3">
+          <div>
+            <label for="academicYearModal" class="form-label">Academic Year</label>
+            <input type="text" id="academicYearModal" class="form-control" placeholder="e.g. 2024/2025">
+          </div>
+          <div>
+            <label for="semesterModal" class="form-label">Semester</label>
+            <select id="semesterModal" class="form-control">
+              <option value="">Select Semester</option>
+              <option value="1">Semester 1</option>
+              <option value="2">Semester 2</option>
+            </select>
+          </div>
         </div>
-        <div id="studentsList">Loading students...</div>
+        <div id="studentsList">Please select academic year and semester...</div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -115,36 +126,39 @@ document.querySelectorAll('.view-students-btn').forEach(button => {
   button.addEventListener('click', function() {
     const sectionId = this.dataset.sectionId;
     const sectionName = this.dataset.sectionName;
-    const academicYear = document.getElementById('academicYearModal').value;
     const modalTitle = document.getElementById('studentsModalLabel');
-    modalTitle.textContent = `Students in Class: ${sectionName} | ${academicYear}`;
     const studentsList = document.getElementById('studentsList');
 
     // Show modal
     var studentsModal = new bootstrap.Modal(document.getElementById('studentsModal'));
     studentsModal.show();
 
-    // Listen for academic year input change
+    // Reset inputs
     const academicYearInput = document.getElementById('academicYearModal');
-    academicYearInput.value = ''; // reset
-    studentsList.innerHTML = 'Please select an academic year...';
-
-   academicYearInput.oninput = function() {
-  const year = this.value.trim();
-  if (year.length > 0) {
-    // Update modal title dynamically
-    modalTitle.textContent = `Students in Class: ${sectionName} | ${year}`;
-
-    // Fetch students via AJAX
-    fetch(`fetch_students.php?section_id=${sectionId}&academic_year=${year}`)
-      .then(response => response.text())
-      .then(data => { studentsList.innerHTML = data; })
-      .catch(err => { studentsList.innerHTML = 'Error fetching students'; });
-  } else {
+    const semesterInput = document.getElementById('semesterModal');
+    academicYearInput.value = '';
+    semesterInput.value = '';
     modalTitle.textContent = `Students in Class: ${sectionName}`;
-    studentsList.innerHTML = 'Please select an academic year...';
-  }
-};
+    studentsList.innerHTML = 'Please select academic year and semester...';
+
+    // Fetch function
+    function fetchStudents() {
+      const year = academicYearInput.value.trim();
+      const semester = semesterInput.value;
+      if(year && semester) {
+        modalTitle.textContent = `Students in Class: ${sectionName} | ${year} | Semester ${semester}`;
+        fetch(`ajax_fetch_students_results.php?section_id=${sectionId}&academic_year=${year}&semester=${semester}`)
+          .then(res => res.text())
+          .then(data => { studentsList.innerHTML = data; })
+          .catch(err => { studentsList.innerHTML = 'Error fetching students'; });
+      } else {
+        modalTitle.textContent = `Students in Class: ${sectionName}`;
+        studentsList.innerHTML = 'Please select academic year and semester...';
+      }
+    }
+
+    academicYearInput.oninput = fetchStudents;
+    semesterInput.onchange = fetchStudents;
 
   });
 });

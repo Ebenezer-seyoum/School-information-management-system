@@ -309,23 +309,15 @@ function case_status($status) {
     }
 }
 
-function getOrdinalWord($number) {
-    $ords = [1 => 'First', 2 => 'Second', 3 => 'Third', 4 => 'Fourth', 5 => 'Fifth'];
-    return $ords[$number] ?? $number . 'th';
-}
-
-function getCaseStatusList() {
-    return [
-        0 => 'PENDING',
-        1 => 'OPENED',
-        2 => 'DISTRIBUTED',
-        3 => 'APPOINTMENT GIVEN',
-        4 => 'WAITING CONFIRM',
-        5 => 'APPOINTED',
-        6 => 'DECISION GIVEN',
-        7 => 'WAITING DECISION',
-        8 => 'DECIDED'
-    ];
+function getSectionNameById($conn, $section_id) {
+    $section_id = (int)$section_id;
+    $query = "SELECT section_name FROM sections WHERE cid='$section_id' LIMIT 1";
+    $res = mysqli_query($conn, $query);
+    if($res && mysqli_num_rows($res) > 0){
+        $row = mysqli_fetch_assoc($res);
+        return $row['section_name'];
+    }
+    return "Unknown Section";
 }
 
 function checkUserByUsername($data)
