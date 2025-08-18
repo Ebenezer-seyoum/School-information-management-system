@@ -1,6 +1,5 @@
 <?php
 include 'connection.php';
-require __DIR__ . '/../vendor/autoload.php';
 use \PHPMailer\PHPMailer\PHPMailer;
 // Include PHPMailer classes
 require_once __DIR__ . '/../phpMailer/PHPMailer.php';

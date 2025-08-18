@@ -2,7 +2,7 @@
 // Ensure UTF-8
 header('Content-Type: text/html; charset=utf-8');
 include('../connection/connection.php');
-require_once __DIR__ . '../vendor/autoload.php'; // mPDF autoload
+require_once('../tcpdf/tcpdf.php');
 
 // --- Get parameters ---
 $sid           = $_GET['sid'] ?? null;
@@ -123,54 +123,62 @@ function getClassRank($conn, $section_id, $academic_year, $semester, $sid){
 $sem1Rank = getClassRank($conn, $section_id, $academic_year, 1, $sid);
 $sem2Rank = getClassRank($conn, $section_id, $academic_year, 2, $sid);
 
-// ------------------- mPDF -------------------
-$mpdf = new \Mpdf\Mpdf([
-    'default_font' => 'dejavusans',  // supports Amharic
-    'format' => 'A4'
-]);
+// --- TCPDF ---
+$pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
+$pdf->setPrintHeader(false);
+$pdf->setPrintFooter(false);
+$pdf->SetMargins(10, 10, 10);
+$pdf->SetAutoPageBreak(TRUE, 10);
+
+// Amharic + English support
+$pdf->setFontSubsetting(true);
+$pdf->SetFont('', '', 12);
 
 $studentFullName = $student['first_name'].' '.$student['father_name'].' '.$student['mother_name'];
 
-// ---------------- PAGE 1 ----------------
-$page1 = '
-<html>
-<head>
-<style>
-body { font-family: dejavusans; }
-.card-bg {
-    position: absolute;
-    top: 0; left: 0;
-    width: 210mm;
-    height: 297mm;
-    background-image: url("../images/card-2.png");
-    background-size: cover;
-}
-.student-info {
-    position: absolute;
-    left: 70mm;
-    top: 55mm;
-    font-size: 14px;
-}
-</style>
-</head>
-<body>
-<div class="card-bg"></div>
-<div class="student-info">
-    <p><strong>Name:</strong> '.$studentFullName.'</p>
-    <p><strong>Sex:</strong> '.$student['gender'].' &nbsp;&nbsp; <strong>Age:</strong> '.$age.'</p>
-    <p><strong>Address:</strong> '.$student['woreda'].' '.$student['kebele'].'</p>
-    <p><strong>Academic Year:</strong> '.$academic_year.'</p>
-    <p><strong>Class:</strong> '.$section_id.'</p>
-    <p><strong>Status:</strong> '.$promotionStatus.'</p>
-</div>
-</body>
-</html>
-';
+// ---------------- PAGE 1 (Image Layout) ----------------
+$pdf->AddPage();
 
-$mpdf->WriteHTML($page1);
-$mpdf->AddPage();
+// Background card image
+$pdf->Image('../images/card-2.png', 0, 0, 210, 297, '', '', '', false, 300, '', false, false, 0);
+
+// Add school logo/icon (adjust path & size)
+$pdf->Image('../images/logo.png', 90, 5, 30, 0, '', '', '', false, 300);
+
+// Write student details in exact positions
+$pdf->SetFont('dejavusans', '', 12);
+
+// Name
+$pdf->SetXY(70, 55);
+$pdf->Cell(100, 8, $studentFullName, 0, 1, 'L');
+
+// Sex
+$pdf->SetXY(40, 70);
+$pdf->Cell(30, 8, $student['gender'], 0, 1, 'L');
+
+// Age
+$pdf->SetXY(80, 70);
+$pdf->Cell(30, 8, $age, 0, 1, 'L');
+
+// Address (Woreda + Kebele)
+$pdf->SetXY(70, 80);
+$pdf->Cell(100, 8, $student['woreda'].' '.$student['kebele'], 0, 1, 'L');
+
+// Academic Year
+$pdf->SetXY(70, 95);
+$pdf->Cell(50, 8, $academic_year, 0, 1, 'L');
+
+// Class
+$pdf->SetXY(70, 105);
+$pdf->Cell(50, 8, $section_id, 0, 1, 'L');
+
+// Promotion status
+$pdf->SetXY(70, 115);
+$pdf->Cell(50, 8, $promotionStatus, 0, 1, 'L');
 
 // ---------------- PAGE 2 (Marks Table) ----------------
+$pdf->AddPage();
+
 $rowsHtml = '';
 $yearlyAvgSum = 0; $yearlyAvgCount = 0;
 foreach ($allSubjects as $suid => $subName) {
@@ -190,9 +198,9 @@ foreach ($allSubjects as $suid => $subName) {
 }
 $yearAvg = $yearlyAvgCount ? round($yearlyAvgSum/$yearlyAvgCount,2) : 0;
 
-$page2 = '
+$html2 = '
 <h4 style="text-align:center;">የነጥብ ሰንጠረዥ / Marks Table</h4>
-<table border="1" cellpadding="6" cellspacing="0" width="100%" style="border-collapse:collapse; font-size:12px;">
+<table cellpadding="6" style="width:100%; border-collapse:collapse; font-size:12px;" border="1">
   <tr>
     <th>Subject</th>
     <th>1ኛ መ/ዓ/ት / 1st Semester</th>
@@ -226,8 +234,7 @@ $page2 = '
   </tr>
 </table>
 ';
-
-$mpdf->WriteHTML($page2);
+$pdf->writeHTML($html2, true, false, true, false, '');
 
 // Output
-$mpdf->Output('ReportCard_'.$student['student_id'].'.pdf', 'I');
+$pdf->Output('ReportCard_'.$student['student_id'].'.pdf', 'I');
