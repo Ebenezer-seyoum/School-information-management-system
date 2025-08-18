@@ -82,7 +82,7 @@ if (isset($_SESSION["sid"])) {
   <div class="collapse" id="attendanceMenu">
     <ul class="nav nav-collapse">
       
-      <li><a href="attendance_report.php"><i class="fas fa-eye"></i> View Attendance</a></li>
+      <li><a href="view_attendance.php"><i class="fas fa-eye"></i> View Attendance</a></li>
     </ul>
   </div>
 </li>

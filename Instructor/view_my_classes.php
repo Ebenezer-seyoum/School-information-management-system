@@ -1,18 +1,15 @@
 <?php
 include('instructorHeader.php'); // adjust path as needed
 
-// Get teacher profile
+// --- Check login ---
 $profile = getUserByID($_SESSION["uid"]);
 $roleName = getRoleNameById($profile["user_type"]);
-
 if(!isset($_SESSION["uid"]) || $roleName != "Instructor"){
     echo "You are not authorized to view this page.";
     exit;
 }
 
 // --- Helpers ---
-
-// Fetch academic years assigned to this teacher
 function fetchAcademicYears($conn, $teacher_id){
     $res = mysqli_query($conn, "SELECT DISTINCT academic_year 
                                 FROM assign_instructor 
@@ -25,12 +22,10 @@ function fetchAcademicYears($conn, $teacher_id){
     return $years;
 }
 
-// Fetch assigned classes for a specific year
 function fetchAssignedClasses($conn, $teacher_id, $year){
     $res = mysqli_query($conn, "SELECT at.hid, at.section_id, at.academic_year, s.section_name, s.class_type
                                 FROM assign_instructor at
                                 LEFT JOIN sections s ON at.section_id = s.cid
-        
                                 WHERE at.instructor_id = $teacher_id AND at.academic_year = '$year'
                                 ORDER BY s.section_name ASC");
     $tmp = [];
@@ -40,28 +35,9 @@ function fetchAssignedClasses($conn, $teacher_id, $year){
     return $tmp;
 }
 
-// Fetch students for a specific class
-function fetchStudentsByClass($conn, $class_id) {
-    if(!$class_id) return [];
-    $res = mysqli_query($conn, "SELECT u.sid, u.first_name, u.father_name, u.gender
-                                FROM assign_student ast
-                                LEFT JOIN students u ON ast.student_id = u.sid
-                                WHERE ast.section_id = $class_id
-                                ORDER BY u.first_name ASC");
-    $students = [];
-    while($r = mysqli_fetch_assoc($res)){
-        $students[] = $r;
-    }
-    return $students;
-}
-
 // --- Main Logic ---
 $years = fetchAcademicYears($conn, $_SESSION["uid"]);
-
-// Determine selected year
 $selectedYear = $_GET['academic_year'] ?? ($years[0] ?? null);
-
-// Fetch classes for selected year
 $classes = $selectedYear ? fetchAssignedClasses($conn, $_SESSION["uid"], $selectedYear) : [];
 ?>
 
@@ -101,7 +77,13 @@ $classes = $selectedYear ? fetchAssignedClasses($conn, $_SESSION["uid"], $select
                   <td><?= htmlspecialchars($c['section_name'] . ' - ' . $c['class_type']) ?></td>
                   <td><?= htmlspecialchars($c['academic_year']) ?></td>
                   <td>
-                    <a href="view_Allstudents.php?class_id=<?= $c['hid'] ?>" class="btn btn-primary btn-sm">View Students</a>
+                    <button type="button" 
+                            class="btn btn-primary btn-sm view-students" 
+                            data-class-id="<?= $c['hid'] ?>" 
+                            data-class-name="<?= htmlspecialchars($c['section_name'] . ' - ' . $c['class_type']) ?>" 
+                            data-year="<?= $c['academic_year'] ?>">
+                        View Students
+                    </button>
                   </td>
                 </tr>
               <?php endforeach; ?>
@@ -114,5 +96,46 @@ $classes = $selectedYear ? fetchAssignedClasses($conn, $_SESSION["uid"], $select
     </div>
   </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="studentsModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Students in Class</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div id="studentsTable">Loading...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// when click "View Students"
+document.querySelectorAll(".view-students").forEach(btn => {
+  btn.addEventListener("click", function() {
+    let classId = this.dataset.classId;
+    let className = this.dataset.className;
+    let year = this.dataset.year;
+
+    document.querySelector("#studentsModal .modal-title").innerText = 
+      "Students in " + className + " (" + year + ")";
+    document.querySelector("#studentsTable").innerHTML = "Loading...";
+
+    // AJAX fetch students
+    fetch("fetch_students.php?class_id=" + classId)
+      .then(res => res.text())
+      .then(html => {
+        document.querySelector("#studentsTable").innerHTML = html;
+      });
+
+    // show modal
+    let modal = new bootstrap.Modal(document.getElementById("studentsModal"));
+    modal.show();
+  });
+});
+</script>
 
 <?php include('../Admin/footer.php'); ?>
