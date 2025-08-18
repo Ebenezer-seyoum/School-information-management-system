@@ -1,7 +1,8 @@
 <?php
-// IMPORTANT: Ensure this file is saved as UTF-8 (no BOM).
+// Ensure UTF-8
+header('Content-Type: text/html; charset=utf-8');
 include('../connection/connection.php');
-require_once('../tcpdf/tcpdf.php');
+require_once __DIR__ . '../vendor/autoload.php'; // mPDF autoload
 
 // --- Get parameters ---
 $sid           = $_GET['sid'] ?? null;
@@ -34,8 +35,8 @@ $dob   = new DateTime($student['dob']);
 $today = new DateTime();
 $age   = $today->diff($dob)->y;
 
-// --- Fetch ALL subjects for this section/class (even if no mark yet) ---
-$allSubjects = [];     // [suid => subject_name]
+// --- Fetch ALL subjects ---
+$allSubjects = []; // [suid => subject_name]
 $subRes = mysqli_query($conn, "
     SELECT s.suid, s.subject_name
     FROM curriculum_subjects cs
@@ -47,7 +48,7 @@ while ($r = mysqli_fetch_assoc($subRes)) {
     $allSubjects[(int)$r['suid']] = $r['subject_name'];
 }
 
-// --- Fetch marks for this student for both semesters ---
+// --- Fetch marks ---
 $marksMap = []; // [subject_id][semester] = result
 $marksRes = mysqli_query($conn, "
     SELECT subject_id, semester, result
@@ -65,10 +66,9 @@ while ($m = mysqli_fetch_assoc($marksRes)) {
 
 // --- Utilities ---
 function calcTotalsBySemester($allSubjects, $marksMap, $semester) {
-    $sum = 0;
-    $cnt = 0;
+    $sum = 0; $cnt = 0;
     foreach ($allSubjects as $suid => $name) {
-        if (isset($marksMap[$suid][$semester]) && $marksMap[$suid][$semester] !== '' && $marksMap[$suid][$semester] !== null) {
+        if (isset($marksMap[$suid][$semester])) {
             $sum += (float)$marksMap[$suid][$semester];
             $cnt++;
         }
@@ -91,16 +91,17 @@ function getTotalAbsence($conn, $sid, $section_id, $academic_year, $semester){
     return (int)($row['total_absent'] ?? 0);
 }
 
+// Totals
 list($sem1Sum, $sem1Avg) = calcTotalsBySemester($allSubjects, $marksMap, 1);
 list($sem2Sum, $sem2Avg) = calcTotalsBySemester($allSubjects, $marksMap, 2);
 
 $sem1AbsentTotal = getTotalAbsence($conn, $sid, $section_id, $academic_year, 1);
 $sem2AbsentTotal = getTotalAbsence($conn, $sid, $section_id, $academic_year, 2);
 
-// Promotion decision based on Sem 2 average (change if your rule differs)
+// Promotion
 $promotionStatus = ($sem2Avg >= 50) ? 'Promoted' : 'Not Promoted';
 
-// --- Class Rank per semester ---
+// --- Class Rank ---
 function getClassRank($conn, $section_id, $academic_year, $semester, $sid){
     $query = "
         SELECT student_id, AVG(result) AS avg_mark
@@ -122,173 +123,111 @@ function getClassRank($conn, $section_id, $academic_year, $semester, $sid){
 $sem1Rank = getClassRank($conn, $section_id, $academic_year, 1, $sid);
 $sem2Rank = getClassRank($conn, $section_id, $academic_year, 2, $sid);
 
-// --- Init TCPDF ---
-$pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
-// metadata
-$pdf->SetCreator('Balela School');
-$pdf->SetAuthor('Balela Secondary School');
-$pdf->SetTitle('Student Report Card');
+// ------------------- mPDF -------------------
+$mpdf = new \Mpdf\Mpdf([
+    'default_font' => 'dejavusans',  // supports Amharic
+    'format' => 'A4'
+]);
 
-// no default header/footer
-$pdf->setPrintHeader(false);
-$pdf->setPrintFooter(false);
+$studentFullName = $student['first_name'].' '.$student['father_name'].' '.$student['mother_name'];
 
-// margins & flow
-$pdf->SetMargins(10, 10, 10);
-$pdf->SetAutoPageBreak(TRUE, 10);
-
-// Use Unicode font that supports Amharic
-// DejaVuSans is bundled with TCPDF and supports Ethiopic.
-$pdf->setFontSubsetting(true);
-$pdf->SetFont('dejavusans', '', 12);
-
-// ------------- PAGE 1 (pure red bg) -------------
-$pdf->AddPage();
-
-// pure red background fill (whole page)
-$pdf->SetFillColor(255, 0, 0);
-$pdf->Rect(0, 0, $pdf->getPageWidth(), $pdf->getPageHeight(), 'F');
-
-// content (NO white box backgrounds; keep everything transparent)
-$studentFullName = htmlspecialchars($student['first_name'].' '.$student['father_name'].' '.$student['mother_name']);
-$gender          = htmlspecialchars($student['gender']);
-$address         = htmlspecialchars($student['woreda'].' - '.$student['kebele']);
-$studIdStr       = htmlspecialchars($student['student_id']);
-
-$html1 = '
-<div>
-  <h3 style="text-align:center; margin:4px 0;">ሲዳማ ሕጋዊ ክልል መንግስት / Sidama National Regional Government</h3>
-  <h4 style="text-align:center; margin:4px 0;">ዞን / Zone: ሲዳማ / Sidama</h4>
-  <h4 style="text-align:center; margin:4px 0;">ወረዳ / Woreda: ቢላቴ ዙሪያ / Bilate Zuriya</h4>
-  <h4 style="text-align:center; margin:8px 0;">የተማሪ የሪፖርት ካርድ / Student Report Card - ባለስልጣን ትምህርት ቤት / Balela Secondary School</h4>
-
-  <table cellpadding="6" style="font-size:12px; width:100%; border-collapse:collapse;">
-    <tr>
-      <td style="width:35%; border:1px solid #000;"><strong>የተማሪ ስም / Name of Student</strong></td>
-      <td style="width:65%; border:1px solid #000;">'.$studentFullName.'</td>
-    </tr>
-    <tr>
-      <td style="border:1px solid #000;"><strong>መለያ ቁጥር / Student ID</strong></td>
-      <td style="border:1px solid #000;">'.$studIdStr.'</td>
-    </tr>
-    <tr>
-      <td style="border:1px solid #000;"><strong>ፆታ / Sex</strong></td>
-      <td style="border:1px solid #000;">'.$gender.'</td>
-    </tr>
-    <tr>
-      <td style="border:1px solid #000;"><strong>እድሜ / Age</strong></td>
-      <td style="border:1px solid #000;">'.$age.'</td>
-    </tr>
-    <tr>
-      <td style="border:1px solid #000;"><strong>አድራሻ / Address</strong></td>
-      <td style="border:1px solid #000;">'.$address.'</td>
-    </tr>
-    <tr>
-      <td style="border:1px solid #000;"><strong>ት/ዓ / Academic Year</strong></td>
-      <td style="border:1px solid #000;">'.htmlspecialchars($academic_year).'</td>
-    </tr>
-    <tr>
-      <td style="border:1px solid #000;"><strong>ውጤት / Promotion</strong></td>
-      <td style="border:1px solid #000;">'.$promotionStatus.'</td>
-    </tr>
-  </table>
-</div>
-';
-
-$pdf->writeHTML($html1, true, false, true, false, '');
-
-
-// ------------- PAGE 2 (pure red bg) -------------
-$pdf->AddPage();
-
-// pure red background fill (whole page)
-$pdf->SetFillColor(255, 0, 0);
-$pdf->Rect(0, 0, $pdf->getPageWidth(), $pdf->getPageHeight(), 'F');
-
-// Marks table (NO header row; black borders; list all section subjects; two absence rows BEFORE totals)
-$rowsHtml = '';
-$yearlyAvgSum = 0;
-$yearlyAvgCount = 0;
-foreach ($allSubjects as $suid => $subName) {
-  $has1 = isset($marksMap[$suid][1]) && $marksMap[$suid][1] !== '' && $marksMap[$suid][1] !== null;
-  $has2 = isset($marksMap[$suid][2]) && $marksMap[$suid][2] !== '' && $marksMap[$suid][2] !== null;
-  $sem1Val = $has1 ? (float)$marksMap[$suid][1] : '-';
-  $sem2Val = $has2 ? (float)$marksMap[$suid][2] : '-';
-
-  // per-subject average across available semesters
-  $present = 0; $sum = 0;
-  if ($has1) { $present++; $sum += (float)$marksMap[$suid][1]; }
-  if ($has2) { $present++; $sum += (float)$marksMap[$suid][2]; }
-  $rowAvg = $present > 0 ? round($sum / $present, 2) : '-';
-  if ($present > 0) { $yearlyAvgSum += ($sum / $present); $yearlyAvgCount++; }
-
-  $rowsHtml .= '
-    <tr>
-      <td style="border:1px solid #000; padding:6px;">'.htmlspecialchars($subName).'</td>
-      <td style="border:1px solid #000; padding:6px; text-align:center;">'.$sem1Val.'</td>
-      <td style="border:1px solid #000; padding:6px; text-align:center;">'.$sem2Val.'</td>
-      <td style="border:1px solid #000; padding:6px; text-align:center;">'.$rowAvg.'</td>
-    </tr>
-  ';
+// ---------------- PAGE 1 ----------------
+$page1 = '
+<html>
+<head>
+<style>
+body { font-family: dejavusans; }
+.card-bg {
+    position: absolute;
+    top: 0; left: 0;
+    width: 210mm;
+    height: 297mm;
+    background-image: url("../images/card-2.png");
+    background-size: cover;
 }
-
-$yearAvg = $yearlyAvgCount > 0 ? round($yearlyAvgSum / $yearlyAvgCount, 2) : 0;
-
-// Single Absence row with both semesters
-$absenceRow = '
-  <tr>
-    <td style="border:1px solid #000; padding:6px;"><strong>ጠቅላላ ጉድለት / Total Absence</strong></td>
-    <td style="border:1px solid #000; padding:6px; text-align:center;">'.$sem1AbsentTotal.'</td>
-    <td style="border:1px solid #000; padding:6px; text-align:center;">'.$sem2AbsentTotal.'</td>
-    <td style="border:1px solid #000; padding:6px; text-align:center;">-</td>
-  </tr>
-';
-
-// Totals / Averages / Ranks (4 columns)
-$summaryRows = '
-  <tr>
-    <td style="border:1px solid #000; padding:6px;"><strong>ጠቅላላ ነጥብ / Total</strong></td>
-    <td style="border:1px solid #000; padding:6px; text-align:center;">'.$sem1Sum.'</td>
-    <td style="border:1px solid #000; padding:6px; text-align:center;">'.$sem2Sum.'</td>
-    <td style="border:1px solid #000; padding:6px; text-align:center;">-</td>
-  </tr>
-  <tr>
-    <td style="border:1px solid #000; padding:6px;"><strong>አማካኝ ነጥብ / Average</strong></td>
-    <td style="border:1px solid #000; padding:6px; text-align:center;">'.$sem1Avg.'</td>
-    <td style="border:1px solid #000; padding:6px; text-align:center;">'.$sem2Avg.'</td>
-    <td style="border:1px solid #000; padding:6px; text-align:center;">'.$yearAvg.'</td>
-  </tr>
-  <tr>
-    <td style="border:1px solid #000; padding:6px;"><strong>የክፍል ደረጃ / Class Rank</strong></td>
-    <td style="border:1px solid #000; padding:6px; text-align:center;">'.$sem1Rank.'</td>
-    <td style="border:1px solid #000; padding:6px; text-align:center;">'.$sem2Rank.'</td>
-    <td style="border:1px solid #000; padding:6px; text-align:center;">-</td>
-  </tr>
-';
-
-// Header row
-$headerRow = '
-  <tr>
-    <th style="border:1px solid #000; padding:6px; text-align:left;">Subject</th>
-    <th style="border:1px solid #000; padding:6px; text-align:center;">1st Semester</th>
-    <th style="border:1px solid #000; padding:6px; text-align:center;">2nd Semester</th>
-    <th style="border:1px solid #000; padding:6px; text-align:center;">Average</th>
-  </tr>
-';
-
-$html2 = '
-<div>
-  <h4 style="text-align:center; margin:4px 0;">የነጥብ ሰንጠረዥ / Marks Table</h4>
-  <table cellpadding="0" cellspacing="0" style="width:100%; border-collapse:collapse; font-size:12px;">
-  '.$headerRow.'
-  '.$rowsHtml.'
-  '.$absenceRow.'
-  '.$summaryRows.'
-  </table>
+.student-info {
+    position: absolute;
+    left: 70mm;
+    top: 55mm;
+    font-size: 14px;
+}
+</style>
+</head>
+<body>
+<div class="card-bg"></div>
+<div class="student-info">
+    <p><strong>Name:</strong> '.$studentFullName.'</p>
+    <p><strong>Sex:</strong> '.$student['gender'].' &nbsp;&nbsp; <strong>Age:</strong> '.$age.'</p>
+    <p><strong>Address:</strong> '.$student['woreda'].' '.$student['kebele'].'</p>
+    <p><strong>Academic Year:</strong> '.$academic_year.'</p>
+    <p><strong>Class:</strong> '.$section_id.'</p>
+    <p><strong>Status:</strong> '.$promotionStatus.'</p>
 </div>
+</body>
+</html>
 ';
 
-$pdf->writeHTML($html2, true, false, true, false, '');
+$mpdf->WriteHTML($page1);
+$mpdf->AddPage();
 
-// --- Output PDF ---
-$pdf->Output('ReportCard_'.$student['student_id'].'.pdf', 'I');
+// ---------------- PAGE 2 (Marks Table) ----------------
+$rowsHtml = '';
+$yearlyAvgSum = 0; $yearlyAvgCount = 0;
+foreach ($allSubjects as $suid => $subName) {
+  $s1 = isset($marksMap[$suid][1]) ? $marksMap[$suid][1] : '-';
+  $s2 = isset($marksMap[$suid][2]) ? $marksMap[$suid][2] : '-';
+  $avg = ($s1 !== '-' && $s2 !== '-') ? round(($s1 + $s2)/2,2) : ($s1 !== '-' ? $s1 : ($s2 !== '-' ? $s2 : '-'));
+  if ($avg !== '-') { $yearlyAvgSum += $avg; $yearlyAvgCount++; }
+
+  $rowsHtml .= "
+    <tr>
+      <td>$subName</td>
+      <td align='center'>$s1</td>
+      <td align='center'>$s2</td>
+      <td align='center'>$avg</td>
+    </tr>
+  ";
+}
+$yearAvg = $yearlyAvgCount ? round($yearlyAvgSum/$yearlyAvgCount,2) : 0;
+
+$page2 = '
+<h4 style="text-align:center;">የነጥብ ሰንጠረዥ / Marks Table</h4>
+<table border="1" cellpadding="6" cellspacing="0" width="100%" style="border-collapse:collapse; font-size:12px;">
+  <tr>
+    <th>Subject</th>
+    <th>1ኛ መ/ዓ/ት / 1st Semester</th>
+    <th>2ኛ መ/ዓ/ት / 2nd Semester</th>
+    <th>Average / አማካኝ ዉጤት</th>
+  </tr>
+  '.$rowsHtml.'
+  <tr>
+    <td>Absence / የቀረበት ቀን</td>
+    <td align="center">'.$sem1AbsentTotal.'</td>
+    <td align="center">'.$sem2AbsentTotal.'</td>
+    <td>-</td>
+  </tr>
+  <tr>
+    <td>Total / ጠቅላላ ነጥብ</td>
+    <td align="center">'.$sem1Sum.'</td>
+    <td align="center">'.$sem2Sum.'</td>
+    <td>-</td>
+  </tr>
+  <tr>
+    <td>Average / አማካኝ</td>
+    <td align="center">'.$sem1Avg.'</td>
+    <td align="center">'.$sem2Avg.'</td>
+    <td align="center">'.$yearAvg.'</td>
+  </tr>
+  <tr>
+    <td>Rank / የክፍል ደረጃ</td>
+    <td align="center">'.$sem1Rank.'</td>
+    <td align="center">'.$sem2Rank.'</td>
+    <td>-</td>
+  </tr>
+</table>
+';
+
+$mpdf->WriteHTML($page2);
+
+// Output
+$mpdf->Output('ReportCard_'.$student['student_id'].'.pdf', 'I');
