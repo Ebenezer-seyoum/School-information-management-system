@@ -5,44 +5,55 @@ include('../connection/function.php');
 
 $uid = $_SESSION['uid'] ?? 0;
 $profile = getUserByID($uid);
-if(strtolower(getRoleNameById($profile['user_type']))!=='teacher'){
-    echo "<div class='alert alert-danger'>Not authorized</div>";
-    exit;
-}
+if(getRoleNameById($profile['user_type'])!=='Teacher'){ echo "Not authorized"; exit; }
 
-$section_id = (int)($_GET['section_id'] ?? 0);
-$year       = mysqli_real_escape_string($conn, $_GET['year'] ?? '');
-$semester   = (int)($_GET['semester'] ?? 1);
+$atid = (int)($_GET['atid'] ?? 0);
+$section = (int)($_GET['section_id'] ?? 0);
+$subject = (int)($_GET['subject_id'] ?? 0);
+$year = mysqli_real_escape_string($conn,$_GET['year'] ?? '');
+$semester = (int)($_GET['semester'] ?? 1);
 
-if(!$section_id || !$year){
-    echo "<div class='alert alert-warning'>Invalid parameters</div>";
-    exit;
-}
+if(!$atid || !$section || !$subject || !$year){ echo "Missing parameters"; exit; }
 
-$sql = "SELECT DISTINCT st.sid, st.student_id, CONCAT(st.first_name, ' ', st.father_name) AS full_name
-        FROM marks m
-        INNER JOIN students st ON m.student_id = st.sid
-        WHERE m.section_id = $section_id
-          AND m.academic_year = '$year'
-          AND m.semester = $semester
-        ORDER BY full_name ASC";
-$res = mysqli_query($conn, $sql);
+// verify assignment
+$res=mysqli_query($conn,"SELECT 1 FROM assign_teacher WHERE atid=$atid AND teacher_id=$uid AND section_id=$section AND subject_id=$subject AND academic_year='$year' LIMIT 1");
+if(mysqli_num_rows($res)==0){ echo "Not assigned"; exit; }
 
-echo '<table class="table table-bordered table-striped">
-<thead><tr><th>#</th><th>SID</th><th>Name</th><th>Action</th></tr></thead><tbody>';
+// fetch students
+$students=mysqli_query($conn,"SELECT s.sid,s.first_name,s.father_name,s.student_id , s.grand_father_name
+    FROM assign_student ast
+    JOIN students s ON ast.student_id=s.sid
+    WHERE ast.section_id=$section AND ast.academic_year='$year'
+    ORDER BY s.first_name ASC");
 
-$no = 1;
-while($r = mysqli_fetch_assoc($res)){
+if(mysqli_num_rows($students)==0){ echo "<div class='alert alert-warning'>No students found.</div>"; exit; }
+
+$subjectAbbr = mysqli_fetch_assoc(mysqli_query($conn,"SELECT abbreviation_name AS subject_abbr FROM subjects WHERE suid=$subject LIMIT 1"))['subject_abbr'] ?? '';
+
+echo '<table class="table table-bordered text-center align-middle"><thead><tr><th>#</th><th>Student ID</th><th>Full Name</th><th>Mark</th></tr></thead><tbody>';
+
+$no=1;
+while($s=mysqli_fetch_assoc($students)){
+    $sid = (int)$s['sid'];
+    $full = $s['first_name'].' '.$s['father_name'] .' '.$s['grand_father_name'];
+
+    $markData=mysqli_fetch_assoc(mysqli_query($conn,"SELECT result,mark_status FROM marks
+        WHERE student_id=$sid AND section_id=$section AND subject_id=$subject AND academic_year='$year' AND semester=$semester LIMIT 1"));
+
+    $existing = $markData['result'] ?? '';
+    $status = (int)($markData['mark_status'] ?? 0);
+    $readonly = ($existing !== '' && $status==2) ? 'readonly' : '';
+    $saveDisabled = ($existing !== '' && $status==2) ? 'disabled' : '';
+
     echo "<tr>
-      <td>{$no}</td>
-      <td>".htmlspecialchars($r['student_id'])."</td>
-      <td>".htmlspecialchars($r['full_name'])."</td>
-      <td><button class='btn btn-sm btn-primary view-details-btn' data-sid='{$r['sid']}'>Details</button></td>
+        <td>$no</td>
+        <td>{$s['student_id']}</td>
+        <td class='text-start'>$full</td>
+        <td>
+            <input type='hidden' name='student_id[]' value='$sid'>
+            <input type='number' id='markInput$sid' name='mark[]' class='form-control text-center' min='0' max='100' value='$existing' $readonly>
+        </td>
     </tr>";
     $no++;
 }
-if($no === 1){
-    echo "<tr><td colspan='4' class='text-center'>No records found</td></tr>";
-}
 echo '</tbody></table>';
-?>

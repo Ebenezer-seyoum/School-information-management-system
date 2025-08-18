@@ -41,7 +41,6 @@ $selectedYear = $_GET['academic_year'] ?? ($years[0]??null);
 $classes = $selectedYear ? fetchAssignedClasses($conn,$uid,$selectedYear) : [];
 ?>
 
-<!-- page header -->
 <div class="container">
   <div class="page-inner">
     <div class="page-header">
@@ -53,8 +52,7 @@ $classes = $selectedYear ? fetchAssignedClasses($conn,$uid,$selectedYear) : [];
         <li class="separator"><i class="icon-arrow-right"></i></li>
         <li class="nav-item"><a href="#">Add Marks</a></li>
       </ul>
-  </div>
-<!-- end page header -->
+    </div>
 
     <form method="GET" class="mb-3">
       <label>Academic Year:</label>
@@ -85,7 +83,9 @@ $classes = $selectedYear ? fetchAssignedClasses($conn,$uid,$selectedYear) : [];
                             data-atid="<?= (int)$c['atid'] ?>"
                             data-section="<?= (int)$c['section_id'] ?>"
                             data-subject="<?= (int)$c['subject_id'] ?>"
-                            data-year="<?= htmlspecialchars($c['academic_year']) ?>">
+                            data-year="<?= htmlspecialchars($c['academic_year']) ?>"
+                            data-class="<?= htmlspecialchars($c['section_name'].' - '.$c['class_type']) ?>"
+                            data-subject-name="<?= htmlspecialchars($c['subject_abbr'].' ('.$c['subject_name'].')') ?>">
                       Add/Edit Marks
                     </button>
                   </td>
@@ -107,19 +107,25 @@ $classes = $selectedYear ? fetchAssignedClasses($conn,$uid,$selectedYear) : [];
     <div class="modal-content">
       <form id="marksForm">
         <div class="modal-header">
-          <h5 class="modal-title">Add/Edit Marks</h5>
+          <h5 class="modal-title">
+            Add/Edit Marks
+            <small id="modalTitleInfo" class="text-muted d-block fw-bold"></small>
+          </h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
-          <div class="mb-3">
-            <label>Semester:</label>
-            <select id="semesterSelect" name="semester" class="form-control w-auto">
-              <option value="1">1st Semester</option>
-              <option value="2">2nd Semester</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <input type="text" id="searchStudent" class="form-control" placeholder="Search Student by Name or SID">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label>Semester:</label>
+              <select id="semesterSelect" name="semester" class="form-control w-100">
+                <option value="1">1st Semester</option>
+                <option value="2">2nd Semester</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label>Search Student:</label>
+              <input type="text" id="searchStudent" class="form-control" placeholder="Search by Name or SID">
+            </div>
           </div>
           <div id="studentsContainer">Loading...</div>
         </div>
@@ -154,7 +160,10 @@ document.addEventListener('DOMContentLoaded', function(){
       current.subject = this.dataset.subject;
       current.year = this.dataset.year;
 
-      // Add hidden inputs
+      // Update modal title dynamically
+      document.getElementById('modalTitleInfo').textContent = 
+        `${this.dataset.class} | ${this.dataset.subjectName} | Year: ${this.dataset.year}`;
+
       const form = document.getElementById('marksForm');
       ['atid','academic_year','section_id','subject_id'].forEach(k=>{
         let i=form.querySelector(`input[name="${k}"]`);
@@ -188,27 +197,35 @@ document.addEventListener('DOMContentLoaded', function(){
     fetch('ajax_insert_marks.php',{method:'POST',body:formData})
       .then(res=>res.text())
       .then(txt=>{
-        if(txt.trim()=='success') Swal.fire('Success','Marks saved successfully','success').then(()=>location.reload());
+        if(txt.trim()=='success') Swal.fire('Success','Marks saved successfully','success');
         else Swal.fire('Error',txt,'error');
       });
   });
 
-  // Edit & Save individual mark
+  // Edit individual mark
   document.addEventListener('click', function(e){
-    const btn=e.target;
-    if(btn.classList.contains('edit-mark-btn') || btn.classList.contains('save-mark-btn')){
-      const sid=btn.dataset.sid;
-      const status=btn.dataset.status;
-      const input=document.getElementById('markInput'+sid);
+    const btn=e.target.closest('.edit-mark-btn');
+    if(!btn) return;
 
-      if(btn.classList.contains('edit-mark-btn')){
-        if(status==2){ Swal.fire('Info','Please contact director','info'); return; }
-        input.removeAttribute('readonly');
-        btn.textContent='Save';
-        btn.classList.replace('btn-warning','btn-success');
-        btn.classList.add('save-mark-btn');
-        btn.classList.remove('edit-mark-btn');
-      } else {
+    const sid = btn.dataset.sid;
+    const status = parseInt(btn.dataset.status);
+    const input = document.getElementById('markInput'+sid);
+
+    if(status==2){
+      Swal.fire('Info','Please contact director','info');
+      return;
+    }
+
+    Swal.fire({
+      title: 'Are you sure you want to edit this mark?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'Cancel',
+      backdrop: true,
+      didOpen: ()=>{ document.querySelector('.swal2-container').style.zIndex='11000'; }
+    }).then(result=>{
+      if(result.isConfirmed){
         const mark = input.value;
         const formData = new FormData();
         formData.append('student_id[]', sid);
@@ -222,13 +239,13 @@ document.addEventListener('DOMContentLoaded', function(){
         fetch('ajax_insert_marks.php',{method:'POST',body:formData})
           .then(res=>res.text())
           .then(txt=>{
-            if(txt.trim()=='success') location.reload();
-            else Swal.fire('Error',txt,'error');
+            if(txt.trim()=='success'){
+              Swal.fire({title:'Success', text:'Mark updated successfully', icon:'success'});
+            } else Swal.fire('Error',txt,'error');
           });
       }
-    }
+    });
   });
-
 });
 </script>
 

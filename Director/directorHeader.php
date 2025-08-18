@@ -161,9 +161,8 @@ if (isset($_SESSION["uid"]) and ($roleName == "Director")) {
             </a>
             <div class="collapse" id="grades">
               <ul class="nav nav-collapse">
-                <li><a href="add_grade.php"><i class="fas fa-plus"></i> Add Grade</a></li>
-                <li><a href="edit_grade.php"><i class="fas fa-edit"></i> Edit Grade</a></li>
-                <li><a href="role_edit_grade.php"><i class="fas fa-user-cog"></i> Role to Edit</a></li>
+                <li><a href="add_grade.php"><i class="fas fa-plus"></i> Manage Grade</a></li>
+                <li><a href="mark_role.php"><i class="fas fa-user-cog"></i> Role to Edit</a></li>
                 <li><a href="view_grades.php"><i class="fas fa-eye"></i> View Grades</a></li>
               </ul>
             </div>

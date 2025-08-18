@@ -63,7 +63,7 @@ if (isset($_POST["login"]) and ($_SERVER["REQUEST_METHOD"] == "POST")) {
         // Not found in users table → check students table
         $student_data = checkStudentCredentials($username, $password);
         if ($student_data) {
-            $_SESSION["sid"] = $student_data['student_id'];
+            $_SESSION["sid"] = $student_data['student_id'];        
             header('location: Student/student.php');
             exit;
         } else {

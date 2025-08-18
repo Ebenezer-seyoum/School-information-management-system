@@ -44,13 +44,13 @@ $classes = $selectedYear ? fetchAssignedClasses($conn,$uid,$selectedYear) : [];
 <div class="container">
   <div class="page-inner">
     <div class="page-header">
-      <h3 class="fw-bold mb-3">View Marks</h3>
+      <h3 class="fw-bold mb-3"> View Results</h3>
       <ul class="breadcrumbs mb-3">
         <li class="nav-home"><a href="#"><i class="icon-home"></i></a></li>
         <li class="separator"><i class="icon-arrow-right"></i></li>
-        <li class="nav-item"><a href="#">Manage Marks</a></li>
+        <li class="nav-item"><a href="#">Manage Results</a></li>
         <li class="separator"><i class="icon-arrow-right"></i></li>
-        <li class="nav-item"><a href="#">View Marks</a></li>
+        <li class="nav-item"><a href="#">View Results</a></li>
       </ul>
     </div>
 
@@ -79,12 +79,14 @@ $classes = $selectedYear ? fetchAssignedClasses($conn,$uid,$selectedYear) : [];
                   <td><?= htmlspecialchars($c['subject_abbr'].' ('.$c['subject_name'].')') ?></td>
                   <td><?= htmlspecialchars($c['academic_year']) ?></td>
                   <td>
-                    <button class="btn btn-info btn-sm view-students-btn"
+                    <button class="btn btn-success btn-sm add-marks-btn"
                             data-atid="<?= (int)$c['atid'] ?>"
                             data-section="<?= (int)$c['section_id'] ?>"
                             data-subject="<?= (int)$c['subject_id'] ?>"
-                            data-year="<?= htmlspecialchars($c['academic_year']) ?>">
-                      View Students
+                            data-year="<?= htmlspecialchars($c['academic_year']) ?>"
+                            data-class="<?= htmlspecialchars($c['section_name'].' - '.$c['class_type']) ?>"
+                            data-subject-name="<?= htmlspecialchars($c['subject_abbr'].' ('.$c['subject_name'].')') ?>">
+                      View Results
                     </button>
                   </td>
                 </tr>
@@ -100,42 +102,37 @@ $classes = $selectedYear ? fetchAssignedClasses($conn,$uid,$selectedYear) : [];
 </div>
 
 <!-- Modal -->
-<!-- Modal -->
-<div class="modal fade" id="studentsModal" tabindex="-1">
-  <div class="modal-dialog modal-xl">
+<div class="modal fade" id="addMarksModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Class Students</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <div class="mb-3">
-          <label>Semester:</label>
-          <select id="semesterSelect" class="form-control w-auto d-inline-block">
-            <option value="1">1st Semester</option>
-            <option value="2">2nd Semester</option>
-          </select>
-          
+      <form id="marksForm">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            View Results
+            <small id="modalTitleInfo" class="text-muted d-block fw-bold"></small>
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
-        <div class="mb-3">
-          <input type="text" id="searchStudent" class="form-control" placeholder="Search Student by Name or SID">
+        <div class="modal-body">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label>Semester:</label>
+              <select id="semesterSelect" name="semester" class="form-control w-100">
+                <option value="1">1st Semester</option>
+                <option value="2">2nd Semester</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label>Search Student:</label>
+              <input type="text" id="searchStudent" class="form-control" placeholder="Search by Name or SID">
+            </div>
+          </div>
+          <div id="studentsContainer">Loading...</div>
         </div>
-        <div id="studentsContainer">Loading...</div>
-
-        <div id="studentDetails" class="mt-4" style="display:none;">
-          <h5>Student Details</h5>
-          <button id="closeDetails" class="btn btn-sm btn-warning ms-2">Close Details</button>
-          <table class="table table-bordered">
-            <thead class="table-light">
-              <tr><th>Subject</th><th>Teacher</th><th>Result</th></tr>
-            </thead>
-            <tbody id="studentDetailsBody"></tbody>
-          </table>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-      </div>
+      </form>
     </div>
   </div>
 </div>
@@ -145,83 +142,53 @@ $classes = $selectedYear ? fetchAssignedClasses($conn,$uid,$selectedYear) : [];
 document.addEventListener('DOMContentLoaded', function(){
   let current = {};
 
-  const studentsContainer = document.getElementById('studentsContainer');
-  const studentDetails = document.getElementById('studentDetails');
-  const studentDetailsBody = document.getElementById('studentDetailsBody');
-  const semesterSelect = document.getElementById('semesterSelect');
-  const searchStudent = document.getElementById('searchStudent');
-  const closeDetailsBtn = document.getElementById('closeDetails');
-
   function loadStudents(){
-    const sem = semesterSelect.value;
-    studentsContainer.innerHTML = 'Loading...';
-    fetch(`ajax_fetch_students_marks.php?atid=${current.atid}&section_id=${current.section}&year=${current.year}&semester=${sem}`)
-      .then(res => res.text())
-      .then(html => {
-        studentsContainer.innerHTML = html;
-        studentDetails.style.display = 'none';
-      })
-      .catch(err => console.error('Error loading students:', err));
+    const sem = document.getElementById('semesterSelect').value;
+    fetch(`ajax_fetch_students_marks.php?atid=${current.atid}&section_id=${current.section}&subject_id=${current.subject}&year=${current.year}&semester=${sem}`)
+      .then(res=>res.text())
+      .then(html=>{
+        document.getElementById('studentsContainer').innerHTML = html;
+      });
   }
 
   // Open modal
-  document.querySelectorAll('.view-students-btn').forEach(btn => {
+  document.querySelectorAll('.add-marks-btn').forEach(btn=>{
     btn.addEventListener('click', function(){
       current.atid = this.dataset.atid;
       current.section = this.dataset.section;
+      current.subject = this.dataset.subject;
       current.year = this.dataset.year;
+
+      // Update modal title dynamically
+      document.getElementById('modalTitleInfo').textContent = 
+        `${this.dataset.class} | ${this.dataset.subjectName} | Year: ${this.dataset.year}`;
+
+      const form = document.getElementById('marksForm');
+      ['atid','academic_year','section_id','subject_id'].forEach(k=>{
+        let i=form.querySelector(`input[name="${k}"]`);
+        if(!i){ i=document.createElement('input'); i.type='hidden'; i.name=k; form.appendChild(i);}
+        if(k==='academic_year') i.value = current.year;
+        else if(k==='subject_id') i.value = current.subject;
+        else if(k==='section_id') i.value = current.section;
+        else i.value = current.atid;
+      });
+
       loadStudents();
-      new bootstrap.Modal(document.getElementById('studentsModal')).show();
+      new bootstrap.Modal(document.getElementById('addMarksModal')).show();
     });
   });
 
-  // Reload students on semester change
-  semesterSelect.addEventListener('change', loadStudents);
+  // Semester change reload
+  document.getElementById('semesterSelect').addEventListener('change', loadStudents);
 
   // Search filter
-  searchStudent.addEventListener('keyup', function(){
+  document.getElementById('searchStudent').addEventListener('keyup', function(){
     const filter = this.value.toLowerCase();
-    document.querySelectorAll('#studentsContainer tbody tr').forEach(tr => {
-      tr.style.display = tr.textContent.toLowerCase().includes(filter) ? '' : 'none';
+    document.querySelectorAll('#studentsContainer tbody tr').forEach(tr=>{
+      tr.style.display = tr.textContent.toLowerCase().includes(filter)?'':'none';
     });
   });
-
-  // Close student details
-  closeDetailsBtn.addEventListener('click', function(){
-    studentDetails.style.display = 'none';
-  });
-
-  // Event delegation for dynamic Details button
-  document.addEventListener('click', function(e){
-    if(e.target.classList.contains('view-details-btn')){
-      const sid = e.target.dataset.sid;
-      const sem = semesterSelect.value;
-
-      fetch(`ajax_fetch_student_results.php?student_id=${sid}&year=${current.year}&semester=${sem}`)
-        .then(res => res.json())
-        .then(data => {
-          let rows = '';
-          if(data.length > 0){
-            data.forEach(d => {
-              rows += `<tr>
-                <td>${d.subject_name}</td>
-                <td>${d.teacher_name}</td>
-                <td>${d.result}</td>
-              </tr>`;
-            });
-          } else {
-            rows = `<tr><td colspan="3" class="text-center">No results found</td></tr>`;
-          }
-          studentDetailsBody.innerHTML = rows;
-          studentDetails.style.display = 'block';
-        })
-        .catch(err => console.error('Error loading details:', err));
-    }
-  });
-
 });
 </script>
-
-
 
 <?php include('../Admin/footer.php'); ?>

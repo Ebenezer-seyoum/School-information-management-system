@@ -2,60 +2,72 @@
 session_start();
 include('../connection/connection.php');
 
-$student_id = $_SESSION['student_id'] ?? null;
-$section_id = (int)($_POST['section_id'] ?? 0);
-$academic_year = mysqli_real_escape_string($conn, $_POST['academic_year'] ?? '');
-$semester = (int)($_POST['semester'] ?? 0);
+$student_school_id = $_SESSION['sid'] ?? ''; // school ID string
+$academic_year     = mysqli_real_escape_string($conn, $_POST['academic_year'] ?? '');
+$section_id        = (int)($_POST['section_id'] ?? 0);
+$semester          = (int)($_POST['semester'] ?? 1);
 
-if (!$student_id || !$section_id || !$academic_year || !$semester){
-    echo json_encode([]);
-    exit;
+$response = [];
+
+// --- 1. Fetch classes assigned to this student ---
+if($student_school_id && $academic_year && !$section_id){
+    $q = mysqli_query($conn, "
+        SELECT s.cid, s.section_name, s.class_type, c.sid AS internal_sid
+        FROM assign_student ast
+        JOIN sections s ON ast.section_id = s.cid
+        JOIN students c ON ast.student_id = c.sid
+        WHERE c.student_id = '$student_school_id'
+          AND ast.academic_year = '$academic_year'
+        ORDER BY s.class_type, s.section_name ASC
+    ") or die(mysqli_error($conn));
+
+    while($row = mysqli_fetch_assoc($q)){
+        $response[] = [
+            'cid'          => $row['cid'],
+            'section_name' => $row['section_name'],
+            'sid'          => $student_school_id,  // school ID
+            'class_type'   => $row['class_type'],
+            'internal_sid' => $row['internal_sid'] // internal PK for marks query
+        ];
+    }
 }
 
-// Get student sid via JOIN
-$check = mysqli_query($conn, "
-    SELECT s.sid
-    FROM assign_student ast
-    JOIN students s ON ast.student_id = s.sid
-    WHERE s.student_id='$student_id'
-      AND ast.section_id=$section_id
-      AND ast.academic_year='$academic_year'
-      AND ast.semester=$semester
-    LIMIT 1
-") or die(mysqli_error($conn));
+// --- 2. Fetch subjects & marks for a specific class ---
+if($section_id && $academic_year){
+    // First, get internal student ID if not provided
+    $student_internal_id = 0;
+    $q_stu = mysqli_query($conn, "SELECT sid FROM students WHERE student_id = '$student_school_id'");
+    if($q_stu && mysqli_num_rows($q_stu) > 0){
+        $row = mysqli_fetch_assoc($q_stu);
+        $student_internal_id = $row['sid'];
+    }
 
-if (mysqli_num_rows($check) == 0){
-    echo json_encode([['subject_name'=>'Student not assigned','marks'=>'N/A']]);
-    exit;
+    if($student_internal_id){
+        $sql = "SELECT sub.suid, sub.subject_name,
+                       COALESCE(m.result, 'N/A') AS marks
+                FROM curriculum_subjects cs
+                JOIN subjects sub ON cs.subject_id = sub.suid
+                LEFT JOIN marks m 
+                  ON m.subject_id = sub.suid
+                 AND m.section_id = cs.class_id
+                 AND m.academic_year = '$academic_year'
+                 AND m.semester = '$semester'
+                 AND m.student_id = '$student_internal_id'
+                WHERE cs.class_id = $section_id
+                ORDER BY sub.subject_name ASC";
+
+        $q = mysqli_query($conn, $sql) or die(mysqli_error($conn));
+
+        while($row = mysqli_fetch_assoc($q)){
+            $response[] = [
+                'subject_id'   => $row['suid'],
+                'subject_name' => $row['subject_name'],
+                'marks'        => $row['marks'],
+            ];
+        }
+    }
 }
 
-$row = mysqli_fetch_assoc($check);
-$student_sid = $row['sid'];
-
-// Fetch subjects + marks
-$q = mysqli_query($conn, "
-    SELECT sub.subject_name,
-           (SELECT result 
-            FROM marks m
-            WHERE m.subject_id=sub.suid
-              AND m.student_id=$student_sid
-              AND m.section_id=$section_id
-              AND m.academic_year='$academic_year'
-              AND m.semester=$semester
-            LIMIT 1) AS marks
-    FROM curriculum_subjects cs
-    INNER JOIN subjects sub ON cs.subject_id=sub.suid
-    WHERE cs.class_id=$section_id
-    ORDER BY sub.subject_name ASC
-") or die(mysqli_error($conn));
-
-$result = [];
-while($row = mysqli_fetch_assoc($q)){
-    $result[] = [
-        'subject_name'=>$row['subject_name'],
-        'marks'=>$row['marks'] !== null ? $row['marks'] : 'N/A'
-    ];
-}
-
+// Return JSON
 header('Content-Type: application/json');
-echo json_encode($result);
+echo json_encode($response);
