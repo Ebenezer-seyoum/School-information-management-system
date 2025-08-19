@@ -1,5 +1,5 @@
 <?php
-include('../connection/connection.php');
+include('directorHeader.php');
 
 if (!isset($_GET['sid']) || !is_numeric($_GET['sid'])) {
     echo '<div class="text-danger">Invalid request.</div>';
@@ -36,26 +36,26 @@ $uid = uniqid();
         <div class="col-lg-8">
           <div class="row mb-2">
             <div class="col-md-6"><label class="form-label">Student ID</label>
-              <input type="text" class="form-control" value="<?= htmlspecialchars($student['student_id']); ?>" disabled>
+              <input type="text" class="form-control" value="<?= htmlspecialchars($student['student_id'] ?? 'N/A'); ?>" disabled>
             </div>
             <div class="col-md-6"><label class="form-label">Full Name</label>
-              <input type="text" class="form-control" value="<?= htmlspecialchars($student['first_name'] . ' ' . $student['father_name'] . ' ' . $student['grand_father_name']); ?>" disabled>
+              <input type="text" class="form-control" value="<?= htmlspecialchars(($student['first_name'] ?? '') . ' ' . ($student['father_name'] ?? '') . ' ' . ($student['grand_father_name'] ?? '')); ?>" disabled>
             </div>
           </div>
           <div class="row mb-2">
             <div class="col-md-6"><label class="form-label">Gender</label>
-              <input type="text" class="form-control" value="<?= $student['gender']=='M' ? 'Male' : 'Female'; ?>" disabled>
+              <input type="text" class="form-control" value="<?= ($student['gender'] ?? '') == 'M' ? 'Male' : (($student['gender'] ?? '') == 'F' ? 'Female' : 'N/A'); ?>" disabled>
             </div>
             <div class="col-md-6"><label class="form-label">Date of Birth</label>
-              <input type="text" class="form-control" value="<?= htmlspecialchars($student['dob']); ?>" disabled>
+              <input type="text" class="form-control" value="<?= htmlspecialchars($student['dob'] ?? 'N/A'); ?>" disabled>
             </div>
           </div>
           <div class="row mb-2">
             <div class="col-md-6"><label class="form-label">Email</label>
-              <input type="text" class="form-control" value="<?= htmlspecialchars($student['email']); ?>" disabled>
+              <input type="text" class="form-control" value="<?= htmlspecialchars($student['email'] ?? 'N/A'); ?>" disabled>
             </div>
             <div class="col-md-6"><label class="form-label">Phone</label>
-              <input type="text" class="form-control" value="<?= htmlspecialchars($student['phone']); ?>" disabled>
+              <input type="text" class="form-control" value="<?= htmlspecialchars($student['phone'] ?? 'N/A'); ?>" disabled>
             </div>
           </div>
         </div>
@@ -71,16 +71,16 @@ $uid = uniqid();
     <div class="collapse" id="parentInfo<?= $uid; ?>">
       <div class="card-body row">
         <div class="col-md-6"><label class="form-label">Father Name</label>
-          <input type="text" class="form-control" value="<?= htmlspecialchars($student['father_name']); ?>" disabled>
+          <input type="text" class="form-control" value="<?= htmlspecialchars($student['father_name'] ?? 'N/A'); ?>" disabled>
         </div>
         <div class="col-md-6"><label class="form-label">Mother Name</label>
-          <input type="text" class="form-control" value="<?= htmlspecialchars($student['mother_name']); ?>" disabled>
+          <input type="text" class="form-control" value="<?= htmlspecialchars($student['mother_name'] ?? 'N/A'); ?>" disabled>
         </div>
         <div class="col-md-6"><label class="form-label">Father Contact</label>
-          <input type="text" class="form-control" value="<?= htmlspecialchars($student['father_contact']); ?>" disabled>
+          <input type="text" class="form-control" value="<?= htmlspecialchars($student['father_contact'] ?? 'N/A'); ?>" disabled>
         </div>
         <div class="col-md-6"><label class="form-label">Mother Contact</label>
-          <input type="text" class="form-control" value="<?= htmlspecialchars($student['mother_contact']); ?>" disabled>
+          <input type="text" class="form-control" value="<?= htmlspecialchars($student['mother_contact'] ?? 'N/A'); ?>" disabled>
         </div>
       </div>
     </div>
@@ -94,16 +94,16 @@ $uid = uniqid();
     <div class="collapse" id="healthInfo<?= $uid; ?>">
       <div class="card-body row">
         <div class="col-md-6"><label class="form-label">Emergency Contact</label>
-          <input type="text" class="form-control" value="<?= htmlspecialchars($student['emergency_contact_name']); ?>" disabled>
+          <input type="text" class="form-control" value="<?= htmlspecialchars($student['emergency_contact_name'] ?? 'N/A'); ?>" disabled>
         </div>
         <div class="col-md-6"><label class="form-label">Emergency Phone</label>
-          <input type="text" class="form-control" value="<?= htmlspecialchars($student['emergency_contact_phone']); ?>" disabled>
+          <input type="text" class="form-control" value="<?= htmlspecialchars($student['emergency_contact_phone'] ?? 'N/A'); ?>" disabled>
         </div>
         <div class="col-md-6"><label class="form-label">Blood Group</label>
-          <input type="text" class="form-control" value="<?= htmlspecialchars($student['blood_group']); ?>" disabled>
+          <input type="text" class="form-control" value="<?= htmlspecialchars($student['blood_group'] ?? 'N/A'); ?>" disabled>
         </div>
         <div class="col-md-6"><label class="form-label">Medical Condition</label>
-          <input type="text" class="form-control" value="<?= htmlspecialchars($student['medical_condition']); ?>" disabled>
+          <input type="text" class="form-control" value="<?= htmlspecialchars($student['medical_condition'] ?? 'N/A'); ?>" disabled>
         </div>
         <?php if(!empty($student['other_condition'])): ?>
         <div class="col-md-6"><label class="form-label">Other Condition</label>
@@ -111,7 +111,7 @@ $uid = uniqid();
         </div>
         <?php endif; ?>
         <div class="col-md-6"><label class="form-label">Disabilities</label>
-          <input type="text" class="form-control" value="<?= htmlspecialchars($student['disabilities']); ?>" disabled>
+          <input type="text" class="form-control" value="<?= htmlspecialchars($student['disabilities'] ?? 'N/A'); ?>" disabled>
         </div>
       </div>
     </div>
@@ -125,13 +125,13 @@ $uid = uniqid();
     <div class="collapse" id="academicInfo<?= $uid; ?>">
       <div class="card-body row">
         <div class="col-md-6"><label class="form-label">Previous School</label>
-          <input type="text" class="form-control" value="<?= htmlspecialchars($student['previous_school']); ?>" disabled>
+          <input type="text" class="form-control" value="<?= htmlspecialchars($student['previous_school'] ?? 'N/A'); ?>" disabled>
         </div>
         <div class="col-md-6"><label class="form-label">Academic Status Before Joining</label>
-          <input type="text" class="form-control" value="<?= htmlspecialchars($student['academic_status']); ?>" disabled>
+          <input type="text" class="form-control" value="<?= htmlspecialchars($student['academic_status'] ?? 'N/A'); ?>" disabled>
         </div>
         <div class="col-md-12"><label class="form-label">Previous Documents</label>
-          <?php if(!empty($student['previous_documents'])): ?>
+          <?php if (!empty($student['previous_documents'])): ?>
             <a href="<?= htmlspecialchars($student['previous_documents']); ?>" target="_blank" class="form-control d-block text-primary">View Document</a>
           <?php else: ?>
             <input type="text" class="form-control" value="None" disabled>
@@ -141,3 +141,5 @@ $uid = uniqid();
     </div>
   </div>
 </div>
+
+<?php include('../Admin/footer.php'); ?>
