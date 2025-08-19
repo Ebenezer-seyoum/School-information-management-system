@@ -269,3 +269,4 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 });
 </script>
+<?php include('../Admin/footer.php'); ?>
