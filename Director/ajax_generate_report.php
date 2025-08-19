@@ -30,13 +30,13 @@ if (!$studentRes || mysqli_num_rows($studentRes) == 0) {
 }
 $student = mysqli_fetch_assoc($studentRes);
 
-// Age
+// Calculate age
 $dob   = new DateTime($student['dob']);
 $today = new DateTime();
 $age   = $today->diff($dob)->y;
 
-// --- Fetch ALL subjects ---
-$allSubjects = []; // [suid => subject_name]
+// --- Fetch all subjects for the class ---
+$allSubjects = [];
 $subRes = mysqli_query($conn, "
     SELECT s.suid, s.subject_name
     FROM curriculum_subjects cs
@@ -49,7 +49,7 @@ while ($r = mysqli_fetch_assoc($subRes)) {
 }
 
 // --- Fetch marks ---
-$marksMap = []; // [subject_id][semester] = result
+$marksMap = [];
 $marksRes = mysqli_query($conn, "
     SELECT subject_id, semester, result
     FROM marks
@@ -58,10 +58,7 @@ $marksRes = mysqli_query($conn, "
       AND academic_year = '$academic_year'
 ");
 while ($m = mysqli_fetch_assoc($marksRes)) {
-    $subId = (int)$m['subject_id'];
-    $sem   = (int)$m['semester'];
-    $res   = (float)$m['result'];
-    $marksMap[$subId][$sem] = $res;
+    $marksMap[(int)$m['subject_id']][(int)$m['semester']] = (float)$m['result'];
 }
 
 // --- Utilities ---
@@ -69,7 +66,7 @@ function calcTotalsBySemester($allSubjects, $marksMap, $semester) {
     $sum = 0; $cnt = 0;
     foreach ($allSubjects as $suid => $name) {
         if (isset($marksMap[$suid][$semester])) {
-            $sum += (float)$marksMap[$suid][$semester];
+            $sum += $marksMap[$suid][$semester];
             $cnt++;
         }
     }
@@ -78,20 +75,27 @@ function calcTotalsBySemester($allSubjects, $marksMap, $semester) {
 }
 
 function getTotalAbsence($conn, $sid, $section_id, $academic_year, $semester){
+    $sid = (int)$sid;
+    $section_id = (int)$section_id;
+    $semester = (int)$semester;
+    $academic_year = mysqli_real_escape_string($conn, $academic_year);
+
     $q = "
-        SELECT IFNULL(SUM(absent_days),0) AS total_absent
+        SELECT COUNT(*) AS total_absent
         FROM attendance
         WHERE student_id = '$sid'
           AND section_id  = '$section_id'
           AND academic_year = '$academic_year'
           AND semester = '$semester'
+          AND status = 'Absent'
     ";
     $res = mysqli_query($conn, $q);
+    if (!$res) return 0;
     $row = mysqli_fetch_assoc($res);
     return (int)($row['total_absent'] ?? 0);
 }
 
-// Totals
+// --- Semester totals ---
 list($sem1Sum, $sem1Avg) = calcTotalsBySemester($allSubjects, $marksMap, 1);
 list($sem2Sum, $sem2Avg) = calcTotalsBySemester($allSubjects, $marksMap, 2);
 
@@ -115,11 +119,12 @@ function getClassRank($conn, $section_id, $academic_year, $semester, $sid){
     $res = mysqli_query($conn, $query);
     $rank = 1;
     while($row = mysqli_fetch_assoc($res)){
-        if((int)$row['student_id'] === (int)$sid) return $rank;
+        if ((int)$row['student_id'] === (int)$sid) return $rank;
         $rank++;
     }
     return '-';
 }
+
 $sem1Rank = getClassRank($conn, $section_id, $academic_year, 1, $sid);
 $sem2Rank = getClassRank($conn, $section_id, $academic_year, 2, $sid);
 
@@ -129,73 +134,46 @@ $pdf->setPrintHeader(false);
 $pdf->setPrintFooter(false);
 $pdf->SetMargins(10, 10, 10);
 $pdf->SetAutoPageBreak(TRUE, 10);
-
-// Amharic + English support
 $pdf->setFontSubsetting(true);
 $pdf->SetFont('', '', 12);
 
 $studentFullName = $student['first_name'].' '.$student['father_name'].' '.$student['mother_name'];
 
-// ---------------- PAGE 1 (Image Layout) ----------------
+// ---------------- PAGE 1 ----------------
 $pdf->AddPage();
-
-// Background card image
 $pdf->Image('../images/card-2.png', 0, 0, 210, 297, '', '', '', false, 300, '', false, false, 0);
-
-// Add school logo/icon (adjust path & size)
 $pdf->Image('../images/logo.png', 90, 5, 30, 0, '', '', '', false, 300);
 
-// Write student details in exact positions
 $pdf->SetFont('dejavusans', '', 12);
+$pdf->SetXY(70, 55); $pdf->Cell(100, 8, $studentFullName, 0, 1, 'L');
+$pdf->SetXY(40, 70); $pdf->Cell(30, 8, $student['gender'], 0, 1, 'L');
+$pdf->SetXY(80, 70); $pdf->Cell(30, 8, $age, 0, 1, 'L');
+$pdf->SetXY(70, 80); $pdf->Cell(100, 8, $student['woreda'].' '.$student['kebele'], 0, 1, 'L');
+$pdf->SetXY(70, 95); $pdf->Cell(50, 8, $academic_year, 0, 1, 'L');
+$pdf->SetXY(70, 105); $pdf->Cell(50, 8, $section_id, 0, 1, 'L');
+$pdf->SetXY(70, 115); $pdf->Cell(50, 8, $promotionStatus, 0, 1, 'L');
 
-// Name
-$pdf->SetXY(70, 55);
-$pdf->Cell(100, 8, $studentFullName, 0, 1, 'L');
-
-// Sex
-$pdf->SetXY(40, 70);
-$pdf->Cell(30, 8, $student['gender'], 0, 1, 'L');
-
-// Age
-$pdf->SetXY(80, 70);
-$pdf->Cell(30, 8, $age, 0, 1, 'L');
-
-// Address (Woreda + Kebele)
-$pdf->SetXY(70, 80);
-$pdf->Cell(100, 8, $student['woreda'].' '.$student['kebele'], 0, 1, 'L');
-
-// Academic Year
-$pdf->SetXY(70, 95);
-$pdf->Cell(50, 8, $academic_year, 0, 1, 'L');
-
-// Class
-$pdf->SetXY(70, 105);
-$pdf->Cell(50, 8, $section_id, 0, 1, 'L');
-
-// Promotion status
-$pdf->SetXY(70, 115);
-$pdf->Cell(50, 8, $promotionStatus, 0, 1, 'L');
-
-// ---------------- PAGE 2 (Marks Table) ----------------
+// ---------------- PAGE 2 ----------------
 $pdf->AddPage();
-
 $rowsHtml = '';
 $yearlyAvgSum = 0; $yearlyAvgCount = 0;
-foreach ($allSubjects as $suid => $subName) {
-  $s1 = isset($marksMap[$suid][1]) ? $marksMap[$suid][1] : '-';
-  $s2 = isset($marksMap[$suid][2]) ? $marksMap[$suid][2] : '-';
-  $avg = ($s1 !== '-' && $s2 !== '-') ? round(($s1 + $s2)/2,2) : ($s1 !== '-' ? $s1 : ($s2 !== '-' ? $s2 : '-'));
-  if ($avg !== '-') { $yearlyAvgSum += $avg; $yearlyAvgCount++; }
 
-  $rowsHtml .= "
+foreach ($allSubjects as $suid => $subName) {
+    $s1 = $marksMap[$suid][1] ?? '-';
+    $s2 = $marksMap[$suid][2] ?? '-';
+    $avg = ($s1 !== '-' && $s2 !== '-') ? round(($s1+$s2)/2,2) : ($s1 !== '-' ? $s1 : ($s2 !== '-' ? $s2 : '-'));
+    if ($avg !== '-') { $yearlyAvgSum += $avg; $yearlyAvgCount++; }
+
+    $rowsHtml .= "
     <tr>
       <td>$subName</td>
       <td align='center'>$s1</td>
       <td align='center'>$s2</td>
       <td align='center'>$avg</td>
     </tr>
-  ";
+    ";
 }
+
 $yearAvg = $yearlyAvgCount ? round($yearlyAvgSum/$yearlyAvgCount,2) : 0;
 
 $html2 = '
@@ -234,6 +212,7 @@ $html2 = '
   </tr>
 </table>
 ';
+
 $pdf->writeHTML($html2, true, false, true, false, '');
 
 // Output
