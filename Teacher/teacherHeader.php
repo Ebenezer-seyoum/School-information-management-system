@@ -70,7 +70,7 @@ if (isset($_SESSION["uid"]) and ($roleName == "Teacher")) {
           <ul class="nav nav-collapse">
             <li><a href="view_my_classes.php"><i class="fas fa-list"></i>Assigned Classes</a></li>
             <li><a href="view_students_in_class.php"><i class="fas fa-users"></i>Enrolled Students</a></li>
-            <li><a href="view_students_in_class.php"><i class="fas fa-users"></i>Attendance Records</a></li>
+            <li><a href="view_attendance.php"><i class="fas fa-users"></i>Attendance Records</a></li>
           </ul>
         </div>
       </li>

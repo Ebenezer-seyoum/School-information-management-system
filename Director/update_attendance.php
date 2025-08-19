@@ -21,18 +21,18 @@ function fetchAcademicYears($conn) {
     return $years;
 }
 function fetchAllClasses($conn, $year) {
-    $res = mysqli_query($conn, "SELECT at.hid, at.section_id, at.academic_year,
-                                       s.section_name, s.class_type, i.first_name, i.father_name
-                                FROM assign_instructor at
-                                LEFT JOIN sections s ON at.section_id = s.cid
-                                LEFT JOIN users i ON at.instructor_id = i.uid
-                                WHERE at.academic_year = '".mysqli_real_escape_string($conn,$year)."'
-                                ORDER BY s.section_name ASC");
-    $tmp = [];
-    while ($r = mysqli_fetch_assoc($res)) {
-        $tmp[] = $r;
-    }
-    return $tmp;
+    $yearEsc = mysqli_real_escape_string($conn, $year);
+    $sql = "SELECT at.hid, at.section_id, at.academic_year,
+                   s.section_name, s.class_type, i.first_name, i.father_name
+            FROM assign_instructor at
+            LEFT JOIN sections s ON at.section_id = s.cid
+            LEFT JOIN users i ON at.instructor_id = i.uid
+            WHERE at.academic_year = '$yearEsc'
+            ORDER BY s.section_name ASC";
+    $res = mysqli_query($conn, $sql);
+    $rows = [];
+    while ($r = mysqli_fetch_assoc($res)) $rows[] = $r;
+    return $rows;
 }
 
 // --- Main ---
@@ -108,54 +108,67 @@ $classes = $selectedYear ? fetchAllClasses($conn, $selectedYear) : [];
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="studentsModalLabel">Update Attendance</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <!-- ✅ Only ONE search bar here -->
+        <input type="text" id="searchInput" class="form-control ms-3" placeholder="Search student..." style="width: 250px;">
       </div>
       <div class="modal-body">
-        <div id="studentsTable">Loading...</div>
+        <!-- Date Range Filter -->
+        <div class="d-flex justify-content-end mb-3 gap-2">
+          <label>From: <input type="date" id="dateFrom" class="form-control d-inline-block w-auto"></label>
+          <label>To: <input type="date" id="dateTo" class="form-control d-inline-block w-auto"></label>
+          <button class="btn btn-sm btn-primary" id="filterDateBtn">Apply</button>
+        </div>
+
+        <div id="studentsTable"><div class="text-center p-3">Loading...</div></div>
       </div>
+
     </div>
   </div>
 </div>
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   const studentsModalEl = document.getElementById("studentsModal");
   const studentsModal = new bootstrap.Modal(studentsModalEl);
   const studentsTable = document.getElementById("studentsTable");
+  let currentClassId = null;
+  let currentSemester = 1;
 
   // Open modal -> fetch attendance
   document.querySelectorAll(".view-students").forEach(btn => {
     btn.addEventListener("click", function () {
-      const classId = this.dataset.classId;
+      currentClassId = this.dataset.classId;
       const className = this.dataset.className;
       const year = this.dataset.year;
 
       document.getElementById("studentsModalLabel").innerText =
         "Update Attendance • " + className + " (" + year + ")";
 
-      studentsTable.innerHTML = "<div class='text-center p-3'>Loading...</div>";
-
-      fetch("fetch_update_attendance.php?class_id=" + encodeURIComponent(classId) + "&semester=1")
-        .then(res => res.text())
-        .then(html => {
-          studentsTable.innerHTML = html;
-        })
-        .catch(() => {
-          studentsTable.innerHTML = "<div class='text-danger'>Failed to load attendance data.</div>";
-        });
-
+      loadAttendanceEditor(currentClassId, currentSemester);
       studentsModal.show();
     });
   });
 
-  // Delegated actions inside modal
-  studentsTable.addEventListener('click', function(e){
-    // Close button
-    if (e.target && e.target.id === 'closeAttendanceBtn') {
-      studentsModal.hide();
-    }
+  function loadAttendanceEditor(classId, semester, fromDate='', toDate='', search=''){
+    studentsTable.innerHTML = "<div class='text-center p-3'>Loading...</div>";
+    const url = new URL("fetch_update_attendance.php", window.location.href);
+    url.searchParams.set("class_id", classId);
+    url.searchParams.set("semester", semester);
+    if(fromDate) url.searchParams.set("from", fromDate);
+    if(toDate) url.searchParams.set("to", toDate);
+    if(search) url.searchParams.set("search", search);
 
-    // Save attendance
+    fetch(url)
+      .then(res => res.text())
+      .then(html => { studentsTable.innerHTML = html; })
+      .catch(() => { studentsTable.innerHTML = "<div class='text-danger'>Failed to load attendance data.</div>"; });
+  }
+
+  // Save attendance
+  studentsTable.addEventListener('click', function(e){
     if (e.target && e.target.id === 'saveAttendanceBtn') {
       const form = document.getElementById('attendanceForm');
       if (!form) return;
@@ -169,63 +182,47 @@ document.addEventListener("DOMContentLoaded", function () {
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes, update it!'
       }).then((result) => {
-        if (result.isConfirmed) {
-          const btn = e.target;
-          btn.disabled = true;
-          const originalText = btn.innerText;
-          btn.innerText = 'Updating...';
+        if (!result.isConfirmed) return;
 
-          const formData = new FormData(form);
+        const btn = e.target;
+        btn.disabled = true;
+        const originalText = btn.innerText;
+        btn.innerText = 'Updating...';
 
-          fetch('update_attendance_list.php', {
-            method: 'POST',
-            body: formData
-          })
-          .then(r => {
-            if (!r.ok) throw new Error("HTTP " + r.status);
-            return r.json();
-          })
-          .then(data => {
-            if (data && data.success) {
-              Swal.fire({
-                icon: 'success',
-                title: 'Updated!',
-                text: 'Attendance updated successfully.',
-                timer: 2000,
-                showConfirmButton: false
-              });
-              studentsModal.hide();
-            } else {
-              Swal.fire({
-                icon: 'error',
-                title: 'Update Failed',
-                text: data && data.message ? data.message : 'Error updating attendance.'
-              });
-            }
-          })
-          .catch(err => {
+        const formData = new FormData(form);
+
+        fetch('update_attendance_list.php', {
+          method: 'POST',
+          body: formData
+        })
+        .then(r => r.json())
+        .then(data => {
+          if (data && data.success) {
             Swal.fire({
-              icon: 'error',
-              title: 'Network / JSON Error',
-              text: 'Could not connect to server or invalid response. ' + err
+              icon: 'success',
+              title: 'Updated!',
+              text: data.message || 'Attendance updated successfully.',
+              timer: 1500,
+              showConfirmButton: false
             });
-          })
-          .finally(() => {
-            btn.disabled = false;
-            btn.innerText = originalText;
-          });
-        }
-      });
-    }
-  });
-
-  // Search filter
-  studentsTable.addEventListener('input', function(e){
-    if (e.target && e.target.id === 'searchInput') {
-      const q = e.target.value.toLowerCase();
-      document.querySelectorAll('#studentTable tr').forEach(row => {
-        const name = row.children[1] ? row.children[1].innerText.toLowerCase() : '';
-        row.style.display = name.includes(q) ? '' : 'none';
+            // reload after update
+            setTimeout(() => {
+              loadAttendanceEditor(currentClassId, currentSemester,
+                document.getElementById("dateFrom").value,
+                document.getElementById("dateTo").value,
+                document.getElementById("searchInput").value);
+            }, 1600);
+          } else {
+            Swal.fire({ icon: 'error', title: 'Update Failed', text: (data && data.message) ? data.message : 'Error updating attendance.' });
+          }
+        })
+        .catch(err => {
+          Swal.fire({ icon: 'error', title: 'Network / JSON Error', text: 'Could not connect to server or invalid response. ' + err });
+        })
+        .finally(() => {
+          btn.disabled = false;
+          btn.innerText = originalText;
+        });
       });
     }
   });
@@ -233,21 +230,35 @@ document.addEventListener("DOMContentLoaded", function () {
   // Semester change
   studentsTable.addEventListener('change', function(e){
     if (e.target && e.target.id === 'semesterSelect') {
-      const form = document.getElementById('attendanceForm');
-      const classId = form?.dataset.classId || '';
-      const sem = e.target.value || 1;
-
-      studentsTable.innerHTML = "<div class='text-center p-3'>Loading...</div>";
-      fetch("fetch_update_attendance.php?class_id=" + encodeURIComponent(classId) + "&semester=" + encodeURIComponent(sem))
-        .then(res => res.text())
-        .then(html => { studentsTable.innerHTML = html; })
-        .catch(() => { studentsTable.innerHTML = "<div class='text-danger'>Failed to load attendance data.</div>"; });
+      currentSemester = e.target.value || 1;
+      loadAttendanceEditor(currentClassId, currentSemester,
+        document.getElementById("dateFrom").value,
+        document.getElementById("dateTo").value,
+        document.getElementById("searchInput").value);
     }
   });
 
-  // Cleanup
+  // Date filter
+  document.getElementById("filterDateBtn").addEventListener("click", function(){
+    const fromDate = document.getElementById("dateFrom").value;
+    const toDate = document.getElementById("dateTo").value;
+    loadAttendanceEditor(currentClassId, currentSemester, fromDate, toDate, document.getElementById("searchInput").value);
+  });
+
+  // Search filter
+  document.getElementById("searchInput").addEventListener("input", function(){
+    loadAttendanceEditor(currentClassId, currentSemester,
+      document.getElementById("dateFrom").value,
+      document.getElementById("dateTo").value,
+      this.value);
+  });
+
+  // Cleanup modal
   studentsModalEl.addEventListener('hidden.bs.modal', function () {
     studentsTable.innerHTML = '';
+    document.getElementById("searchInput").value = "";
+    document.getElementById("dateFrom").value = "";
+    document.getElementById("dateTo").value = "";
   });
 });
 </script>

@@ -1,10 +1,10 @@
 <?php
-include('directorHeader.php'); // use director header
+include('teacherHeader.php'); 
 
 // --- Check login ---
 $profile = getUserByID($_SESSION["uid"]);
 $roleName = getRoleNameById($profile["user_type"]);
-if (!isset($_SESSION["uid"]) || $roleName != "Director") {
+if (!isset($_SESSION["uid"]) || $roleName != "Teacher") {
     echo "You are not authorized to view this page.";
     exit;
 }
@@ -13,7 +13,7 @@ if (!isset($_SESSION["uid"]) || $roleName != "Director") {
 // Fetch all academic years
 function fetchAcademicYears($conn){
     $res = mysqli_query($conn, "SELECT DISTINCT academic_year 
-                                FROM assign_instructor
+                                FROM assign_teacher
                                 ORDER BY academic_year DESC");
     $years = [];
     while($r = mysqli_fetch_assoc($res)){ $years[] = $r['academic_year']; }
@@ -22,13 +22,13 @@ function fetchAcademicYears($conn){
 
 // Fetch all classes for selected year
 function fetchAllClasses($conn, $year){
-    $res = mysqli_query($conn, "SELECT at.hid, at.section_id, at.academic_year,
+    $res = mysqli_query($conn, "SELECT DISTINCT at.atid, at.section_id, at.academic_year,
                                        s.section_name, s.class_type, i.first_name, i.father_name
-                                FROM assign_instructor at
+                                FROM assign_teacher at
                                 LEFT JOIN sections s ON at.section_id = s.cid
-                                LEFT JOIN users i ON at.instructor_id = i.uid
+                                LEFT JOIN users i ON at.teacher_id = i.uid
                                 WHERE at.academic_year = '$year'
-                                ORDER BY s.section_name ASC");
+                                ORDER BY s.section_name ASC limit 1");
     $tmp = [];
     while($r = mysqli_fetch_assoc($res)){ $tmp[] = $r; }
     return $tmp;
@@ -65,7 +65,6 @@ $classes = $selectedYear ? fetchAllClasses($conn, $selectedYear) : [];
               <th>#</th>
               <th>Class</th>
               <th>Class Type</th>
-              <th>Instructor</th>
               <th>Academic Year</th>
               <th>Action</th>
             </tr>
@@ -77,12 +76,11 @@ $classes = $selectedYear ? fetchAllClasses($conn, $selectedYear) : [];
                   <td><?= $no++ ?></td>
                   <td><?= htmlspecialchars($c['section_name']) ?></td>
                   <td><?= htmlspecialchars($c['class_type']) ?></td>
-                  <td><?= htmlspecialchars($c['first_name'].' '.$c['father_name']) ?></td>
                   <td><?= htmlspecialchars($c['academic_year']) ?></td>
                   <td>
                     <button type="button"
                             class="btn btn-primary btn-sm view-students"
-                            data-class-id="<?= $c['hid'] ?>"
+                            data-class-id="<?= $c['atid'] ?>"
                             data-class-name="<?= htmlspecialchars($c['section_name'].' - '.$c['class_type']) ?>"
                             data-year="<?= $c['academic_year'] ?>">
                         View Attendance
