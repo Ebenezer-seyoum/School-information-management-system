@@ -441,6 +441,7 @@ function getNextSchoolId($roleType) {
     return "BSS/$roleTypeName/$paddedNumber/" . substr($ethiopianYear, -2);
 }
 
+
 function addUser($idNumber, $profile_pic, $firstName, $fatherName, $gFatherName, $gender, 
 $role_type, $username, $encrypted_password, $email, $phone, $userStatus)
 {
@@ -485,73 +486,130 @@ function studentExist($student_id)
 }
 
 
-// Function to register a new student
-function registerStudent( $student_photo, $student_id, $first_name, $father_name, $grand_father_name,
-    $gender, $dob, $email, $phone, $birth_place, $nationality,
-    $region, $zone, $woreda, $kebele, $username, $password,
-    $mother_name = null, $father_contact = null, $mother_contact = null,
-    $father_occupation = null, $mother_occupation = null,
-    $emergency_contact_name = null, $emergency_contact_phone = null,
-    $blood_group = null, $medical_condition = null, $other_condition = null,
-    $disabilities = null, $previous_school = null,
-    $previous_documents = null)
-{
-    global $conn;
-    // Sanitize variables
-    $student_id = mysqli_real_escape_string($conn, $student_id);
-    $first_name = mysqli_real_escape_string($conn, $first_name);
-    $father_name = mysqli_real_escape_string($conn, $father_name);
-    $grand_father_name = mysqli_real_escape_string($conn, $grand_father_name);
-    $gender = mysqli_real_escape_string($conn, $gender);
-    $dob = mysqli_real_escape_string($conn, $dob);
-    $email = mysqli_real_escape_string($conn, $email);
-    $phone = mysqli_real_escape_string($conn, $phone);
-    $birth_place = mysqli_real_escape_string($conn, $birth_place);
-    $nationality = mysqli_real_escape_string($conn, $nationality);
-    $region = mysqli_real_escape_string($conn, $region);
-    $zone = mysqli_real_escape_string($conn, $zone);
-    $woreda = mysqli_real_escape_string($conn, $woreda);
-    $kebele = mysqli_real_escape_string($conn, $kebele);
-    $username = mysqli_real_escape_string($conn, $username);
-    $password = mysqli_real_escape_string($conn, $password);
-    $mother_name = mysqli_real_escape_string($conn, $mother_name);
-    $father_contact = mysqli_real_escape_string($conn, $father_contact);
-    $mother_contact = mysqli_real_escape_string($conn, $mother_contact);
-    $father_occupation = mysqli_real_escape_string($conn, $father_occupation);
-    $mother_occupation = mysqli_real_escape_string($conn, $mother_occupation);
-    $emergency_contact_name = mysqli_real_escape_string($conn, $emergency_contact_name);
-    $emergency_contact_phone = mysqli_real_escape_string($conn, $emergency_contact_phone);
-    $blood_group = mysqli_real_escape_string($conn, $blood_group);
-    $medical_condition = mysqli_real_escape_string($conn, $medical_condition);
-    $other_condition = mysqli_real_escape_string($conn, $other_condition);
-    $disabilities = mysqli_real_escape_string($conn, $disabilities);
-    $previous_school = mysqli_real_escape_string($conn, $previous_school);
-    $previous_documents = mysqli_real_escape_string($conn, $previous_documents);
+// // Function to register a new student
+// function registerStudent( $student_photo, $student_id, $first_name, $father_name, $grand_father_name,
+//     $gender, $dob, $email, $phone, $birth_place, $nationality,
+//     $region, $zone, $woreda, $kebele, $username, $password,
+//     $mother_name = null, $father_contact = null, $mother_contact = null,
+//     $father_occupation = null, $mother_occupation = null,
+//     $emergency_contact_name = null, $emergency_contact_phone = null,
+//     $blood_group = null, $medical_condition = null, $other_condition = null,
+//     $disabilities = null, $previous_school = null,
+//     $previous_documents = null)
+// {
+//     global $conn;
+//     // Sanitize variables
+//     $student_id = mysqli_real_escape_string($conn, $student_id);
+//     $first_name = mysqli_real_escape_string($conn, $first_name);
+//     $father_name = mysqli_real_escape_string($conn, $father_name);
+//     $grand_father_name = mysqli_real_escape_string($conn, $grand_father_name);
+//     $gender = mysqli_real_escape_string($conn, $gender);
+//     $dob = mysqli_real_escape_string($conn, $dob);
+//     $email = mysqli_real_escape_string($conn, $email);
+//     $phone = mysqli_real_escape_string($conn, $phone);
+//     $birth_place = mysqli_real_escape_string($conn, $birth_place);
+//     $nationality = mysqli_real_escape_string($conn, $nationality);
+//     $region = mysqli_real_escape_string($conn, $region);
+//     $zone = mysqli_real_escape_string($conn, $zone);
+//     $woreda = mysqli_real_escape_string($conn, $woreda);
+//     $kebele = mysqli_real_escape_string($conn, $kebele);
+//     $username = mysqli_real_escape_string($conn, $username);
+//     $password = mysqli_real_escape_string($conn, $password);
+//     $mother_name = mysqli_real_escape_string($conn, $mother_name);
+//     $father_contact = mysqli_real_escape_string($conn, $father_contact);
+//     $mother_contact = mysqli_real_escape_string($conn, $mother_contact);
+//     $father_occupation = mysqli_real_escape_string($conn, $father_occupation);
+//     $mother_occupation = mysqli_real_escape_string($conn, $mother_occupation);
+//     $emergency_contact_name = mysqli_real_escape_string($conn, $emergency_contact_name);
+//     $emergency_contact_phone = mysqli_real_escape_string($conn, $emergency_contact_phone);
+//     $blood_group = mysqli_real_escape_string($conn, $blood_group);
+//     $medical_condition = mysqli_real_escape_string($conn, $medical_condition);
+//     $other_condition = mysqli_real_escape_string($conn, $other_condition);
+//     $disabilities = mysqli_real_escape_string($conn, $disabilities);
+//     $previous_school = mysqli_real_escape_string($conn, $previous_school);
+//     $previous_documents = mysqli_real_escape_string($conn, $previous_documents);
 
-    // INSERT query matching your table columns
-    $query = "
-        INSERT INTO students (
-            student_photo, student_id, first_name, father_name, grand_father_name, gender, dob, email, phone, birth_place, nationality,
-            region, zone, woreda, kebele, username password, mother_name, father_contact, mother_contact,
-            father_occupation, mother_occupation, emergency_contact_name, emergency_contact_phone, blood_group, medical_condition,
-            other_condition, disabilities, previous_school,, previous_documents
-        ) VALUES (
-            '$student_photo', '$student_id', '$first_name', '$father_name', '$grand_father_name', '$gender', '$dob', '$email', '$phone',
-            '$birth_place', '$nationality', '$region', '$zone', '$woreda', '$kebele', '$username','$password',
-            '$mother_name', '$father_contact', '$mother_contact', '$father_occupation', '$mother_occupation', '$emergency_contact_name',
-            '$emergency_contact_phone', '$blood_group', '$medical_condition', '$other_condition', '$disabilities', '$previous_school',
-             '$previous_documents'
-        )
-    ";
-    $query = mysqli_query($conn, $query);
-    if ($query) {
-        return 1;
+//     // INSERT query matching your table columns
+//     $query = "
+//         INSERT INTO students (
+//             student_photo, student_id, first_name, father_name, grand_father_name, gender, dob, email, phone, birth_place, nationality,
+//             region, zone, woreda, kebele, username password, mother_name, father_contact, mother_contact,
+//             father_occupation, mother_occupation, emergency_contact_name, emergency_contact_phone, blood_group, medical_condition,
+//             other_condition, disabilities, previous_school,, previous_documents
+//         ) VALUES (
+//             '$student_photo', '$student_id', '$first_name', '$father_name', '$grand_father_name', '$gender', '$dob', '$email', '$phone',
+//             '$birth_place', '$nationality', '$region', '$zone', '$woreda', '$kebele', '$username','$password',
+//             '$mother_name', '$father_contact', '$mother_contact', '$father_occupation', '$mother_occupation', '$emergency_contact_name',
+//             '$emergency_contact_phone', '$blood_group', '$medical_condition', '$other_condition', '$disabilities', '$previous_school',
+//              '$previous_documents'
+//         )
+//     ";
+//     $query = mysqli_query($conn, $query);
+//     if ($query) {
+//         return 1;
+//     } else {
+//         echo "MySQL Error: " . mysqli_error($conn);
+//         return 0;
+//     }
+// }
+
+function registerStudent($mysql, $student_photo, $student_id, $first_name, $father_name, $grand_father_name, $gender, $dob, $email, $phone, $birth_place, $nationality, $region, $zone, $woreda, $kebele, $username, $password, $father_full_name, $mother_name, $father_contact, $mother_contact, $father_occupation, $mother_occupation, $emergency_contact_name, $emergency_contact_phone, $blood_group, $medical_condition, $other_condition, $disabilities, $previous_school, $previous_documents) {
+    // Check if connection is valid
+   global $conn;
+    // Escape all string inputs to prevent SQL injection
+    $student_photo = mysqli_real_escape_string($mysql, $student_photo);
+    $student_id = mysqli_real_escape_string($mysql, $student_id);
+    $first_name = mysqli_real_escape_string($mysql, $first_name);
+    $father_name = mysqli_real_escape_string($mysql, $father_name);
+    $grand_father_name = mysqli_real_escape_string($mysql, $grand_father_name);
+    $gender = mysqli_real_escape_string($mysql, $gender);
+    $dob = mysqli_real_escape_string($mysql, $dob);
+    $email = mysqli_real_escape_string($mysql, $email);
+    $phone = mysqli_real_escape_string($mysql, $phone);
+    $birth_place = mysqli_real_escape_string($mysql, $birth_place);
+    $nationality = mysqli_real_escape_string($mysql, $nationality);
+    $region = mysqli_real_escape_string($mysql, $region);
+    $zone = mysqli_real_escape_string($mysql, $zone);
+    $woreda = mysqli_real_escape_string($mysql, $woreda);
+    $kebele = mysqli_real_escape_string($mysql, $kebele);
+    $username = mysqli_real_escape_string($mysql, $username);
+    $password = mysqli_real_escape_string($mysql, $password);
+    $father_full_name = mysqli_real_escape_string($mysql, $father_full_name);
+    $mother_name = mysqli_real_escape_string($mysql, $mother_name);
+    $father_contact = mysqli_real_escape_string($mysql, $father_contact);
+    $mother_contact = mysqli_real_escape_string($mysql, $mother_contact);
+    $father_occupation = mysqli_real_escape_string($mysql, $father_occupation);
+    $mother_occupation = mysqli_real_escape_string($mysql, $mother_occupation);
+    $emergency_contact_name = mysqli_real_escape_string($mysql, $emergency_contact_name);
+    $emergency_contact_phone = mysqli_real_escape_string($mysql, $emergency_contact_phone);
+    $blood_group = mysqli_real_escape_string($mysql, $blood_group);
+    $medical_condition = mysqli_real_escape_string($mysql, $medical_condition);
+    $other_condition = mysqli_real_escape_string($mysql, $other_condition);
+    $disabilities = mysqli_real_escape_string($mysql, $disabilities);
+    $previous_school = mysqli_real_escape_string($mysql, $previous_school);
+    $previous_documents = mysqli_real_escape_string($mysql, $previous_documents);
+
+    // Prepare the SQL query
+    $query = "INSERT INTO students (
+        student_photo, student_id, first_name, father_name, grand_father_name, gender, dob, email, phone, birth_place, nationality,
+        region, zone, woreda, kebele, username, password, father_full_name, mother_name, father_contact, mother_contact,
+        father_occupation, mother_occupation, emergency_contact_name, emergency_contact_phone, blood_group, medical_condition,
+        other_condition, disabilities, previous_school, previous_documents
+    ) VALUES (
+        '$student_photo', '$student_id', '$first_name', '$father_name', '$grand_father_name', '$gender', '$dob', '$email', '$phone', '$birth_place', '$nationality',
+        '$region', '$zone', '$woreda', '$kebele', '$username', '$password', '$father_full_name', '$mother_name', '$father_contact', '$mother_contact',
+        '$father_occupation', '$mother_occupation', '$emergency_contact_name', '$emergency_contact_phone', '$blood_group', '$medical_condition',
+        '$other_condition', '$disabilities', '$previous_school', '$previous_documents'
+    )";
+
+    // Execute the query
+    if (mysqli_query($mysql, $query)) {
+        return 1; // success
     } else {
-        echo "MySQL Error: " . mysqli_error($conn);
-        return 0;
+        error_log("Query failed: " . mysqli_error($mysql));
+        return 0; // failure
     }
 }
-
 // Function to get students not yet assigned
 function getUnassignedStudents($conn) {
     $query = "
