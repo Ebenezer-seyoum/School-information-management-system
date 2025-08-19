@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Aug 16, 2025 at 08:58 PM
+-- Generation Time: Aug 19, 2025 at 09:03 AM
 -- Server version: 9.1.0
 -- PHP Version: 8.3.14
 
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `assign_instructor` (
   `section_id` int NOT NULL,
   `academic_year` int NOT NULL,
   PRIMARY KEY (`hid`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `assign_instructor`
@@ -55,7 +55,10 @@ INSERT INTO `assign_instructor` (`hid`, `instructor_id`, `section_id`, `academic
 (1, 5, 7, 2017),
 (2, 5, 7, 2017),
 (3, 5, 7, 2017),
-(4, 5, 7, 2018);
+(4, 5, 7, 2018),
+(5, 5, 4, 2018),
+(6, 5, 5, 2018),
+(7, 5, 6, 2018);
 
 -- --------------------------------------------------------
 
@@ -114,7 +117,7 @@ CREATE TABLE IF NOT EXISTS `assign_teacher` (
   KEY `sub_ibpk_1` (`subject_id`),
   KEY `sec_ibpk_1` (`section_id`),
   KEY `tec_ibpk_1` (`teacher_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `assign_teacher`
@@ -125,8 +128,9 @@ INSERT INTO `assign_teacher` (`atid`, `teacher_id`, `section_id`, `subject_id`, 
 (2, 4, 9, 4, 2018),
 (3, 6, 7, 6, 2018),
 (4, 6, 7, 13, 2018),
-(5, 10, 7, 7, 2018),
-(6, 12, 7, 9, 2018);
+(5, 10, 8, 13, 2018),
+(6, 12, 7, 9, 2018),
+(7, 6, 13, 15, 2018);
 
 -- --------------------------------------------------------
 
@@ -192,7 +196,7 @@ CREATE TABLE IF NOT EXISTS `marks` (
   KEY `class_ibpk_1` (`section_id`),
   KEY `subj_ipbk_1` (`subject_id`),
   KEY `teacher_ibpk_1` (`teacher_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `marks`
@@ -202,7 +206,8 @@ INSERT INTO `marks` (`mid`, `student_id`, `section_id`, `subject_id`, `teacher_i
 (32, 2, 9, 4, 4, 20, 1, '2018', 2, '2025-08-15 14:36:09', '2025-08-15 14:36:09'),
 (33, 1, 9, 4, 4, 25, 1, '2018', 2, '2025-08-15 14:36:09', '2025-08-15 14:36:09'),
 (34, 2, 9, 4, 4, 98, 2, '2018', 2, '2025-08-16 08:55:32', '2025-08-16 08:55:32'),
-(35, 1, 9, 4, 4, 99, 2, '2018', 2, '2025-08-16 08:55:32', '2025-08-16 08:55:32');
+(35, 1, 9, 4, 4, 99, 2, '2018', 2, '2025-08-16 08:55:32', '2025-08-16 08:55:32'),
+(36, 20, 9, 4, 4, 0, 2, '2018', 2, '2025-08-19 08:05:20', '2025-08-19 08:05:20');
 
 -- --------------------------------------------------------
 
@@ -349,85 +354,88 @@ INSERT INTO `sections` (`cid`, `section_name`, `class_type`) VALUES
 DROP TABLE IF EXISTS `students`;
 CREATE TABLE IF NOT EXISTS `students` (
   `sid` int NOT NULL AUTO_INCREMENT,
-  `student_photo` varchar(250) COLLATE utf8mb4_general_ci NOT NULL,
-  `student_id` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
-  `first_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `father_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `grand_father_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `student_photo` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `student_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `first_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `father_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `grand_father_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `gender` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `dob` date NOT NULL,
-  `email` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
-  `phone` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
-  `birth_place` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
-  `nationality` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `phone` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `birth_place` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `nationality` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `region` int NOT NULL,
   `zone` int DEFAULT NULL,
   `woreda` int DEFAULT NULL,
-  `kebele` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `username` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
-  `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `mother_name` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `father_contact` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `mother_contact` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `father_occupation` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `mother_occupation` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `emergency_contact_name` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `emergency_contact_phone` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `blood_group` varchar(10) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `medical_condition` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `other_condition` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `kebele` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `mother_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `father_full_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `father_contact` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `mother_contact` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `father_occupation` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `mother_occupation` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `emergency_contact_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `emergency_contact_phone` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `blood_group` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `medical_condition` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `other_condition` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `disabilities` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `previous_school` varchar(150) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `previous_school` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `previous_documents` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`sid`),
   UNIQUE KEY `student_id` (`student_id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `students`
 --
 
-INSERT INTO `students` (`sid`, `student_photo`, `student_id`, `first_name`, `father_name`, `grand_father_name`, `gender`, `dob`, `email`, `phone`, `birth_place`, `nationality`, `region`, `zone`, `woreda`, `kebele`, `username`, `password`, `mother_name`, `father_contact`, `mother_contact`, `father_occupation`, `mother_occupation`, `emergency_contact_name`, `emergency_contact_phone`, `blood_group`, `medical_condition`, `other_condition`, `disabilities`, `previous_school`, `previous_documents`, `created_at`) VALUES
-(1, '../assets/img/wallpaper.jpg', 'BSS/STU/0001/17', 'alem', 'Kebede', 'tefera', 'M', '2009-01-01', 'Abseyoum16@gmail.com', '+251909299398', 'bishoftu', 'ethiopia', 12, 89, 591, 'kebele 01', 'Mecry', 'igJzPdVP5cUymhx5zrs7NQ==', 'alem', '+251913865846', '+251913865846', 'doctor', 'doctur', 'seyoium', '+251909299398', 'A+', 'Epilepsy', '', 'Yes', 'ebenezer', '../assets/case_files/DS Outline.pdf', '2025-08-13 15:21:24'),
-(2, '', 'BSS/STU/0002/17', 'abenezer', 'seyoum', 'tefera', 'M', '2009-01-01', 'Abeniseyoum16@gmail.com', '+251909299378', 'bishoftu', 'ethiopia', 12, 89, 591, 'kebele 01', 'ab', 'e3GsIIeW3jPNBqjoHG9rMw==', 'alem', '+251913865846', '+251913865846', 'doctor', 'doctur', 'seyoium', '+251909299398', 'A+', 'Diabetes', '', 'Yes', 'ebenezer', '../assets/case_files/DS Outline.pdf', '2025-08-13 15:37:38'),
-(15, '../assets/img/pp.jpg', 'BSS/STU/0003/17', 'John', 'Michael', 'David', 'Male', '2005-01-15', 'john1@example.com', '0911000001', 'Addis Ababa', 'Ethiopian', 12, 89, 591, 'Kebele 1', 'john1', 'password123', 'Sarah', '0911000101', '0911000201', 'Farmer', 'Teacher', 'Peter', '0911000301', 'O+', '', '', 'None', 'ABC School', NULL, '2025-08-16 14:52:56'),
-(16, '../assets/img/profile.jpg', 'BSS/STU/0004/17', 'Mary', 'Daniel', 'Abebe', 'Female', '2006-03-22', 'mary2@example.com', '0911000002', 'Bahir Dar', 'Ethiopian', 12, 89, 591, 'Kebele 2', 'mary2', 'password123', 'Anna', '0911000102', '0911000202', 'Teacher', 'Nurse', 'Paul', '0911000302', 'A+', 'Asthma', '', 'None', 'XYZ School', NULL, '2025-08-16 14:52:56'),
-(17, '../assets/img/download.jpg', 'BSS/STU/0005/17', 'Samuel', 'Abel', 'Tekle', 'Male', '2005-07-18', 'samuel3@example.com', '0911000003', 'Gondar', 'Ethiopian', 12, 89, 591, 'Kebele 3', 'samuel3', 'password123', 'Betty', '0911000103', '0911000203', 'Farmer', 'Housewife', 'John', '0911000303', 'B+', '', '', 'None', 'LMN School', NULL, '2025-08-16 14:52:56'),
-(18, '../assets/img/man united.jpg', 'BSS/STU/0006/17', 'Helen', 'Gabriel', 'Tesfaye', 'Female', '2006-12-05', 'helen4@example.com', '0911000004', 'Dire Dawa', 'Ethiopian', 12, 89, 591, 'Kebele 4', 'helen4', 'password123', 'Ruth', '0911000104', '0911000204', 'Engineer', 'Teacher', 'Mark', '0911000304', 'AB+', 'Diabetes', '', 'None', 'OPQ School', NULL, '2025-08-16 14:52:56'),
-(19, '../assets/img/pp.jpg', 'BSS/STU/0007/17', 'David', 'Simon', 'Bekele', 'Male', '2005-11-10', 'david5@example.com', '0911000005', 'Addis Ababa', 'Ethiopian', 12, 89, 591, 'Kebele 5', 'david5', 'password123', 'Martha', '0911000105', '0911000205', 'Teacher', 'Nurse', 'Luke', '0911000305', 'O-', '', '', 'None', 'RST School', NULL, '2025-08-16 14:52:56'),
-(20, '../assets/img/profile.jpg', 'BSS/STU/0008/17', 'Abel', 'Solomon', 'Kebede', 'Male', '2006-02-20', 'abel6@example.com', '0911000006', 'Hawassa', 'Ethiopian', 12, 89, 591, 'Kebele 6', 'abel6', 'password123', 'Lily', '0911000106', '0911000206', 'Farmer', 'Housewife', 'James', '0911000306', 'A-', '', '', 'None', 'UVW School', NULL, '2025-08-16 14:52:56'),
-(21, '../assets/img/download.jpg', 'BSS/STU/0009/17', 'Ruth', 'Daniel', 'Bekele', 'Female', '2005-05-14', 'ruth7@example.com', '0911000007', 'Bahir Dar', 'Ethiopian', 12, 89, 591, 'Kebele 7', 'ruth7', 'password123', 'Clara', '0911000107', '0911000207', 'Teacher', 'Nurse', 'Ethan', '0911000307', 'B+', '', '', 'None', 'XYZ School', NULL, '2025-08-16 14:52:56'),
-(22, '../assets/img/man united.jpg', 'BSS/STU/0010/17', 'Simon', 'Abebe', 'Meles', 'Male', '2006-08-09', 'simon8@example.com', '0911000008', 'Gondar', 'Ethiopian', 12, 89, 591, 'Kebele 8', 'simon8', 'password123', 'Mary', '0911000108', '0911000208', 'Engineer', 'Teacher', 'Daniel', '0911000308', 'AB+', '', '', 'None', 'LMN School', NULL, '2025-08-16 14:52:56'),
-(23, '../assets/img/pp.jpg', 'BSS/STU/0011/17', 'Alice', 'Tekle', 'Kebede', 'Female', '2005-06-11', 'alice9@example.com', '0911000009', 'Addis Ababa', 'Ethiopian', 12, 89, 591, 'Kebele 9', 'alice9', 'password123', 'Martha', '0911000109', '0911000209', 'Teacher', 'Housewife', 'Paul', '0911000309', 'O+', '', '', 'None', 'ABC School', NULL, '2025-08-16 14:52:56'),
-(24, '../assets/img/profile.jpg', 'BSS/STU/0012/17', 'Daniel', 'Teshome', 'Abebe', 'Male', '2006-09-17', 'daniel10@example.com', '0911000010', 'Bahir Dar', 'Ethiopian', 12, 89, 591, 'Kebele 10', 'daniel10', 'password123', 'Ruth', '0911000110', '0911000210', 'Farmer', 'Nurse', 'Mark', '0911000310', 'A-', '', '', 'None', 'XYZ School', NULL, '2025-08-16 14:52:56'),
-(25, '../assets/img/download.jpg', 'BSS/STU/0013/17', 'Grace', 'Abebe', 'Tesfaye', 'Female', '2005-12-12', 'grace11@example.com', '0911000011', 'Gondar', 'Ethiopian', 12, 89, 591, 'Kebele 11', 'grace11', 'password123', 'Lily', '0911000111', '0911000211', 'Teacher', 'Housewife', 'John', '0911000311', 'B+', '', '', 'None', 'LMN School', NULL, '2025-08-16 14:52:56'),
-(26, '../assets/img/man united.jpg', 'BSS/STU/0014/17', 'Michael', 'Bekele', 'Daniel', 'Male', '2006-01-05', 'michael12@example.com', '0911000012', 'Dire Dawa', 'Ethiopian', 12, 89, 591, 'Kebele 12', 'michael12', 'password123', 'Sarah', '0911000112', '0911000212', 'Engineer', 'Teacher', 'Luke', '0911000312', 'AB+', '', '', 'None', 'OPQ School', NULL, '2025-08-16 14:52:56'),
-(27, '../assets/img/pp.jpg', 'BSS/STU/0015/17', 'Linda', 'Tesfaye', 'Abebe', 'Female', '2005-04-19', 'linda13@example.com', '0911000013', 'Addis Ababa', 'Ethiopian', 12, 89, 591, 'Kebele 13', 'linda13', 'password123', 'Clara', '0911000113', '0911000213', 'Teacher', 'Nurse', 'Peter', '0911000313', 'O-', '', '', 'None', 'RST School', NULL, '2025-08-16 14:52:56'),
-(28, '../assets/img/profile.jpg', 'BSS/STU/0016/17', 'Peter', 'Abel', 'Kebede', 'Male', '2006-07-21', 'peter14@example.com', '0911000014', 'Hawassa', 'Ethiopian', 12, 89, 591, 'Kebele 14', 'peter14', 'password123', 'Mary', '0911000114', '0911000214', 'Farmer', 'Housewife', 'James', '0911000314', 'A+', '', '', 'None', 'UVW School', NULL, '2025-08-16 14:52:56'),
-(29, '../assets/img/download.jpg', 'BSS/STU/0017/17', 'Betty', 'Daniel', 'Tesfaye', 'Female', '2005-09-16', 'betty15@example.com', '0911000015', 'Bahir Dar', 'Ethiopian', 12, 89, 591, 'Kebele 15', 'betty15', 'password123', 'Anna', '0911000115', '0911000215', 'Teacher', 'Nurse', 'Ethan', '0911000315', 'B+', '', '', 'None', 'XYZ School', NULL, '2025-08-16 14:52:56'),
-(30, '../assets/img/man united.jpg', 'BSS/STU/0018/17', 'Steven', 'Abebe', 'David', 'Male', '2006-03-30', 'steven16@example.com', '0911000016', 'Gondar', 'Ethiopian', 12, 89, 591, 'Kebele 16', 'steven16', 'password123', 'Ruth', '0911000116', '0911000216', 'Engineer', 'Teacher', 'Daniel', '0911000316', 'AB+', '', '', 'None', 'LMN School', NULL, '2025-08-16 14:52:56'),
-(31, '../assets/img/pp.jpg', 'BSS/STU/0019/17', 'Rose', 'Tekle', 'Bekele', 'Female', '2005-11-25', 'rose17@example.com', '0911000017', 'Addis Ababa', 'Ethiopian', 12, 89, 591, 'Kebele 17', 'rose17', 'password123', 'Lily', '0911000117', '0911000217', 'Teacher', 'Housewife', 'John', '0911000317', 'O+', '', '', 'None', 'ABC School', NULL, '2025-08-16 14:52:56'),
-(32, '../assets/img/profile.jpg', 'BSS/STU/0020/17', 'Mark', 'Solomon', 'Abebe', 'Male', '2006-06-12', 'mark18@example.com', '0911000018', 'Bahir Dar', 'Ethiopian', 12, 89, 591, 'Kebele 18', 'mark18', 'password123', 'Sarah', '0911000118', '0911000218', 'Farmer', 'Nurse', 'Luke', '0911000318', 'A-', '', '', 'None', 'XYZ School', NULL, '2025-08-16 14:52:56'),
-(33, '../assets/img/download.jpg', 'BSS/STU/0021/17', 'Nancy', 'Abel', 'Tesfaye', 'Female', '2005-08-07', 'nancy19@example.com', '0911000019', 'Gondar', 'Ethiopian', 12, 89, 591, 'Kebele 19', 'nancy19', 'password123', 'Martha', '0911000119', '0911000219', 'Teacher', 'Housewife', 'Paul', '0911000319', 'B+', '', '', 'None', 'LMN School', NULL, '2025-08-16 14:52:56'),
-(34, '../assets/img/man united.jpg', 'BSS/STU/0022/17', 'James', 'Bekele', 'Kebede', 'Male', '2006-02-11', 'james20@example.com', '0911000020', 'Dire Dawa', 'Ethiopian', 12, 89, 591, 'Kebele 20', 'james20', 'password123', 'Anna', '0911000120', '0911000220', 'Engineer', 'Teacher', 'Mark', '0911000320', 'AB+', '', '', 'None', 'OPQ School', NULL, '2025-08-16 14:52:56'),
-(35, '../assets/img/pp.jpg', 'BSS/STU/0023/17', 'Emma', 'Daniel', 'David', 'Female', '2005-03-18', 'emma21@example.com', '0911000021', 'Addis Ababa', 'Ethiopian', 12, 89, 591, 'Kebele 21', 'emma21', 'password123', 'Clara', '0911000121', '0911000221', 'Teacher', 'Nurse', 'Peter', '0911000321', 'O-', '', '', 'None', 'RST School', NULL, '2025-08-16 14:52:56'),
-(36, '../assets/img/profile.jpg', 'BSS/STU/0024/17', 'Robert', 'Abebe', 'Abebe', 'Male', '2006-12-01', 'robert22@example.com', '0911000022', 'Hawassa', 'Ethiopian', 12, 89, 591, 'Kebele 22', 'robert22', 'password123', 'Mary', '0911000122', '0911000222', 'Farmer', 'Housewife', 'James', '0911000322', 'A+', '', '', 'None', 'UVW School', NULL, '2025-08-16 14:52:56'),
-(37, '../assets/img/download.jpg', 'BSS/STU/0025/17', 'Sophia', 'Tekle', 'Tesfaye', 'Female', '2005-05-09', 'sophia23@example.com', '0911000023', 'Bahir Dar', 'Ethiopian', 12, 89, 591, 'Kebele 23', 'sophia23', 'password123', 'Ruth', '0911000123', '0911000223', 'Teacher', 'Nurse', 'Ethan', '0911000323', 'B+', '', '', 'None', 'XYZ School', NULL, '2025-08-16 14:52:56'),
-(38, '../assets/img/man united.jpg', 'BSS/STU/0026/17', 'Daniel', 'Solomon', 'David', 'Male', '2006-08-13', 'daniel24@example.com', '0911000024', 'Gondar', 'Ethiopian', 12, 89, 591, 'Kebele 24', 'daniel24', 'password123', 'Lily', '0911000124', '0911000224', 'Engineer', 'Teacher', 'Daniel', '0911000324', 'AB+', '', '', 'None', 'LMN School', NULL, '2025-08-16 14:52:56'),
-(39, '../assets/img/pp.jpg', 'BSS/STU/0027/17', 'Grace', 'Abel', 'Bekele', 'Female', '2005-11-29', 'grace25@example.com', '0911000025', 'Addis Ababa', 'Ethiopian', 12, 89, 591, 'Kebele 25', 'grace25', 'password123', 'Martha', '0911000125', '0911000225', 'Teacher', 'Housewife', 'John', '0911000325', 'O+', '', '', 'None', 'ABC School', NULL, '2025-08-16 14:52:56'),
-(40, '../assets/img/profile.jpg', 'BSS/STU/0028/17', 'Michael', 'Daniel', 'Kebede', 'Male', '2006-04-05', 'michael26@example.com', '0911000026', 'Bahir Dar', 'Ethiopian', 12, 89, 591, 'Kebele 26', 'michael26', 'password123', 'Sarah', '0911000126', '0911000226', 'Farmer', 'Nurse', 'Luke', '0911000326', 'A-', '', '', 'None', 'XYZ School', NULL, '2025-08-16 14:52:56'),
-(41, '../assets/img/download.jpg', 'BSS/STU/0029/17', 'Linda', 'Abebe', 'Tesfaye', 'Female', '2005-07-21', 'linda27@example.com', '0911000027', 'Gondar', 'Ethiopian', 12, 89, 591, 'Kebele 27', 'linda27', 'password123', 'Anna', '0911000127', '0911000227', 'Teacher', 'Nurse', 'Ethan', '0911000327', 'B+', '', '', 'None', 'LMN School', NULL, '2025-08-16 14:52:56'),
-(42, '../assets/img/man united.jpg', 'BSS/STU/0030/17', 'James', 'Tekle', 'David', 'Male', '2006-09-18', 'james28@example.com', '0911000028', 'Dire Dawa', 'Ethiopian', 12, 89, 591, 'Kebele 28', 'james28', 'password123', 'Clara', '0911000128', '0911000228', 'Engineer', 'Teacher', 'Mark', '0911000328', 'AB+', '', '', 'None', 'OPQ School', NULL, '2025-08-16 14:52:56'),
-(43, '../assets/img/pp.jpg', 'BSS/STU/0031/17', 'Emma', 'Solomon', 'Abebe', 'Female', '2005-01-07', 'emma29@example.com', '0911000029', 'Addis Ababa', 'Ethiopian', 12, 89, 591, 'Kebele 29', 'emma29', 'password123', 'Lily', '0911000129', '0911000229', 'Teacher', 'Housewife', 'John', '0911000329', 'O-', '', '', 'None', 'RST School', NULL, '2025-08-16 14:52:56'),
-(44, '../assets/img/profile.jpg', 'BSS/STU/0032/17', 'Robert', 'Abel', 'Tesfaye', 'Male', '2006-06-23', 'robert30@example.com', '0911000030', 'Hawassa', 'Ethiopian', 12, 89, 591, 'Kebele 30', 'robert30', 'password123', 'Mary', '0911000130', '0911000230', 'Farmer', 'Housewife', 'James', '0911000330', 'A+', '', '', 'None', 'UVW School', NULL, '2025-08-16 14:52:56'),
-(45, '../assets/img/download.jpg', 'BSS/STU/0033/17', 'Sophia', 'Daniel', 'Bekele', 'Female', '2005-03-12', 'sophia31@example.com', '0911000031', 'Bahir Dar', 'Ethiopian', 12, 89, 591, 'Kebele 31', 'sophia31', 'password123', 'Ruth', '0911000131', '0911000231', 'Teacher', 'Nurse', 'Ethan', '0911000331', 'B+', '', '', 'None', 'XYZ School', NULL, '2025-08-16 14:52:56'),
-(46, '../assets/img/man united.jpg', 'BSS/STU/0034/17', 'Daniel', 'Abebe', 'David', 'Male', '2006-08-29', 'daniel32@example.com', '0911000032', 'Gondar', 'Ethiopian', 12, 89, 591, 'Kebele 32', 'daniel32', 'password123', 'Lily', '0911000132', '0911000232', 'Engineer', 'Teacher', 'Daniel', '0911000332', 'AB+', '', '', 'None', 'LMN School', NULL, '2025-08-16 14:52:56'),
-(47, '../assets/img/pp.jpg', 'BSS/STU/0035/17', 'Grace', 'Tekle', 'Kebede', 'Female', '2005-12-03', 'grace33@example.com', '0911000033', 'Addis Ababa', 'Ethiopian', 12, 89, 591, 'Kebele 33', 'grace33', 'password123', 'Martha', '0911000133', '0911000233', 'Teacher', 'Housewife', 'John', '0911000333', 'O+', '', '', 'None', 'ABC School', NULL, '2025-08-16 14:52:56'),
-(48, '../assets/img/profile.jpg', 'BSS/STU/0036/17', 'Michael', 'Daniel', 'Abebe', 'Male', '2006-05-17', 'michael34@example.com', '0911000034', 'Bahir Dar', 'Ethiopian', 12, 89, 591, 'Kebele 34', 'michael34', 'password123', 'Sarah', '0911000134', '0911000234', 'Farmer', 'Nurse', 'Luke', '0911000334', 'A-', '', '', 'None', 'XYZ School', NULL, '2025-08-16 14:52:56'),
-(49, '../assets/img/download.jpg', 'BSS/STU/0037/17', 'Linda', 'Abebe', 'Tesfaye', 'Female', '2005-07-28', 'linda35@example.com', '0911000035', 'Gondar', 'Ethiopian', 12, 89, 591, 'Kebele 35', 'linda35', 'password123', 'Anna', '0911000135', '0911000235', 'Teacher', 'Nurse', 'Ethan', '0911000335', 'B+', '', '', 'None', 'LMN School', NULL, '2025-08-16 14:52:56'),
-(50, '../assets/img/man united.jpg', 'BSS/STU/0038/17', 'James', 'Tekle', 'David', 'Male', '2006-09-05', 'james36@example.com', '0911000036', 'Dire Dawa', 'Ethiopian', 12, 89, 591, 'Kebele 36', 'james36', 'password123', 'Clara', '0911000136', '0911000236', 'Engineer', 'Teacher', 'Mark', '0911000336', 'AB+', '', '', 'None', 'OPQ School', NULL, '2025-08-16 14:52:56');
+INSERT INTO `students` (`sid`, `student_photo`, `student_id`, `first_name`, `father_name`, `grand_father_name`, `gender`, `dob`, `email`, `phone`, `birth_place`, `nationality`, `region`, `zone`, `woreda`, `kebele`, `username`, `password`, `mother_name`, `father_full_name`, `father_contact`, `mother_contact`, `father_occupation`, `mother_occupation`, `emergency_contact_name`, `emergency_contact_phone`, `blood_group`, `medical_condition`, `other_condition`, `disabilities`, `previous_school`, `previous_documents`, `created_at`) VALUES
+(1, '../assets/img/wallpaper.jpg', 'BSS/STU/0001/17', 'alem', 'Kebede', 'tefera', 'M', '2009-01-01', 'Abseyoum16@gmail.com', '+251909299398', 'bishoftu', 'ethiopia', 12, 89, 591, 'kebele 01', 'Mecry', 'igJzPdVP5cUymhx5zrs7NQ==', 'alem', '', '+251913865846', '+251913865846', 'doctor', 'doctur', 'seyoium', '+251909299398', 'A+', 'Epilepsy', '', 'Yes', 'ebenezer', '../assets/case_files/DS Outline.pdf', '2025-08-13 15:21:24'),
+(2, '', 'BSS/STU/0002/17', 'abenezer', 'seyoum', 'tefera', 'M', '2009-01-01', 'Abeniseyoum16@gmail.com', '+251909299378', 'bishoftu', 'ethiopia', 12, 89, 591, 'kebele 01', 'ab', 'e3GsIIeW3jPNBqjoHG9rMw==', 'alem', '', '+251913865846', '+251913865846', 'doctor', 'doctur', 'seyoium', '+251909299398', 'A+', 'Diabetes', '', 'Yes', 'ebenezer', '../assets/case_files/DS Outline.pdf', '2025-08-13 15:37:38'),
+(15, '../assets/img/pp.jpg', 'BSS/STU/0003/17', 'John', 'Michael', 'David', 'Male', '2005-01-15', 'john1@example.com', '0911000001', 'Addis Ababa', 'Ethiopian', 12, 89, 591, 'Kebele 1', 'john1', 'password123', 'Sarah', '', '0911000101', '0911000201', 'Farmer', 'Teacher', 'Peter', '0911000301', 'O+', '', '', 'None', 'ABC School', NULL, '2025-08-16 14:52:56'),
+(17, '../assets/img/download.jpg', 'BSS/STU/0005/17', 'Samuel', 'Abel', 'Tekle', 'Male', '2005-07-18', 'samuel3@example.com', '0911000003', 'Gondar', 'Ethiopian', 12, 89, 591, 'Kebele 3', 'samuel3', 'password123', 'Betty', '', '0911000103', '0911000203', 'Farmer', 'Housewife', 'John', '0911000303', 'B+', '', '', 'None', 'LMN School', NULL, '2025-08-16 14:52:56'),
+(18, '../assets/img/man united.jpg', 'BSS/STU/0006/17', 'Helen', 'Gabriel', 'Tesfaye', 'Female', '2006-12-05', 'helen4@example.com', '0911000004', 'Dire Dawa', 'Ethiopian', 12, 89, 591, 'Kebele 4', 'helen4', 'password123', 'Ruth', '', '0911000104', '0911000204', 'Engineer', 'Teacher', 'Mark', '0911000304', 'AB+', 'Diabetes', '', 'None', 'OPQ School', NULL, '2025-08-16 14:52:56'),
+(19, '../assets/img/pp.jpg', 'BSS/STU/0007/17', 'David', 'Simon', 'Bekele', 'Male', '2005-11-10', 'david5@example.com', '0911000005', 'Addis Ababa', 'Ethiopian', 12, 89, 591, 'Kebele 5', 'david5', 'password123', 'Martha', '', '0911000105', '0911000205', 'Teacher', 'Nurse', 'Luke', '0911000305', 'O-', '', '', 'None', 'RST School', NULL, '2025-08-16 14:52:56'),
+(20, '../assets/img/profile.jpg', 'BSS/STU/0008/17', 'Abel', 'Solomon', 'Kebede', 'Male', '2006-02-20', 'abel6@example.com', '0911000006', 'Hawassa', 'Ethiopian', 12, 89, 591, 'Kebele 6', 'abel6', 'password123', 'Lily', '', '0911000106', '0911000206', 'Farmer', 'Housewife', 'James', '0911000306', 'A-', '', '', 'None', 'UVW School', NULL, '2025-08-16 14:52:56'),
+(21, '../assets/img/download.jpg', 'BSS/STU/0009/17', 'Ruth', 'Daniel', 'Bekele', 'Female', '2005-05-14', 'ruth7@example.com', '0911000007', 'Bahir Dar', 'Ethiopian', 12, 89, 591, 'Kebele 7', 'ruth7', 'password123', 'Clara', '', '0911000107', '0911000207', 'Teacher', 'Nurse', 'Ethan', '0911000307', 'B+', '', '', 'None', 'XYZ School', NULL, '2025-08-16 14:52:56'),
+(22, '../assets/img/man united.jpg', 'BSS/STU/0010/17', 'Simon', 'Abebe', 'Meles', 'Male', '2006-08-09', 'simon8@example.com', '0911000008', 'Gondar', 'Ethiopian', 12, 89, 591, 'Kebele 8', 'simon8', 'password123', 'Mary', '', '0911000108', '0911000208', 'Engineer', 'Teacher', 'Daniel', '0911000308', 'AB+', '', '', 'None', 'LMN School', NULL, '2025-08-16 14:52:56'),
+(23, '../assets/img/pp.jpg', 'BSS/STU/0011/17', 'Alice', 'Tekle', 'Kebede', 'Female', '2005-06-11', 'alice9@example.com', '0911000009', 'Addis Ababa', 'Ethiopian', 12, 89, 591, 'Kebele 9', 'alice9', 'password123', 'Martha', '', '0911000109', '0911000209', 'Teacher', 'Housewife', 'Paul', '0911000309', 'O+', '', '', 'None', 'ABC School', NULL, '2025-08-16 14:52:56'),
+(24, '../assets/img/profile.jpg', 'BSS/STU/0012/17', 'Daniel', 'Teshome', 'Abebe', 'Male', '2006-09-17', 'daniel10@example.com', '0911000010', 'Bahir Dar', 'Ethiopian', 12, 89, 591, 'Kebele 10', 'daniel10', 'password123', 'Ruth', '', '0911000110', '0911000210', 'Farmer', 'Nurse', 'Mark', '0911000310', 'A-', '', '', 'None', 'XYZ School', NULL, '2025-08-16 14:52:56'),
+(25, '../assets/img/download.jpg', 'BSS/STU/0013/17', 'Grace', 'Abebe', 'Tesfaye', 'Female', '2005-12-12', 'grace11@example.com', '0911000011', 'Gondar', 'Ethiopian', 12, 89, 591, 'Kebele 11', 'grace11', 'password123', 'Lily', '', '0911000111', '0911000211', 'Teacher', 'Housewife', 'John', '0911000311', 'B+', '', '', 'None', 'LMN School', NULL, '2025-08-16 14:52:56'),
+(26, '../assets/img/man united.jpg', 'BSS/STU/0014/17', 'Michael', 'Bekele', 'Daniel', 'Male', '2006-01-05', 'michael12@example.com', '0911000012', 'Dire Dawa', 'Ethiopian', 12, 89, 591, 'Kebele 12', 'michael12', 'password123', 'Sarah', '', '0911000112', '0911000212', 'Engineer', 'Teacher', 'Luke', '0911000312', 'AB+', '', '', 'None', 'OPQ School', NULL, '2025-08-16 14:52:56'),
+(27, '../assets/img/pp.jpg', 'BSS/STU/0015/17', 'Linda', 'Tesfaye', 'Abebe', 'Female', '2005-04-19', 'linda13@example.com', '0911000013', 'Addis Ababa', 'Ethiopian', 12, 89, 591, 'Kebele 13', 'linda13', 'password123', 'Clara', '', '0911000113', '0911000213', 'Teacher', 'Nurse', 'Peter', '0911000313', 'O-', '', '', 'None', 'RST School', NULL, '2025-08-16 14:52:56'),
+(28, '../assets/img/profile.jpg', 'BSS/STU/0016/17', 'Peter', 'Abel', 'Kebede', 'Male', '2006-07-21', 'peter14@example.com', '0911000014', 'Hawassa', 'Ethiopian', 12, 89, 591, 'Kebele 14', 'peter14', 'password123', 'Mary', '', '0911000114', '0911000214', 'Farmer', 'Housewife', 'James', '0911000314', 'A+', '', '', 'None', 'UVW School', NULL, '2025-08-16 14:52:56'),
+(29, '../assets/img/download.jpg', 'BSS/STU/0017/17', 'Betty', 'Daniel', 'Tesfaye', 'Female', '2005-09-16', 'betty15@example.com', '0911000015', 'Bahir Dar', 'Ethiopian', 12, 89, 591, 'Kebele 15', 'betty15', 'password123', 'Anna', '', '0911000115', '0911000215', 'Teacher', 'Nurse', 'Ethan', '0911000315', 'B+', '', '', 'None', 'XYZ School', NULL, '2025-08-16 14:52:56'),
+(30, '../assets/img/man united.jpg', 'BSS/STU/0018/17', 'Steven', 'Abebe', 'David', 'Male', '2006-03-30', 'steven16@example.com', '0911000016', 'Gondar', 'Ethiopian', 12, 89, 591, 'Kebele 16', 'steven16', 'password123', 'Ruth', '', '0911000116', '0911000216', 'Engineer', 'Teacher', 'Daniel', '0911000316', 'AB+', '', '', 'None', 'LMN School', NULL, '2025-08-16 14:52:56'),
+(31, '../assets/img/pp.jpg', 'BSS/STU/0019/17', 'Rose', 'Tekle', 'Bekele', 'Female', '2005-11-25', 'rose17@example.com', '0911000017', 'Addis Ababa', 'Ethiopian', 12, 89, 591, 'Kebele 17', 'rose17', 'password123', 'Lily', '', '0911000117', '0911000217', 'Teacher', 'Housewife', 'John', '0911000317', 'O+', '', '', 'None', 'ABC School', NULL, '2025-08-16 14:52:56'),
+(32, '../assets/img/profile.jpg', 'BSS/STU/0020/17', 'Mark', 'Solomon', 'Abebe', 'Male', '2006-06-12', 'mark18@example.com', '0911000018', 'Bahir Dar', 'Ethiopian', 12, 89, 591, 'Kebele 18', 'mark18', 'password123', 'Sarah', '', '0911000118', '0911000218', 'Farmer', 'Nurse', 'Luke', '0911000318', 'A-', '', '', 'None', 'XYZ School', NULL, '2025-08-16 14:52:56'),
+(33, '../assets/img/download.jpg', 'BSS/STU/0021/17', 'Nancy', 'Abel', 'Tesfaye', 'Female', '2005-08-07', 'nancy19@example.com', '0911000019', 'Gondar', 'Ethiopian', 12, 89, 591, 'Kebele 19', 'nancy19', 'password123', 'Martha', '', '0911000119', '0911000219', 'Teacher', 'Housewife', 'Paul', '0911000319', 'B+', '', '', 'None', 'LMN School', NULL, '2025-08-16 14:52:56'),
+(34, '../assets/img/man united.jpg', 'BSS/STU/0022/17', 'James', 'Bekele', 'Kebede', 'Male', '2006-02-11', 'james20@example.com', '0911000020', 'Dire Dawa', 'Ethiopian', 12, 89, 591, 'Kebele 20', 'james20', 'password123', 'Anna', '', '0911000120', '0911000220', 'Engineer', 'Teacher', 'Mark', '0911000320', 'AB+', '', '', 'None', 'OPQ School', NULL, '2025-08-16 14:52:56'),
+(35, '../assets/img/pp.jpg', 'BSS/STU/0023/17', 'Emma', 'Daniel', 'David', 'Female', '2005-03-18', 'emma21@example.com', '0911000021', 'Addis Ababa', 'Ethiopian', 12, 89, 591, 'Kebele 21', 'emma21', 'password123', 'Clara', '', '0911000121', '0911000221', 'Teacher', 'Nurse', 'Peter', '0911000321', 'O-', '', '', 'None', 'RST School', NULL, '2025-08-16 14:52:56'),
+(36, '../assets/img/profile.jpg', 'BSS/STU/0024/17', 'Robert', 'Abebe', 'Abebe', 'Male', '2006-12-01', 'robert22@example.com', '0911000022', 'Hawassa', 'Ethiopian', 12, 89, 591, 'Kebele 22', 'robert22', 'password123', 'Mary', '', '0911000122', '0911000222', 'Farmer', 'Housewife', 'James', '0911000322', 'A+', '', '', 'None', 'UVW School', NULL, '2025-08-16 14:52:56'),
+(37, '../assets/img/download.jpg', 'BSS/STU/0025/17', 'Sophia', 'Tekle', 'Tesfaye', 'Female', '2005-05-09', 'sophia23@example.com', '0911000023', 'Bahir Dar', 'Ethiopian', 12, 89, 591, 'Kebele 23', 'sophia23', 'password123', 'Ruth', '', '0911000123', '0911000223', 'Teacher', 'Nurse', 'Ethan', '0911000323', 'B+', '', '', 'None', 'XYZ School', NULL, '2025-08-16 14:52:56'),
+(38, '../assets/img/man united.jpg', 'BSS/STU/0026/17', 'Daniel', 'Solomon', 'David', 'Male', '2006-08-13', 'daniel24@example.com', '0911000024', 'Gondar', 'Ethiopian', 12, 89, 591, 'Kebele 24', 'daniel24', 'password123', 'Lily', '', '0911000124', '0911000224', 'Engineer', 'Teacher', 'Daniel', '0911000324', 'AB+', '', '', 'None', 'LMN School', NULL, '2025-08-16 14:52:56'),
+(39, '../assets/img/pp.jpg', 'BSS/STU/0027/17', 'Grace', 'Abel', 'Bekele', 'Female', '2005-11-29', 'grace25@example.com', '0911000025', 'Addis Ababa', 'Ethiopian', 12, 89, 591, 'Kebele 25', 'grace25', 'password123', 'Martha', '', '0911000125', '0911000225', 'Teacher', 'Housewife', 'John', '0911000325', 'O+', '', '', 'None', 'ABC School', NULL, '2025-08-16 14:52:56'),
+(40, '../assets/img/profile.jpg', 'BSS/STU/0028/17', 'Michael', 'Daniel', 'Kebede', 'Male', '2006-04-05', 'michael26@example.com', '0911000026', 'Bahir Dar', 'Ethiopian', 12, 89, 591, 'Kebele 26', 'michael26', 'password123', 'Sarah', '', '0911000126', '0911000226', 'Farmer', 'Nurse', 'Luke', '0911000326', 'A-', '', '', 'None', 'XYZ School', NULL, '2025-08-16 14:52:56'),
+(41, '../assets/img/download.jpg', 'BSS/STU/0029/17', 'Linda', 'Abebe', 'Tesfaye', 'Female', '2005-07-21', 'linda27@example.com', '0911000027', 'Gondar', 'Ethiopian', 12, 89, 591, 'Kebele 27', 'linda27', 'password123', 'Anna', '', '0911000127', '0911000227', 'Teacher', 'Nurse', 'Ethan', '0911000327', 'B+', '', '', 'None', 'LMN School', NULL, '2025-08-16 14:52:56'),
+(42, '../assets/img/man united.jpg', 'BSS/STU/0030/17', 'James', 'Tekle', 'David', 'Male', '2006-09-18', 'james28@example.com', '0911000028', 'Dire Dawa', 'Ethiopian', 12, 89, 591, 'Kebele 28', 'james28', 'password123', 'Clara', '', '0911000128', '0911000228', 'Engineer', 'Teacher', 'Mark', '0911000328', 'AB+', '', '', 'None', 'OPQ School', NULL, '2025-08-16 14:52:56'),
+(43, '../assets/img/pp.jpg', 'BSS/STU/0031/17', 'Emma', 'Solomon', 'Abebe', 'Female', '2005-01-07', 'emma29@example.com', '0911000029', 'Addis Ababa', 'Ethiopian', 12, 89, 591, 'Kebele 29', 'emma29', 'password123', 'Lily', '', '0911000129', '0911000229', 'Teacher', 'Housewife', 'John', '0911000329', 'O-', '', '', 'None', 'RST School', NULL, '2025-08-16 14:52:56'),
+(44, '../assets/img/profile.jpg', 'BSS/STU/0032/17', 'Robert', 'Abel', 'Tesfaye', 'Male', '2006-06-23', 'robert30@example.com', '0911000030', 'Hawassa', 'Ethiopian', 12, 89, 591, 'Kebele 30', 'robert30', 'password123', 'Mary', '', '0911000130', '0911000230', 'Farmer', 'Housewife', 'James', '0911000330', 'A+', '', '', 'None', 'UVW School', NULL, '2025-08-16 14:52:56'),
+(45, '../assets/img/download.jpg', 'BSS/STU/0033/17', 'Sophia', 'Daniel', 'Bekele', 'Female', '2005-03-12', 'sophia31@example.com', '0911000031', 'Bahir Dar', 'Ethiopian', 12, 89, 591, 'Kebele 31', 'sophia31', 'password123', 'Ruth', '', '0911000131', '0911000231', 'Teacher', 'Nurse', 'Ethan', '0911000331', 'B+', '', '', 'None', 'XYZ School', NULL, '2025-08-16 14:52:56'),
+(46, '../assets/img/man united.jpg', 'BSS/STU/0034/17', 'Daniel', 'Abebe', 'David', 'Male', '2006-08-29', 'daniel32@example.com', '0911000032', 'Gondar', 'Ethiopian', 12, 89, 591, 'Kebele 32', 'daniel32', 'password123', 'Lily', '', '0911000132', '0911000232', 'Engineer', 'Teacher', 'Daniel', '0911000332', 'AB+', '', '', 'None', 'LMN School', NULL, '2025-08-16 14:52:56'),
+(47, '../assets/img/pp.jpg', 'BSS/STU/0035/17', 'Grace', 'Tekle', 'Kebede', 'Female', '2005-12-03', 'grace33@example.com', '0911000033', 'Addis Ababa', 'Ethiopian', 12, 89, 591, 'Kebele 33', 'grace33', 'password123', 'Martha', '', '0911000133', '0911000233', 'Teacher', 'Housewife', 'John', '0911000333', 'O+', '', '', 'None', 'ABC School', NULL, '2025-08-16 14:52:56'),
+(48, '../assets/img/profile.jpg', 'BSS/STU/0036/17', 'Michael', 'Daniel', 'Abebe', 'Male', '2006-05-17', 'michael34@example.com', '0911000034', 'Bahir Dar', 'Ethiopian', 12, 89, 591, 'Kebele 34', 'michael34', 'password123', 'Sarah', '', '0911000134', '0911000234', 'Farmer', 'Nurse', 'Luke', '0911000334', 'A-', '', '', 'None', 'XYZ School', NULL, '2025-08-16 14:52:56'),
+(49, '../assets/img/download.jpg', 'BSS/STU/0037/17', 'Linda', 'Abebe', 'Tesfaye', 'Female', '2005-07-28', 'linda35@example.com', '0911000035', 'Gondar', 'Ethiopian', 12, 89, 591, 'Kebele 35', 'linda35', 'password123', 'Anna', '', '0911000135', '0911000235', 'Teacher', 'Nurse', 'Ethan', '0911000335', 'B+', '', '', 'None', 'LMN School', NULL, '2025-08-16 14:52:56'),
+(50, '../assets/img/man united.jpg', 'BSS/STU/0038/17', 'James', 'Tekle', 'David', 'Male', '2006-09-05', 'james36@example.com', '0911000036', 'Dire Dawa', 'Ethiopian', 12, 89, 591, 'Kebele 36', 'james36', 'password123', 'Clara', '', '0911000136', '0911000236', 'Engineer', 'Teacher', 'Mark', '0911000336', 'AB+', '', '', 'None', 'OPQ School', NULL, '2025-08-16 14:52:56'),
+(51, '../assets/img/Michaele_page-0001.jpg', 'BSS/STU/0039/17', 'abinet', 'mesele', 'shano', 'M', '2025-08-05', 'simo.dukamo15@gmail.com', '+251935225763', 'have', 'ethiopia', 9, 59, 462, 'kebele', 'admin', 'nIvRPLWFfGH/pgidb0LY8A==', 'Ermias', '', '+251935225763', '+251935225763', 'medicen', 'farmer', 'Ermias', '+251935225763', 'A-', 'Allergies', '', 'No', 'ebenezer', '../assets/case_files/appLatter.docx', '2025-08-19 07:55:20'),
+(53, '../assets/img/balelaHome.png', 'BSS/STU/0040/17', 'dukamo', 'Ermias', 'dubiso', 'F', '2025-08-03', 'simo.dukamo15@gmail.com', '+251935225763', 'bishoftu', 'ethiopia', 3, 21, 147, 'kebele', 'sss', 'nIvRPLWFfGH/pgidb0LY8A==', 'Ermias', '', '+251935225763', '+251935225763', 'medicen', 'farmer', 'Ermias', '+251935225763', 'A-', 'Diabetes', '', 'Yes', 'ebenezer', '../assets/case_files/appLatter.docx', '2025-08-19 07:59:51'),
+(54, '../assets/img/balelaHome.png', 'BSS/STU/0041/17', 'dukamo', 'Kebede', 'weknkdngqq', 'M', '2025-08-10', 'simo.dukamo15@gmail.com', '+251909299398', 'basa', 'Ethiopia', 9, 60, 468, 'kebele', 'aba', 'nIvRPLWFfGH/pgidb0LY8A==', 'Ermias', 'Ermias', '+251935225763', '+251935225763', 'medicen', 'farmer', 'Ermias', '+251935225763', 'A-', 'Heart Condition', '', 'Yes', 'Hawasaa', '../assets/case_files/appLatter.docx', '2025-08-19 09:00:33');
 
 -- --------------------------------------------------------
 
