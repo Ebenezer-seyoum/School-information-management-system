@@ -215,9 +215,11 @@ if (isset($_SESSION["uid"]) and ($roleName == "Director")) {
             </div>
           </li>
 <li class="nav-item">
-  <a data-bs-toggle="collapse" href="#reports"><i class="fas fa-chart-bar"></i><p>Reports</p><span class="caret"></span></a>
+  <a data-bs-toggle="collapse" href="#reports">
+    <i class="fas fa-chart-bar"></i><p>Reports</p><span class="caret"></span></a>
     <div class="collapse" id="reports">
-      <ul class="nav nav-collapse"><li><a href="general_report.php"><i class="fas fa-file-alt me-2"></i>general report</span> </a></li>
+      <ul class="nav nav-collapse">
+        <li><a href="general_report.php"><i class="fas fa-file-alt me-2"></i>general report</span></a></li>
       <li><a href="litigant_report.php"><i class="fas fa-file-alt me-2"></i> litigant report</a></li>
     
     
