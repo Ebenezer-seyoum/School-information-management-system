@@ -214,20 +214,37 @@ if (isset($_SESSION["uid"]) and ($roleName == "Director")) {
               </ul>
             </div>
           </li>
-<li class="nav-item">
-  <a data-bs-toggle="collapse" href="#reports">
-    <i class="fas fa-chart-bar"></i><p>Reports</p><span class="caret"></span></a>
-    <div class="collapse" id="reports">
-      <ul class="nav nav-collapse">
-        <li><a href="general_report.php"><i class="fas fa-file-alt me-2"></i>general report</span></a></li>
-      <li><a href="litigant_report.php"><i class="fas fa-file-alt me-2"></i> litigant report</a></li>
-    
-    
-    
-        </ul>
-      </div>
-     </li>
+            <!-- Report -->
+    <li class="nav-item">
+  <a data-bs-toggle="collapse" href="#reports" role="button" aria-expanded="false" aria-controls="reports">
+    <i class="fas fa-chart-bar"></i>
+    <p>Report Management</p>
+    <span class="caret"></span>
+  </a>
+  <div class="collapse" id="reports">
+    <ul class="nav nav-collapse">
+      <li><a href="teacher_report.php"><i class="fas fa-chalkboard-teacher"></i> Teacher Report</a></li>
+      <li><a href="student_report.php"><i class="fas fa-user-graduate"></i> Student Report</a></li>
+      <li><a href="attendance_report.php"><i class="fas fa-users"></i> Attendance Report</a></li>
+
+      <!-- Academic Report -->
+      <li>
+        <a data-bs-toggle="collapse" href="#academicReports" role="button" aria-expanded="false" aria-controls="academicReports">
+          <i class="fas fa-users"></i> Academic Report
+          <span class="caret"></span>
+        </a>
+        <div class="collapse" id="academicReports">
+          <ul class="nav nav-collapse">
+            <li><a href="academic_report_student.php"><i class="fas fa-user-graduate"></i> Student-level Report</a></li>
+            <li><a href="academic_report_section.php"><i class="fas fa-layer-group"></i> Section-level Report</a></li>
+          </ul>
+        </div>
+      </li>
+
     </ul>
+  </div>
+</li>
+
   </div>
  </div>
 </div>
@@ -238,7 +255,7 @@ if (isset($_SESSION["uid"]) and ($roleName == "Director")) {
 				<!-- Logo Header -->
 	<div class="logo-header" data-background-color="dark">
 		<a href="index.html" class="logo">
-		<img src="../assets/img/kaiadmin/logo_light.svg" alt="navbar brand" class="navbar-brand" height="20"></a>
+    <img src="../assets/img/logo.png" alt="navbar brand" class="navbar-brand" height="20"></a>
 	<div class="nav-toggle">
 		<button class="btn btn-toggle toggle-sidebar"><i class="gg-menu-right"></i></button>
 		<button class="btn btn-toggle sidenav-toggler"><i class="gg-menu-left"></i></button></div>

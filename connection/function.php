@@ -1,11 +1,5 @@
 <?php
 include 'connection.php';
-use \PHPMailer\PHPMailer\PHPMailer;
-// Include PHPMailer classes
-require_once __DIR__ . '/../phpMailer/PHPMailer.php';
-require_once __DIR__ . '/../phpMailer/SMTP.php';
-require_once __DIR__ . '/../phpMailer/Exception.php';
-
 // --- Encryption configuration ---
 define('ENCRYPT_METHOD', 'AES-256-CBC');
 define('SECRET_KEY', 'your-strong-secret-key'); 

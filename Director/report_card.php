@@ -120,6 +120,25 @@ if (isset($_SESSION["uid"]) && ($roleName == "Director")) {
   </div>
 </div>
 
+<!-- Preview PDF Modal -->
+<div class="modal fade" id="previewPdfModal" tabindex="-1" aria-labelledby="previewPdfModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="previewPdfModalLabel">Report Card Preview</h5>
+        <div class="d-flex gap-2">
+          <a id="previewOpenNewTab" href="#" target="_blank" class="btn btn-sm btn-outline-primary">Open in new tab</a>
+          <a id="previewDownload" href="#" target="_blank" class="btn btn-sm btn-outline-success">Download</a>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-0" style="height: 80vh;">
+        <iframe id="reportPdfIframe" src="" style="width:100%; height:100%; border:0;"></iframe>
+      </div>
+    </div>
+  </div>
+  </div>
+
 <script>
 // Event listener for "View Students" button
 document.querySelectorAll('.view-students-btn').forEach(button => {
@@ -149,7 +168,9 @@ document.querySelectorAll('.view-students-btn').forEach(button => {
         modalTitle.textContent = `Students in Class: ${sectionName} | ${year} | Semester ${semester}`;
         fetch(`ajax_fetch_students_results.php?section_id=${sectionId}&academic_year=${year}&semester=${semester}`)
           .then(res => res.text())
-          .then(data => { studentsList.innerHTML = data; })
+          .then(data => {
+            studentsList.innerHTML = data;
+          })
           .catch(err => { studentsList.innerHTML = 'Error fetching students'; });
       } else {
         modalTitle.textContent = `Students in Class: ${sectionName}`;
@@ -162,6 +183,47 @@ document.querySelectorAll('.view-students-btn').forEach(button => {
 
   });
 });
+
+// Delegated handlers inside the modal content so injected scripts are not required
+(function(){
+  const container = document.getElementById('studentsList');
+  if (!container) return;
+
+  // Handle Show Report button clicks (preview in dedicated modal)
+  container.addEventListener('click', function(e){
+    const btn = e.target.closest && e.target.closest('.preview-btn');
+    if (!btn) return;
+    const url = btn.dataset.previewUrl;
+    if (!url) return;
+
+    // Setup links
+    const openBtn = document.getElementById('previewOpenNewTab');
+    const downloadBtn = document.getElementById('previewDownload');
+    if (openBtn) openBtn.href = url;
+    if (downloadBtn) {
+      const dlUrl = url.includes('mode=preview') ? url.replace('mode=preview','mode=download') : (url + (url.includes('?') ? '&' : '?') + 'mode=download');
+      downloadBtn.href = dlUrl;
+    }
+
+    // Set iframe and open modal
+    const iframe = document.getElementById('reportPdfIframe');
+    if (iframe) iframe.src = url;
+    const modal = new bootstrap.Modal(document.getElementById('previewPdfModal'));
+    modal.show();
+  });
+
+  // Handle search inside injected table
+  container.addEventListener('input', function(e){
+    if (e.target && e.target.id === 'studentSearch') {
+      const filter = e.target.value.toLowerCase();
+      const rows = container.querySelectorAll('#studentTable tbody tr');
+      rows.forEach(function(row){
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(filter) ? '' : 'none';
+      });
+    }
+  });
+})();
 </script>
 
 <?php

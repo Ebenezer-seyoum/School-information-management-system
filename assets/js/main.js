@@ -1,8 +1,6 @@
- AOS.init({
- 	duration: 800,
- 	easing: 'slide',
- 	once: true
- });
+if (window.AOS && typeof AOS.init === 'function') {
+	AOS.init({ duration: 800, easing: 'slide', once: true });
+}
 
 jQuery(document).ready(function($) {
 

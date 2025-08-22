@@ -106,5 +106,5 @@ if (isset($_SESSION["uid"])) {
 ?>
 
 <?php
-include('footer.php');
+include('../Admin/footer.php');
 ?>

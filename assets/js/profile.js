@@ -4,18 +4,22 @@
         const removeImage = document.getElementById('removeImage');
         const profileImage = document.querySelector('.profile-images');
 
-        removeImage.addEventListener('click', function() {
-            profileImage.src = '../assets/img/no.png'; // Clear the image preview
-            imageUpload.value = ''; // Clear the file input
-        });
+        if (removeImage && profileImage && imageUpload) {
+            removeImage.addEventListener('click', function() {
+                profileImage.src = '../assets/img/no.png';
+                imageUpload.value = '';
+            });
+        }
 
-        imageUpload.addEventListener('change', function() {
-            if (imageUpload.files && imageUpload.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    profileImage.src = e.target.result; // Update the image preview
-                };
-                reader.readAsDataURL(imageUpload.files[0]);
-            }
-        });
+        if (imageUpload && profileImage) {
+            imageUpload.addEventListener('change', function() {
+                if (imageUpload.files && imageUpload.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        profileImage.src = e.target.result;
+                    };
+                    reader.readAsDataURL(imageUpload.files[0]);
+                }
+            });
+        }
     });
