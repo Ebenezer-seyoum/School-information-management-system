@@ -3,6 +3,7 @@ include "directorHeader.php";
 $success = $error = "";
 $promotedStudents = [];
 $notPromotedStudents = [];
+$promotionSuccess = false;
 
 // --- Fetch all classes ---
 $classesRes = mysqli_query($conn, "SELECT * FROM sections ORDER BY section_name");
@@ -31,9 +32,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['promote_final'])) {
         mysqli_query($conn, "INSERT INTO assign_student (student_id, section_id, academic_year, promote_status) 
             VALUES ('$student_id', '$fromClass', '$toYear', 0)");
     }
-    echo "<script>
-        Swal.fire({icon:'success', title:'Success', text:'Students promoted successfully!'}).then(()=>{window.location=''});
-    </script>";
+
+    // Set flag for success alert
+    $promotionSuccess = true;
+
+    // Prevent form resubmission
+    echo "<script>window.history.replaceState({}, document.title, window.location.pathname);</script>";
 }
 
 // --- Fetch students for preview when class/year is selected ---
@@ -63,23 +67,38 @@ if ($selectedClass && $selectedYear) {
         $mathFail = false;
         while($m = mysqli_fetch_assoc($marksRes)){
             $mark = $m['result'];
-            $subject = strtolower($m['subject_name']);
             $total += $mark;
             $count++;
             if($mark < 50) $failCount++;
-            if($subject == "english" && $mark < 50) $englishFail = true;
-            if(($subject == "mathematics" || $subject == "math") && $mark < 50) $mathFail = true;
+            if(stripos($m['subject_name'], 'english')!==false && $mark<50) $englishFail=true;
+            if(stripos($m['subject_name'], 'math')!==false && $mark<50) $mathFail=true;
         }
         $avgMark = ($count>0)?round($total/$count,2):0;
+        // Total required subjects for this class
+        $curriculumRes = mysqli_query($conn, "
+            SELECT COUNT(*) as total_subjects 
+            FROM curriculum_subjects 
+            WHERE class_id='$selectedClass'
+        ");
+        $curriculumRow = mysqli_fetch_assoc($curriculumRes);
+        $totalSubjects = $curriculumRow['total_subjects'] ?? 0;
+        $marksCount = $count; 
+        $expectedMarks = $totalSubjects * 2;
+        $allMarksEntered = ($expectedMarks > 0 && $marksCount == $expectedMarks);
 
         // Promotion rules
-        if($avgMark >= 50 && $failCount < 3 && !($englishFail && $mathFail)){
+        if($allMarksEntered && $avgMark >= 50 && $failCount < 3 && !$englishFail && !$mathFail){
             $promotedStudents[] = [
                 'student_id'=> $student_id,
                 'id'=>$id,
                 'first_name'=>$stu['first_name'],
                 'father_name'=>$stu['father_name'],
-                'grand_father_name'=>$stu['grand_father_name']
+                'grand_father_name'=>$stu['grand_father_name'],
+                'avg'=>round($avgMark,2),
+                'fails'=>$failCount,
+                'englishFail'=>$englishFail,
+                'mathFail'=>$mathFail,
+                'allMarks' => $allMarksEntered
             ];
         } else {
             $notPromotedStudents[] = [
@@ -87,18 +106,32 @@ if ($selectedClass && $selectedYear) {
                 'id'=>$id,
                 'first_name'=>$stu['first_name'],
                 'father_name'=>$stu['father_name'],
-                'grand_father_name'=>$stu['grand_father_name']
+                'grand_father_name'=>$stu['grand_father_name'],
+                'avg'=>round($avgMark,2),
+                'fails'=>$failCount,
+                'englishFail'=>$englishFail,
+                'mathFail'=>$mathFail,
+                'allMarks' => $allMarksEntered
             ];
         }
     }
 }
 ?>
 
+<!-- page header -->
 <div class="container">
   <div class="page-inner">
     <div class="page-header">
       <h3 class="fw-bold mb-3">Promote Student</h3>
-    </div>
+      <ul class="breadcrumbs mb-3">
+        <li class="nav-home"><a href="#"><i class="icon-home"></i></a></li>
+        <li class="separator"><i class="icon-arrow-right"></i></li>
+        <li class="nav-item"><a href="#">Manage Student</a></li>
+        <li class="separator"><i class="icon-arrow-right"></i></li>
+        <li class="nav-item"><a href="#">Promote Student</a></li>
+      </ul>
+  </div>
+<!-- end page header -->
 
     <!-- Promotion Form -->
     <form method="POST" action="" id="promoteForm">
@@ -153,6 +186,7 @@ if ($selectedClass && $selectedYear) {
     </form>
   </div>
 </div>
+
 <!-- Modal Preview -->
 <div class="modal fade" id="previewModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-xl">
@@ -197,6 +231,11 @@ if ($selectedClass && $selectedYear) {
                     <tr>
                         <th>ID</th>
                         <th>Full Name</th>
+                         <th>Average</th>
+                         <th>Fails</th>
+                        <th>English Fail</th>
+                        <th>Math Fail</th>
+                        <th>All Marks Entered</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -204,6 +243,11 @@ if ($selectedClass && $selectedYear) {
                     <tr>
                         <td><?= $stu['id'] ?></td>
                         <td><?= htmlspecialchars($stu['first_name'].' '.$stu['father_name'].' '.$stu['grand_father_name']) ?></td>
+                        <td><?= number_format($stu['avg'], 2) ?></td>
+                        <td><?= $stu['fails'] ?></td>
+                        <td><?= $stu['englishFail'] ? 'Yes' : 'No' ?></td>
+                        <td><?= $stu['mathFail'] ? 'Yes' : 'No' ?></td>
+                        <td><?= $stu['allMarks'] ? 'Yes' : 'No' ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
@@ -228,34 +272,48 @@ document.getElementById('previewBtn').addEventListener('click', function(){
     modal.show();
 });
 
-document.getElementById('confirmPromoteBtn').addEventListener('click', function(){
-    let form = document.getElementById('promoteForm');
-    
-    let inputFinal = document.createElement('input');
-    inputFinal.type = 'hidden';
-    inputFinal.name = 'promote_final';
-    inputFinal.value = 1;
-    form.appendChild(inputFinal);
+document.getElementById('confirmPromoteBtn').addEventListener('click', function(e){
+    e.preventDefault();
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You are about to promote students!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#28a745',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, promote',
+        cancelButtonText: 'No, cancel'
+    }).then((result) => {
+        if(result.isConfirmed){
+            let form = document.getElementById('promoteForm');
 
-    let promotedList = <?php echo json_encode(array_column($promotedStudents,'student_id')); ?>;
-    let notPromotedList = <?php echo json_encode(array_column($notPromotedStudents,'student_id')); ?>;
+            let inputFinal = document.createElement('input');
+            inputFinal.type = 'hidden';
+            inputFinal.name = 'promote_final';
+            inputFinal.value = 1;
+            form.appendChild(inputFinal);
 
-    let inputPromoted = document.createElement('input');
-    inputPromoted.type = 'hidden';
-    inputPromoted.name = 'promoted_list';
-    inputPromoted.value = JSON.stringify(promotedList);
-    form.appendChild(inputPromoted);
+            let promotedList = <?php echo json_encode(array_column($promotedStudents,'student_id')); ?>;
+            let notPromotedList = <?php echo json_encode(array_column($notPromotedStudents,'student_id')); ?>;
 
-    let inputNotPromoted = document.createElement('input');
-    inputNotPromoted.type = 'hidden';
-    inputNotPromoted.name = 'not_promoted_list';
-    inputNotPromoted.value = JSON.stringify(notPromotedList);
-    form.appendChild(inputNotPromoted);
+            let inputPromoted = document.createElement('input');
+            inputPromoted.type = 'hidden';
+            inputPromoted.name = 'promoted_list';
+            inputPromoted.value = JSON.stringify(promotedList);
+            form.appendChild(inputPromoted);
 
-    form.submit();
+            let inputNotPromoted = document.createElement('input');
+            inputNotPromoted.type = 'hidden';
+            inputNotPromoted.name = 'not_promoted_list';
+            inputNotPromoted.value = JSON.stringify(notPromotedList);
+            form.appendChild(inputNotPromoted);
+
+            form.submit();
+        }
+    });
 });
-</script>
-<script>
+
+// Table search filter
 function filterTable(inputId, tableId) {
     document.getElementById(inputId).addEventListener("keyup", function() {
         let filter = this.value.toLowerCase();
@@ -266,9 +324,21 @@ function filterTable(inputId, tableId) {
         });
     });
 }
-
 filterTable("searchPromoted", "promotedTable");
 filterTable("searchNotPromoted", "notPromotedTable");
 </script>
+
+<?php if($promotionSuccess): ?>
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+    Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Students promoted successfully!',
+        confirmButtonText: 'OK'
+    });
+});
+</script>
+<?php endif; ?>
 
 <?php include('../Admin/footer.php'); ?>

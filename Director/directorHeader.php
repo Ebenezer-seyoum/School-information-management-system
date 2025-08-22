@@ -208,8 +208,6 @@ if (isset($_SESSION["uid"]) and ($roleName == "Director")) {
             </a>
             <div class="collapse" id="feedback">
               <ul class="nav nav-collapse">
-                <li><a href="teacher_feedback.php"><i class="fas fa-chalkboard-teacher"></i> Teacher Feedback</a></li>
-                <li><a href="student_feedback.php"><i class="fas fa-user-graduate"></i> Student Feedback</a></li>
                 <li><a href="customer_feedback.php"><i class="fas fa-users"></i> Customer Feedback</a></li>
               </ul>
             </div>

@@ -115,27 +115,6 @@ if (isset($_SESSION["sid"])) {
     </ul>
   </div>
 </li>
-
-<li class="nav-item">
-   <a data-bs-toggle="collapse" href="#feedback"><i class="fas fa-comments"></i><p>Feedback</p><span class="caret"></span></a>
-    <div class="collapse" id="feedback">
-    <ul class="nav nav-collapse">
-      <li><a href="view_feedback.php"><i class="fas fa-comments"></i>View Feedback</a></li>
-     <a href="view_feedback.php">  <i class="fas fa-comments"></i>Send Feedback</a></li></ul>
- </div>
-</li>
-<li class="nav-item">
-  <a data-bs-toggle="collapse" href="#reports"><i class="fas fa-chart-bar"></i><p>Reports</p><span class="caret"></span></a>
-    <div class="collapse" id="reports">
-      <ul class="nav nav-collapse"><li><a href="general_report.php"><i class="fas fa-file-alt me-2"></i>general report</span> </a></li>
-      <li><a href="litigant_report.php"><i class="fas fa-file-alt me-2"></i> litigant report</a></li>
-    
-    
-    
-        </ul>
-      </div>
-     </li>
-    </ul>
   </div>
  </div>
 </div>

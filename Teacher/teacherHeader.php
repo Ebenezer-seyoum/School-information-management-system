@@ -116,20 +116,6 @@ if (isset($_SESSION["uid"]) and ($roleName == "Teacher")) {
     </ul>
   </div>
 </li>
-<!-- Feedback -->
-<li class="nav-item">
-  <a data-bs-toggle="collapse" href="#feedback" role="button" aria-expanded="false" aria-controls="feedback">
-    <i class="fas fa-bullhorn"></i>
-    <p>Feedback Management</p>
-    <span class="caret"></span>
-  </a>
-  <div class="collapse" id="feedback">
-    <ul class="nav nav-collapse">
-      <li><a href="view_feedback.php"><i class="fas fa-eye"></i> View Feedback</a></li>
-      <li><a href="view_feedback.php"><i class="fas fa-eye"></i> Send Feedback</a></li>
-    </ul>
-  </div>
-</li>
 <!-- Report -->
 <li class="nav-item">
   <a data-bs-toggle="collapse" href="#report" role="button" aria-expanded="false" aria-controls="report">
