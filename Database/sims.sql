@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Aug 19, 2025 at 03:59 PM
+-- Generation Time: Aug 22, 2025 at 10:29 PM
 -- Server version: 9.1.0
 -- PHP Version: 8.3.14
 
@@ -29,8 +29,24 @@ SET time_zone = "+00:00";
 
 DROP TABLE IF EXISTS `announcements`;
 CREATE TABLE IF NOT EXISTS `announcements` (
-  `anid` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `eid` int NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `start_date` date NOT NULL,
+  `end_date` date NOT NULL,
+  `created_by` int NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`eid`),
+  KEY `annou_ibpk_1` (`created_by`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `announcements`
+--
+
+INSERT INTO `announcements` (`eid`, `title`, `description`, `start_date`, `end_date`, `created_by`, `created_at`) VALUES
+(1, 'do', 'please come to event on time', '2025-08-22', '2025-08-25', 3, '2025-08-22 10:19:33'),
+(2, 'metting', 'please come to event on time', '2025-08-22', '2025-08-25', 3, '2025-08-22 10:24:03');
 
 -- --------------------------------------------------------
 
@@ -77,38 +93,57 @@ CREATE TABLE IF NOT EXISTS `assign_student` (
   `student_id` int NOT NULL,
   `section_id` int NOT NULL,
   `academic_year` int NOT NULL,
+  `promote_status` int NOT NULL,
   PRIMARY KEY (`asid`),
   KEY `student_ibpk_1` (`student_id`),
   KEY `section_ibpk_1` (`section_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `assign_student`
 --
 
-INSERT INTO `assign_student` (`asid`, `student_id`, `section_id`, `academic_year`) VALUES
-(1, 2, 9, 2018),
-(2, 1, 9, 2018),
-(4, 20, 9, 2018),
-(5, 23, 9, 2018),
-(6, 29, 9, 2018),
-(7, 38, 8, 2018),
-(8, 24, 8, 2018),
-(9, 46, 8, 2018),
-(10, 19, 10, 2018),
-(11, 35, 10, 2018),
-(12, 43, 10, 2018),
-(13, 39, 9, 2018),
-(14, 47, 9, 2018),
-(15, 25, 9, 2018),
-(16, 18, 7, 2018),
-(17, 42, 7, 2018),
-(18, 50, 7, 2018),
-(19, 20, 12, 2017),
-(20, 2, 12, 2017),
-(21, 19, 12, 2017),
-(22, 39, 12, 2017),
-(23, 50, 12, 2017);
+INSERT INTO `assign_student` (`asid`, `student_id`, `section_id`, `academic_year`, `promote_status`) VALUES
+(1, 2, 9, 2018, 2),
+(2, 1, 9, 2018, 1),
+(4, 20, 9, 2018, 1),
+(5, 23, 9, 2018, 1),
+(6, 29, 9, 2018, 1),
+(7, 38, 8, 2018, 0),
+(8, 24, 8, 2018, 0),
+(9, 46, 8, 2018, 0),
+(10, 19, 10, 2018, 0),
+(11, 35, 10, 2018, 0),
+(12, 43, 10, 2018, 0),
+(13, 39, 9, 2018, 1),
+(14, 47, 9, 2018, 1),
+(15, 25, 9, 2018, 1),
+(16, 18, 7, 2018, 0),
+(17, 42, 7, 2018, 0),
+(18, 50, 7, 2018, 0),
+(19, 20, 12, 2017, 0),
+(20, 2, 12, 2017, 0),
+(21, 19, 12, 2017, 0),
+(22, 39, 12, 2017, 0),
+(23, 50, 12, 2017, 0),
+(32, 47, 9, 2020, 0),
+(33, 25, 9, 2020, 0),
+(34, 2, 15, 2020, 0),
+(35, 1, 9, 2020, 0),
+(36, 20, 9, 2020, 0),
+(37, 23, 9, 2020, 0),
+(38, 29, 9, 2020, 0),
+(39, 39, 9, 2020, 0),
+(40, 47, 9, 2020, 0),
+(41, 25, 9, 2020, 0),
+(43, 2, 17, 2010, 0),
+(44, 1, 9, 2010, 0),
+(45, 20, 9, 2010, 0),
+(46, 23, 9, 2010, 0),
+(47, 29, 9, 2010, 0),
+(48, 39, 9, 2010, 0),
+(49, 47, 9, 2010, 0),
+(50, 25, 9, 2010, 0);
 
 -- --------------------------------------------------------
 
@@ -539,46 +574,60 @@ CREATE TABLE IF NOT EXISTS `marks` (
   KEY `class_ibpk_1` (`section_id`),
   KEY `subj_ipbk_1` (`subject_id`),
   KEY `teacher_ibpk_1` (`teacher_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=77 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `marks`
 --
 
 INSERT INTO `marks` (`mid`, `student_id`, `section_id`, `subject_id`, `teacher_id`, `result`, `semester`, `academic_year`, `mark_status`, `action_by`, `created_at`, `updated_at`) VALUES
-(44, 20, 9, 5, 6, 12, 1, '2018', 2, '', '2025-08-17 02:49:30', '2025-08-18 08:37:07'),
-(45, 2, 9, 5, 6, 39, 1, '2018', 2, '', '2025-08-17 02:49:30', '2025-08-17 02:49:30'),
-(46, 1, 9, 5, 6, 12, 1, '2018', 0, '', '2025-08-17 02:49:30', '2025-08-18 07:52:25'),
-(47, 23, 9, 5, 6, 43, 1, '2018', 2, '', '2025-08-17 02:49:30', '2025-08-17 02:49:30'),
-(48, 29, 9, 5, 6, 66, 1, '2018', 2, '', '2025-08-17 02:49:30', '2025-08-17 02:49:30'),
-(49, 39, 9, 5, 6, 66, 1, '2018', 2, '', '2025-08-17 02:49:30', '2025-08-17 02:49:30'),
-(50, 47, 9, 5, 6, 34, 1, '2018', 2, '', '2025-08-17 02:49:30', '2025-08-17 02:49:30'),
-(51, 25, 9, 5, 6, 53, 1, '2018', 2, '', '2025-08-17 02:49:30', '2025-08-17 02:49:30'),
-(52, 20, 9, 5, 6, 98, 2, '2018', 2, '', '2025-08-17 11:47:49', '2025-08-17 11:47:49'),
-(53, 2, 9, 5, 6, 76, 2, '2018', 2, '', '2025-08-17 11:47:49', '2025-08-17 11:47:49'),
-(54, 1, 9, 5, 6, 43, 2, '2018', 2, '', '2025-08-17 11:47:50', '2025-08-17 11:47:50'),
-(55, 23, 9, 5, 6, 43, 2, '2018', 2, '', '2025-08-17 11:47:50', '2025-08-17 11:47:50'),
-(56, 29, 9, 5, 6, 98, 2, '2018', 2, '', '2025-08-17 11:47:50', '2025-08-17 11:47:50'),
-(57, 39, 9, 5, 6, 95, 2, '2018', 2, '', '2025-08-17 11:47:50', '2025-08-17 11:47:50'),
-(58, 47, 9, 5, 6, 32, 2, '2018', 2, '', '2025-08-17 11:47:50', '2025-08-17 11:47:50'),
-(59, 25, 9, 5, 6, 65, 2, '2018', 2, '', '2025-08-17 11:47:50', '2025-08-17 11:47:50'),
-(60, 2, 9, 2, 3, 13, 1, '2018', 2, 'director', '2025-08-17 13:00:55', '2025-08-17 13:28:56'),
-(61, 1, 9, 2, 3, 55, 2, '2018', 2, 'director', '2025-08-17 13:00:55', '2025-08-18 08:53:58'),
-(62, 20, 9, 2, 3, 57, 1, '2018', 2, 'director', '2025-08-17 13:00:55', '2025-08-18 08:43:46'),
-(63, 23, 9, 2, 3, 0, 1, '2018', 2, 'director', '2025-08-17 13:00:55', '2025-08-17 13:28:56'),
-(64, 29, 9, 2, 3, 0, 1, '2018', 2, 'director', '2025-08-17 13:00:55', '2025-08-17 13:28:56'),
-(65, 39, 9, 2, 3, 0, 1, '2018', 2, 'director', '2025-08-17 13:00:55', '2025-08-17 13:28:56'),
-(66, 47, 9, 2, 3, 0, 1, '2018', 2, 'director', '2025-08-17 13:00:55', '2025-08-17 13:28:56'),
-(67, 25, 9, 2, 3, 0, 1, '2018', 2, 'director', '2025-08-17 13:00:55', '2025-08-17 13:28:56'),
-(68, 20, 9, 2, 3, 75, 2, '2018', 2, 'director', '2025-08-17 13:12:45', '2025-08-17 13:12:45'),
-(69, 2, 9, 2, 3, 0, 2, '2018', 2, 'director', '2025-08-17 13:12:45', '2025-08-17 13:12:45'),
+(44, 20, 9, 5, 3, 12, 1, '2018', 2, 'director', '2025-08-17 02:49:30', '2025-08-22 11:47:50'),
+(45, 2, 9, 5, 3, 59, 1, '2018', 2, 'director', '2025-08-17 02:49:30', '2025-08-22 11:47:50'),
+(46, 1, 9, 5, 3, 12, 1, '2018', 2, 'director', '2025-08-17 02:49:30', '2025-08-22 11:47:50'),
+(47, 23, 9, 5, 3, 43, 1, '2018', 2, 'director', '2025-08-17 02:49:30', '2025-08-22 11:47:50'),
+(48, 29, 9, 5, 3, 66, 1, '2018', 2, 'director', '2025-08-17 02:49:30', '2025-08-22 11:47:50'),
+(49, 39, 9, 5, 3, 66, 1, '2018', 2, 'director', '2025-08-17 02:49:30', '2025-08-22 11:47:50'),
+(50, 47, 9, 5, 3, 34, 1, '2018', 2, 'director', '2025-08-17 02:49:30', '2025-08-22 11:47:50'),
+(51, 25, 9, 5, 3, 53, 1, '2018', 2, 'director', '2025-08-17 02:49:30', '2025-08-22 11:47:50'),
+(52, 20, 9, 5, 3, 98, 2, '2018', 2, 'director', '2025-08-17 11:47:49', '2025-08-22 11:47:00'),
+(53, 2, 9, 5, 3, 76, 2, '2018', 2, 'director', '2025-08-17 11:47:49', '2025-08-22 11:47:00'),
+(54, 1, 9, 5, 3, 43, 2, '2018', 2, 'director', '2025-08-17 11:47:50', '2025-08-22 11:47:00'),
+(55, 23, 9, 5, 3, 43, 2, '2018', 2, 'director', '2025-08-17 11:47:50', '2025-08-22 11:47:00'),
+(56, 29, 9, 5, 3, 98, 2, '2018', 2, 'director', '2025-08-17 11:47:50', '2025-08-22 11:47:00'),
+(57, 39, 9, 5, 3, 95, 2, '2018', 2, 'director', '2025-08-17 11:47:50', '2025-08-22 11:47:00'),
+(58, 47, 9, 5, 3, 32, 2, '2018', 2, 'director', '2025-08-17 11:47:50', '2025-08-22 11:47:00'),
+(59, 25, 9, 5, 3, 65, 2, '2018', 2, 'director', '2025-08-17 11:47:50', '2025-08-22 11:47:00'),
+(60, 2, 9, 2, 3, 59, 1, '2018', 2, 'director', '2025-08-17 13:00:55', '2025-08-22 11:47:38'),
+(61, 1, 9, 2, 3, 0, 2, '2018', 2, 'director', '2025-08-17 13:00:55', '2025-08-22 11:46:44'),
+(62, 20, 9, 2, 3, 57, 1, '2018', 2, 'director', '2025-08-17 13:00:55', '2025-08-22 11:47:38'),
+(63, 23, 9, 2, 3, 0, 1, '2018', 2, 'director', '2025-08-17 13:00:55', '2025-08-22 11:47:38'),
+(64, 29, 9, 2, 3, 0, 1, '2018', 2, 'director', '2025-08-17 13:00:55', '2025-08-22 11:47:38'),
+(65, 39, 9, 2, 3, 0, 1, '2018', 2, 'director', '2025-08-17 13:00:55', '2025-08-22 11:47:38'),
+(66, 47, 9, 2, 3, 0, 1, '2018', 2, 'director', '2025-08-17 13:00:55', '2025-08-22 11:47:38'),
+(67, 25, 9, 2, 3, 0, 1, '2018', 2, 'director', '2025-08-17 13:00:55', '2025-08-22 11:47:38'),
+(68, 20, 9, 2, 3, 75, 2, '2018', 2, 'director', '2025-08-17 13:12:45', '2025-08-22 11:46:44'),
+(69, 2, 9, 2, 3, 59, 2, '2018', 2, 'director', '2025-08-17 13:12:45', '2025-08-22 11:46:44'),
 (70, 1, 9, 2, 3, 0, 2, '2018', 2, 'director', '2025-08-17 13:12:45', '2025-08-17 13:12:45'),
-(71, 23, 9, 2, 3, 0, 2, '2018', 2, 'director', '2025-08-17 13:12:45', '2025-08-17 13:12:45'),
-(72, 29, 9, 2, 3, 0, 2, '2018', 2, 'director', '2025-08-17 13:12:45', '2025-08-17 13:12:45'),
-(73, 39, 9, 2, 3, 0, 2, '2018', 2, 'director', '2025-08-17 13:12:45', '2025-08-17 13:12:45'),
-(74, 47, 9, 2, 3, 0, 2, '2018', 2, 'director', '2025-08-17 13:12:45', '2025-08-17 13:12:45'),
-(75, 25, 9, 2, 3, 0, 2, '2018', 2, 'director', '2025-08-17 13:12:45', '2025-08-17 13:12:45'),
-(76, 1, 9, 2, 4, 33, 1, '2018', 2, '', '2025-08-18 08:54:22', '2025-08-18 08:54:22');
+(71, 23, 9, 2, 3, 0, 2, '2018', 2, 'director', '2025-08-17 13:12:45', '2025-08-22 11:46:44'),
+(72, 29, 9, 2, 3, 0, 2, '2018', 2, 'director', '2025-08-17 13:12:45', '2025-08-22 11:46:44'),
+(73, 39, 9, 2, 3, 0, 2, '2018', 2, 'director', '2025-08-17 13:12:45', '2025-08-22 11:46:44'),
+(74, 47, 9, 2, 3, 0, 2, '2018', 2, 'director', '2025-08-17 13:12:45', '2025-08-22 11:46:44'),
+(75, 25, 9, 2, 3, 0, 2, '2018', 2, 'director', '2025-08-17 13:12:45', '2025-08-22 11:46:44'),
+(76, 1, 9, 2, 3, 33, 1, '2018', 2, 'director', '2025-08-18 08:54:22', '2025-08-22 11:47:38'),
+(77, 2, 9, 6, 3, 59, 1, '2018', 2, 'director', '2025-08-22 11:47:24', '2025-08-22 11:47:24'),
+(78, 2, 9, 6, 3, 60, 2, '2018', 2, 'director', '2025-08-22 11:48:11', '2025-08-22 11:48:11'),
+(79, 2, 9, 3, 3, 60, 1, '2018', 2, 'director', '2025-08-22 11:49:19', '2025-08-22 11:49:19'),
+(80, 2, 9, 3, 3, 59, 2, '2018', 2, 'director', '2025-08-22 11:49:32', '2025-08-22 11:49:32'),
+(81, 2, 9, 11, 3, 60, 1, '2018', 2, 'director', '2025-08-22 11:49:45', '2025-08-22 11:49:45'),
+(82, 2, 9, 11, 3, 59, 2, '2018', 2, 'director', '2025-08-22 11:50:02', '2025-08-22 11:50:02'),
+(83, 2, 9, 4, 3, 59, 1, '2018', 2, 'director', '2025-08-22 11:50:16', '2025-08-22 11:50:16'),
+(84, 2, 9, 4, 3, 60, 2, '2018', 2, 'director', '2025-08-22 11:50:28', '2025-08-22 11:50:28'),
+(85, 2, 9, 12, 3, 60, 1, '2018', 2, 'director', '2025-08-22 11:50:39', '2025-08-22 11:50:39'),
+(86, 2, 9, 12, 3, 60, 2, '2018', 2, 'director', '2025-08-22 11:50:51', '2025-08-22 11:50:51'),
+(87, 2, 9, 7, 3, 60, 1, '2018', 2, 'director', '2025-08-22 11:51:05', '2025-08-22 11:51:05'),
+(88, 2, 9, 7, 3, 59, 2, '2018', 2, 'director', '2025-08-22 11:51:23', '2025-08-22 11:51:23'),
+(89, 2, 9, 1, 3, 59, 1, '2018', 2, 'director', '2025-08-22 11:51:33', '2025-08-22 11:51:33'),
+(90, 2, 9, 1, 3, 60, 2, '2018', 2, 'director', '2025-08-22 11:51:45', '2025-08-22 11:51:45');
 
 -- --------------------------------------------------------
 
@@ -665,18 +714,6 @@ INSERT INTO `role_type` (`rid`, `role_name`, `abbreviation_name`, `description`,
 (2, 'Admin', 'ADM', 'Handles administrative tasks and system management.', '2025-08-08 10:36:30'),
 (3, 'Director', 'DIR', 'Oversees school operations and strategic planning.', '2025-08-08 10:36:30'),
 (4, 'Instructor', 'INSTR', 'Provides instruction and support to learners.', '2025-08-08 10:36:30');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `schedule`
---
-
-DROP TABLE IF EXISTS `schedule`;
-CREATE TABLE IF NOT EXISTS `schedule` (
-  `tid` int NOT NULL,
-  `start_date` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -837,6 +874,27 @@ INSERT INTO `subjects` (`suid`, `subject_name`, `abbreviation_name`) VALUES
 (11, 'Information and Communication ', 'ICT'),
 (12, 'Physical Education', 'PE'),
 (13, 'Economics', 'ECON');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `time_table`
+--
+
+DROP TABLE IF EXISTS `time_table`;
+CREATE TABLE IF NOT EXISTS `time_table` (
+  `tid` int NOT NULL AUTO_INCREMENT,
+  `class_id` int NOT NULL,
+  `subject_id` int NOT NULL,
+  `teacher_id` int NOT NULL,
+  `day_of_week` enum('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday') NOT NULL,
+  `start_time` time NOT NULL,
+  `end_time` time NOT NULL,
+  PRIMARY KEY (`tid`),
+  KEY `time_ibpk_1` (`class_id`),
+  KEY `time_ibpk_2` (`subject_id`),
+  KEY `time_ibpk_3` (`teacher_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -1737,6 +1795,12 @@ INSERT INTO `zones` (`id`, `name`, `region_id`) VALUES
 --
 
 --
+-- Constraints for table `announcements`
+--
+ALTER TABLE `announcements`
+  ADD CONSTRAINT `annou_ibpk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`uid`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+--
 -- Constraints for table `assign_instructor`
 --
 ALTER TABLE `assign_instructor`
@@ -1781,6 +1845,14 @@ ALTER TABLE `marks`
   ADD CONSTRAINT `stud_ibpk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`sid`) ON DELETE RESTRICT ON UPDATE CASCADE,
   ADD CONSTRAINT `subj_ipbk_1` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`suid`) ON DELETE RESTRICT ON UPDATE CASCADE,
   ADD CONSTRAINT `teacher_ibpk_1` FOREIGN KEY (`teacher_id`) REFERENCES `users` (`uid`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+--
+-- Constraints for table `time_table`
+--
+ALTER TABLE `time_table`
+  ADD CONSTRAINT `time_ibpk_1` FOREIGN KEY (`class_id`) REFERENCES `sections` (`cid`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  ADD CONSTRAINT `time_ibpk_2` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`suid`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  ADD CONSTRAINT `time_ibpk_3` FOREIGN KEY (`teacher_id`) REFERENCES `users` (`uid`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 --
 -- Constraints for table `woredas`
