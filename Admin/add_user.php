@@ -9,7 +9,7 @@ include('adminHeader.php');
     <ul class="breadcrumbs mb-3">
       <li class="nav-home"><a href="#"><i class="icon-home"></i></a></li>
       <li class="separator"><i class="icon-arrow-right"></i></li>
-      <li class="nav-item"><a href="#">Manage Account</a></li>
+      <li class="nav-item"><a href="#">Account Management</a></li>
       <li class="separator"><i class="icon-arrow-right"></i></li>
       <li class="nav-item"><a href="#">Create Account</a></li>
     </ul>

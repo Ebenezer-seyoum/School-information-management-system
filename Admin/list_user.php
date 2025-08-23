@@ -28,11 +28,19 @@ include('adminHeader.php');
  <div class="row">
   <div class="col-6">
     <div class="page-title flex-wrap">
-    <form method="GET">
-    <div class="input-group">
-  <input type="text" name="search" id="userSearch" class="form-control" 
-       style="font-weight: bold;" placeholder="Search by IdNumber, Name or user_type....">
-        </div>
+   <form method="GET">
+    <div class="search-box">
+  <div class="input-group">
+    <span class="input-group-text bg-primary text-white">
+      <i class="fas fa-search"></i>
+    </span>
+    <input type="text" name="search" id="userSearch" 
+           class="form-control search-input"
+           placeholder="Search by ID, Name, or Role...">
+    <button class="btn btn-primary" type="button">
+      Search
+    </button>
+  </div>
     </form>        
     </div>
   </div>

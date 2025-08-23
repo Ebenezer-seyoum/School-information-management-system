@@ -6,28 +6,18 @@ $profile = getUserByID($_SESSION["uid"]);
 $roleName = getRoleNameById($profile["user_type"]);
 if (isset($_SESSION["uid"]) && ($roleName == "Admin")) {
 ?>
-<!-- CSS for profile image -->
-<style>
-  .profile-img {
-    width: 30px; 
-    height: 30px;
-    border-radius: 50%; 
-    object-fit: cover; 
-}
-</style>
-<!-- end CSS for profile image -->
  
 <!-- Page Header -->
 <div class="container">
   <div class="page-inner">
     <div class="page-header">
-        <h3 class="fw-bold mb-3">DeActive Account</h3>
+        <h3 class="fw-bold mb-3">Disable Account</h3>
     <ul class="breadcrumbs mb-3">
         <li class="nav-home"><a href="#"><i class="icon-home"></i></a></li>
         <li class="separator"><i class="icon-arrow-right"></i></li>
-        <li class="nav-item"><a href="#">Manage Account</a></li>
+        <li class="nav-item"><a href="#">Account Management</a></li>
         <li class="separator"><i class="icon-arrow-right"></i></li>
-        <li class="nav-item"><a href="#">DeActive Account</a></li>
+        <li class="nav-item"><a href="#">Disable Account</a></li>
     </ul>
  </div>
 <!-- End Page Header -->
@@ -41,16 +31,22 @@ if (isset($_SESSION["uid"]) && ($roleName == "Admin")) {
    <div class="card-header">
     <div class="row w-100 align-items-center">
      <div class="col-12 col-md-6 mb-2 mb-md-0">
-     <h4 class="mb-0">View all users</h4>
+     <h4 class="mb-0">View all Staff</h4>
    </div>
 <div class="col-12 col-md-6">
-  <form method="GET">
-    <div class="input-group">
-   <input type="text" name="search" id="userSearch" class="form-control" 
-       style="font-weight: bold;" placeholder="Search by IdNumber, Name or user_type....">
-       </div>
-     </form>
-   </div>
+    <form method="GET">
+    <div class="search-box">
+  <div class="input-group">
+    <span class="input-group-text bg-primary text-white">
+      <i class="fas fa-search"></i>
+    </span>
+    <input type="text" name="search" id="userSearch" 
+           class="form-control search-input"
+           placeholder="Search by ID, Name, or Role...">
+    <button class="btn btn-primary" type="button">
+      Search
+    </button>
+  </div>
   </div> 
 </div> 
 <?php

@@ -31,6 +31,217 @@ include '../connection/function.php';
 	<link rel="stylesheet" href="../assets/css/bootstrap.min.css">
 	<link rel="stylesheet" href="../assets/css/plugins.min.css">
 	<link rel="stylesheet" href="../assets/css/kaiadmin.min.css">
+<!-- Custom Layout Styles -->
+<style>
+:root {
+  --sims-sidebar-width: 280px;
+  --sims-sidebar-width-min: 72px;
+  --sims-color-sidebar-bg: #081528; 
+  --sims-color-navbar-bg: #081528;  
+  --sims-color-text: #ffffff;       
+  --sims-color-hover: rgba(255, 255, 255, 1); 
+}
+
+/* ===== Sidebar ===== */
+.wrapper .sidebar {
+  width: var(--sims-sidebar-width) !important;
+  min-width: var(--sims-sidebar-width) !important;
+  background-color: var(--sims-color-sidebar-bg) !important;
+  color: var(--sims-color-text) !important;
+  position: fixed;
+  height: 100%;
+  top: 0;
+  left: 0;
+  overflow-y: auto;
+  transition: width .2s ease;
+}
+.sidebar .sidebar-wrapper {
+    width: var(--sims-sidebar-width) !important;
+}
+.sidebar .nav-secondary > li > a {
+  color: var(--sims-color-text) !important;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+}
+
+/* Sidebar hover / expanded */
+.sidebar .nav-secondary > li > a:hover,
+.sidebar .nav-secondary > li > a[aria-expanded="true"] {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+}
+
+/* Remove persistent active gray */
+.sidebar .nav-secondary > li.active > a {
+    background-color: transparent !important;
+    color: var(--sims-color-text) !important;
+}
+
+/* Sidebar nested collapse links hover */
+.sidebar .nav.nav-collapse li a:hover {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+}
+
+/* Nested collapse links default color */
+.sidebar .nav.nav-collapse li a {
+    color: var(--sims-color-text) !important;
+}
+
+/* Sidebar caret */
+.sidebar .nav-item > a .caret {
+  border-top-color: currentColor;
+  margin-left: auto;
+  transition: transform .2s ease;
+  transform: rotate(90deg); /* pointing right */
+}
+.sidebar .nav-item > a[aria-expanded="true"] .caret {
+  transform: rotate(0deg); /* pointing down when open */
+}
+
+/* Main panel shift based on sidebar width */
+.main-panel {
+  margin-left: var(--sims-sidebar-width);
+  transition: margin-left .2s ease;
+}
+
+/* Minimized sidebar */
+.wrapper.sidebar-min .sidebar {
+  width: var(--sims-sidebar-width-min) !important;
+  min-width: var(--sims-sidebar-width-min) !important;
+}
+.wrapper.sidebar-min .main-panel {
+  margin-left: var(--sims-sidebar-width-min);
+}
+.wrapper.sidebar-min .sidebar .nav-secondary > li > a p,
+.wrapper.sidebar-min .sidebar .logo-header .logo img + span,
+.wrapper.sidebar-min .sidebar .sidebar-content .nav.nav-collapse {
+  display: none !important;
+}
+.wrapper.sidebar-min .sidebar .logo-header .logo img {
+  width: 48px !important;
+  height: auto !important;
+}
+
+/* ===== Navbar ===== */
+.logo-header[data-background-color],
+.main-header .navbar,
+.navbar-header {
+  background-color: var(--sims-color-navbar-bg) !important;
+  color: var(--sims-color-text) !important;
+}
+.navbar .nav-link,
+.navbar .fa,
+.navbar .navbar-brand {
+  color: var(--sims-color-text) !important;
+}
+.navbar .nav-link:hover,
+.navbar .fa:hover {
+  color: var(--sims-color-text) !important;
+}
+
+/* Notification badge */
+.notification {
+    background-color: #ff0000ff !important; /* red badge */
+    color: #000000ff !important;
+}
+
+/* Profile image */
+.profile-img {
+    width: 50px;           
+    height: 50px;          
+    border-radius: 5px;    
+    object-fit: cover;     
+    border: 2px solid rgba(255, 255, 255, 1); 
+}
+
+
+/* Profile username */
+.profile-username {
+    color: #060505ff !important;
+    font-weight: 100;
+}
+
+/* Header title */
+.sims-title {
+    color:#ffffff;
+    margin:0;
+    font-weight:600;
+    letter-spacing:.3px;
+}
+/* Dropdown menus - white theme */
+.dropdown-menu,
+.dropdown-user,
+.notif-box {
+    border-radius: .5rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,.15);
+    background-color: #ffffff !important;
+    color: #000000 !important;
+}
+
+/* Dropdown items */
+.dropdown-menu .dropdown-item {
+  color: #000000 !important;
+}
+.dropdown-menu .dropdown-item:hover {
+  background-color: #f0f0f0 !important;
+  color: #000000 !important;
+}
+
+/* Dropdown buttons inside profile */
+.dropdown-user .btn {
+    background-color: #f0f0f0 !important;
+    color: #000000 !important;
+    border: none;
+}
+.dropdown-user .btn:hover {
+    background-color: #dcdcdc !important;
+    color: #000000 !important;
+}
+
+/* Notification dropdown content */
+.notif-box .dropdown-title {
+    color: #000000ff !important;
+}
+
+/* Logo image */
+.logo-header .logo img {
+    image-rendering: -webkit-optimize-contrast;
+}
+/* Avatar sizing: small in navbar, large in dropdown */
+.navbar .topbar-user .avatar-sm .profile-img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+.dropdown-user .avatar-lg .profile-img {
+  width: 96px;
+  height: 96px;
+  border-radius: 8px;
+}
+
+/* Button colors in profile dropdown without changing markup */
+.dropdown-user .dropdown-user-scroll a.btn-primary {
+  background-color: #0d6efd !important;
+  border-color: #0d6efd !important;
+  color: #ffffff !important;
+}
+.dropdown-user .dropdown-user-scroll a.btn-primary:hover {
+  background-color: #0b5ed7 !important;
+  border-color: #0a58ca !important;
+}
+.dropdown-user .dropdown-user-scroll a[href*="logout.php"] {
+  background-color: #dc3545 !important;
+  border-color: #dc3545 !important;
+  color: #ffffff !important;
+}
+.dropdown-user .dropdown-user-scroll a[href*="logout.php"]:hover {
+  background-color: #bb2d3b !important;
+  border-color: #b02a37 !important;
+}
+</style>
+
 </head>
 <?php
 $profile = getStudentByID($_SESSION["sid"]);
@@ -132,26 +343,13 @@ if (isset($_SESSION["sid"])) {
 		<button class="topbar-toggler more"><i class="gg-more-vertical-alt"></i></button></div>
 				<!-- End Logo Header -->
 			</div>
-				  <!--Notification -->
-<!-- CSS for profile image -->
-<style>
-  .profile-img {
-    width: 40px; 
-    height: 40px;
-    border-radius: 80%; 
-    object-fit: cover; 
-}
-</style>
-<!-- end CSS for profile image -->	  
+				  <!--Notification -->  
 <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
   <div class="container-fluid">
 	<div class="input-group">
 	  <div class="input-group-prepend">									
 		<h4>Balela Secondary School Dashboard </h4></div>			
 	    <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
-			        <!-- Language Selection -->
-
-           <!-- End Language Selection -->
 <!-- Notification -->
 <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
  <li class="nav-item topbar-icon dropdown hidden-caret">
@@ -173,19 +371,17 @@ if (isset($_SESSION["sid"])) {
  <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#" aria-expanded="false">
     <div class="avatar-sm"><img class="profile-img" src="<?php echo $profile["student_photo"]; ?>" 
 	       alt="Profile Picture" width="100" height="100"></div>
-    <span class="profile-username"><span class="op-7"><?php echo htmlspecialchars(($profile['first_name'] ?? '') . ' ' . ($profile['father_name'] ?? '')); ?></span></span></span>
  </a>
 <ul class="dropdown-menu dropdown-user animated fadeIn">
   <div class="dropdown-user-scroll scrollbar-outer">
 <li>
 <div class="user-box">
-  <div class="avatar-lg">
-    <img class="profile-img" src="<?php echo htmlspecialchars($profile['student_photo'] ?? ''); ?>" alt="Profile Picture" width="100" height="100"></div>
+    <img class="profile-img" src="<?php echo htmlspecialchars($profile['student_photo'] ?? ''); ?>" alt="Profile Picture" width="100" height="100">
 	  <div class="u-text">
-		<h4><?php echo htmlspecialchars($profile['first_name'] ?? ''); ?></h4>
+		<h4><?php echo htmlspecialchars(($profile['first_name'] ?? '') . ' ' . ($profile['father_name'] ?? '')); ?></h4>
 		<p class="text-muted"><?php echo htmlspecialchars($profile['email'] ?? ''); ?></p>
-        <a href="profile.php?sid=<?php echo htmlspecialchars($profile['sid'] ?? ''); ?>" class="btn btn-xs btn-secondary btn-sm">View Profile</a>
-        <a href="../connection/logout.php" class="btn btn-xs btn-secondary btn-sm">Logout</a>
+        <a href="profile.php?sid=<?php echo $profile['sid']; ?>" class="btn btn-xs btn-primary btn-md">View Profile</a>
+        <a href="../connection/logout.php" class="btn btn-xs btn-secondary btn-md">Logout</a>
 								    </div>
 								</div>
 							</li>									

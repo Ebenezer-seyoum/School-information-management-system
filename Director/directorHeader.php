@@ -31,6 +31,216 @@ include '../connection/function.php';
 	<link rel="stylesheet" href="../assets/css/bootstrap.min.css">
 	<link rel="stylesheet" href="../assets/css/plugins.min.css">
 	<link rel="stylesheet" href="../assets/css/kaiadmin.min.css">
+<!-- Custom Layout Styles -->
+<style>
+:root {
+  --sims-sidebar-width: 290px;
+  --sims-sidebar-width-min: 72px;
+  --sims-color-sidebar-bg: #081528; 
+  --sims-color-navbar-bg: #081528;  
+  --sims-color-text: #ffffff;       
+  --sims-color-hover: rgba(255, 255, 255, 1); 
+}
+
+/* ===== Sidebar ===== */
+.wrapper .sidebar {
+  width: var(--sims-sidebar-width) !important;
+  min-width: var(--sims-sidebar-width) !important;
+  background-color: var(--sims-color-sidebar-bg) !important;
+  color: var(--sims-color-text) !important;
+  position: fixed;
+  height: 100%;
+  top: 0;
+  left: 0;
+  overflow-y: auto;
+  transition: width .2s ease;
+}
+.sidebar .sidebar-wrapper {
+    width: var(--sims-sidebar-width) !important;
+}
+.sidebar .nav-secondary > li > a {
+  color: var(--sims-color-text) !important;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+}
+
+/* Sidebar hover / expanded */
+.sidebar .nav-secondary > li > a:hover,
+.sidebar .nav-secondary > li > a[aria-expanded="true"] {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+}
+
+/* Remove persistent active gray */
+.sidebar .nav-secondary > li.active > a {
+    background-color: transparent !important;
+    color: var(--sims-color-text) !important;
+}
+
+/* Sidebar nested collapse links hover */
+.sidebar .nav.nav-collapse li a:hover {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+}
+
+/* Nested collapse links default color */
+.sidebar .nav.nav-collapse li a {
+    color: var(--sims-color-text) !important;
+}
+
+/* Sidebar caret */
+.sidebar .nav-item > a .caret {
+  border-top-color: currentColor;
+  margin-left: auto;
+  transition: transform .2s ease;
+  transform: rotate(90deg); /* pointing right */
+}
+.sidebar .nav-item > a[aria-expanded="true"] .caret {
+  transform: rotate(0deg); /* pointing down when open */
+}
+
+/* Main panel shift based on sidebar width */
+.main-panel {
+  margin-left: var(--sims-sidebar-width);
+  transition: margin-left .2s ease;
+}
+
+/* Minimized sidebar */
+.wrapper.sidebar-min .sidebar {
+  width: var(--sims-sidebar-width-min) !important;
+  min-width: var(--sims-sidebar-width-min) !important;
+}
+.wrapper.sidebar-min .main-panel {
+  margin-left: var(--sims-sidebar-width-min);
+}
+.wrapper.sidebar-min .sidebar .nav-secondary > li > a p,
+.wrapper.sidebar-min .sidebar .logo-header .logo img + span,
+.wrapper.sidebar-min .sidebar .sidebar-content .nav.nav-collapse {
+  display: none !important;
+}
+.wrapper.sidebar-min .sidebar .logo-header .logo img {
+  width: 48px !important;
+  height: auto !important;
+}
+
+/* ===== Navbar ===== */
+.logo-header[data-background-color],
+.main-header .navbar,
+.navbar-header {
+  background-color: var(--sims-color-navbar-bg) !important;
+  color: var(--sims-color-text) !important;
+}
+.navbar .nav-link,
+.navbar .fa,
+.navbar .navbar-brand {
+  color: var(--sims-color-text) !important;
+}
+.navbar .nav-link:hover,
+.navbar .fa:hover {
+  color: var(--sims-color-text) !important;
+}
+
+/* Notification badge */
+.notification {
+    background-color: #ff0000ff !important; /* red badge */
+    color: #000000ff !important;
+}
+
+/* Profile image */
+.profile-img {
+    width: 50px;           
+    height: 50px;          
+    border-radius: 5px;    
+    object-fit: cover;     
+    border: 2px solid rgba(255, 255, 255, 1); 
+}
+
+
+/* Profile username */
+.profile-username {
+    color: #060505ff !important;
+    font-weight: 100;
+}
+
+/* Header title */
+.sims-title {
+    color:#ffffff;
+    margin:0;
+    font-weight:600;
+    letter-spacing:.3px;
+}
+/* Dropdown menus - white theme */
+.dropdown-menu,
+.dropdown-user,
+.notif-box {
+    border-radius: .5rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,.15);
+    background-color: #ffffff !important;
+    color: #000000 !important;
+}
+
+/* Dropdown items */
+.dropdown-menu .dropdown-item {
+  color: #000000 !important;
+}
+.dropdown-menu .dropdown-item:hover {
+  background-color: #f0f0f0 !important;
+  color: #000000 !important;
+}
+
+/* Dropdown buttons inside profile */
+.dropdown-user .btn {
+    background-color: #f0f0f0 !important;
+    color: #000000 !important;
+    border: none;
+}
+.dropdown-user .btn:hover {
+    background-color: #dcdcdc !important;
+    color: #000000 !important;
+}
+
+/* Notification dropdown content */
+.notif-box .dropdown-title {
+    color: #000000ff !important;
+}
+
+/* Logo image */
+.logo-header .logo img {
+    image-rendering: -webkit-optimize-contrast;
+}
+/* Avatar sizing: small in navbar, large in dropdown */
+.navbar .topbar-user .avatar-sm .profile-img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+.dropdown-user .avatar-lg .profile-img {
+  width: 96px;
+  height: 96px;
+  border-radius: 8px;
+}
+
+/* Button colors in profile dropdown without changing markup */
+.dropdown-user .dropdown-user-scroll a.btn-primary {
+  background-color: #0d6efd !important;
+  border-color: #0d6efd !important;
+  color: #ffffff !important;
+}
+.dropdown-user .dropdown-user-scroll a.btn-primary:hover {
+  background-color: #0b5ed7 !important;
+  border-color: #0a58ca !important;
+}
+.dropdown-user .dropdown-user-scroll a[href*="logout.php"] {
+  background-color: #dc3545 !important;
+  border-color: #dc3545 !important;
+  color: #ffffff !important;
+}
+.dropdown-user .dropdown-user-scroll a[href*="logout.php"]:hover {
+  background-color: #bb2d3b !important;
+  border-color: #b02a37 !important;
+}
+</style>
 </head>
 <?php
 $profile = getUserByID($_SESSION["uid"]);
@@ -57,8 +267,14 @@ if (isset($_SESSION["uid"]) and ($roleName == "Director")) {
 <div class="sidebar-wrapper scrollbar scrollbar-inner">
   <div class="sidebar-content">
 	<ul class="nav nav-secondary">
-	  <li class="nav-item">
-    <a href="director.php" class="collapsed"><i class="fas fa-home"></i><p><?php echo $roleName = getRoleNameById($profile["user_type"]); ?></p></a></li>   
+	    <li class="nav-item">
+          <a href="director.php" class="collapsed">
+            <i class="fas fa-tachometer-alt"></i>
+            <p style="font-weight: 200; text-transform: uppercase; margin: 0;">
+              <?php echo htmlspecialchars($roleName . ' - ' . $profile['first_name'] . ' ' . $profile['father_name'], ENT_QUOTES, 'UTF-8'); ?>
+            </p>
+          </a>
+        </li>
 <li class="nav-item">
     <a data-bs-toggle="collapse" href="#users" role="button" aria-expanded="false" aria-controls="users">
         <i class="fas fa-users-cog"></i>
@@ -183,22 +399,6 @@ if (isset($_SESSION["uid"]) and ($roleName == "Director")) {
               </ul>
             </div>
           </li>
-            <!-- Announcements -->
-          <li class="nav-item">
-            <a data-bs-toggle="collapse" href="#announcement" role="button" aria-expanded="false" aria-controls="announcement">
-              <i class="fas fa-bullhorn"></i>
-              <p>Announcement Management</p>
-              <span class="caret"></span>
-            </a>
-            <div class="collapse" id="announcement">
-              <ul class="nav nav-collapse">
-                <li><a href="create_announcement.php"><i class="fas fa-plus-circle"></i> Create Announcement</a></li>
-                <li><a href="view_announcement.php"><i class="fas fa-eye"></i> View Announcements</a></li>
-                <li><a href="edit_announcement.php"><i class="fas fa-edit"></i> Edit Announcement</a></li>
-              </ul>
-            </div>
-          </li>
-
           <!-- Feedback -->
           <li class="nav-item">
             <a data-bs-toggle="collapse" href="#feedback" role="button" aria-expanded="false" aria-controls="feedback">
@@ -238,11 +438,24 @@ if (isset($_SESSION["uid"]) and ($roleName == "Director")) {
           </ul>
         </div>
       </li>
-
     </ul>
   </div>
 </li>
-
+  <!-- Announcements -->
+          <li class="nav-item">
+            <a data-bs-toggle="collapse" href="#announcement" role="button" aria-expanded="false" aria-controls="announcement">
+              <i class="fas fa-bullhorn"></i>
+              <p>Announcement</p>
+              <span class="caret"></span>
+            </a>
+            <div class="collapse" id="announcement">
+              <ul class="nav nav-collapse">
+                <li><a href="create_announcement.php"><i class="fas fa-plus-circle"></i> Create Announcement</a></li>
+                <li><a href="view_announcement.php"><i class="fas fa-eye"></i> View Announcements</a></li>
+                <li><a href="edit_announcement.php"><i class="fas fa-edit"></i> Edit Announcement</a></li>
+              </ul>
+            </div>
+          </li>
   </div>
  </div>
 </div>
@@ -261,16 +474,6 @@ if (isset($_SESSION["uid"]) and ($roleName == "Director")) {
 				<!-- End Logo Header -->
 			</div>
 				  <!--Notification -->
-<!-- CSS for profile image -->
-<style>
-  .profile-img {
-    width: 40px; 
-    height: 40px;
-    border-radius: 80%; 
-    object-fit: cover; 
-}
-</style>
-<!-- end CSS for profile image -->	  
 <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
   <div class="container-fluid">
 	<div class="input-group">
@@ -301,19 +504,17 @@ if (isset($_SESSION["uid"]) and ($roleName == "Director")) {
  <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#" aria-expanded="false">
     <div class="avatar-sm"><img class="profile-img" src="<?php echo $profile["profile_picture"]; ?>" 
 	       alt="Profile Picture" width="100" height="100"></div>
-    <span class="profile-username"><span class="op-7"><?php echo "$profile[username]";?></span></span></span>
  </a>
 <ul class="dropdown-menu dropdown-user animated fadeIn">
   <div class="dropdown-user-scroll scrollbar-outer">
 <li>
 <div class="user-box">
-  <div class="avatar-lg">
-    <img class="profile-img" src="<?php echo $profile["profile_picture"]; ?>" alt="Profile Picture" width="100" height="100"></div>
+    <img class="profile-img" src="<?php echo $profile["profile_picture"]; ?>" alt="Profile Picture" width="100" height="100">
 	  <div class="u-text">
-		<h4><?php echo "$profile[username]";?></h4>
+		<h4><?php echo $profile['first_name']. ' ' . $profile['father_name']; ?></h4>
 		<p class="text-muted"><?php echo "$profile[email]";?></p>
-        <a href="profile.php?uid=<?php echo $profile['uid']; ?>" class="btn btn-xs btn-secondary btn-sm">View Profile</a>
-        <a href="../connection/logout.php" class="btn btn-xs btn-secondary btn-sm">Logout</a>
+       <a href="profile.php?uid=<?php echo $profile['uid']; ?>" class="btn btn-xs btn-primary btn-md">View Profile</a>
+       <a href="../connection/logout.php" class="btn btn-xs btn-secondary btn-md">Logout</a>
 								    </div>
 								</div>
 							</li>									
