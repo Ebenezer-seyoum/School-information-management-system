@@ -14,12 +14,21 @@ if (!isset($_SESSION["uid"]) || $roleName != "Director") {
   .modal-body { max-height: 400px; overflow-y: auto; }
   .table td, .table th { vertical-align: middle; }
 </style>
-
 <div class="container">
   <div class="page-inner">
     <div class="page-header">
-      <h3 class="fw-bold mb-3">Manage Teacher Transfer</h3>
-    </div>
+     <h3 class="fw-bold mb-3">view Instructor</h3>
+      <ul class="breadcrumbs mb-3">
+        <li class="nav-home"><a href="#"><i class="icon-home"></i></a></li>
+        <li class="separator"><i class="icon-arrow-right"></i></li>
+        <li class="nav-item"><a href="#">Manage Instructor</a></li>
+        <li class="separator"><i class="icon-arrow-right"></i></li>
+        <li class="nav-item"><a href="#">View Instructor</a></li>
+      </ul>
+   </div>
+</div>
+<div class="container">
+  <div class="page-inner">
     <div class="main-content">
       <section class="section">
         <div class="row">
@@ -45,7 +54,7 @@ if (!isset($_SESSION["uid"]) || $roleName != "Director") {
                     $search = trim($_GET['search'] ?? '');
                     $res = mysqli_query($conn, "SELECT u.uid, u.first_name, u.father_name
                                                 FROM users u
-                                                WHERE u.user_type = 4
+                                                WHERE u.user_type = 1
                                                 AND (u.first_name LIKE '%$search%' OR u.father_name LIKE '%$search%' OR u.uid LIKE '%$search%')
                                                 ORDER BY u.first_name ASC");
                     $no = 1;

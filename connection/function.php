@@ -1255,7 +1255,13 @@ function getAllTeachers()
 function getAllInstructors()
 {
     global $conn;
-    $query = mysqli_query($conn, "select * from users where user_type = 4");
+    $query = mysqli_query($conn, "
+        SELECT DISTINCT u.*
+        FROM users u
+        INNER JOIN assign_instructor ai ON ai.instructor_id = u.uid
+        WHERE u.user_type = 1
+        ORDER BY u.first_name ASC
+    ");
     $result = array();
     while ($row = mysqli_fetch_array($query)) {
         array_push($result, $row);

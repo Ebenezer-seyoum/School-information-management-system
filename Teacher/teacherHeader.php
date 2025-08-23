@@ -116,6 +116,20 @@ if (isset($_SESSION["uid"]) and ($roleName == "Teacher")) {
     </ul>
   </div>
 </li>
+<!-- Attendance -->
+<li class="nav-item">
+  <a data-bs-toggle="collapse" href="#attendance" role="button" aria-expanded="false" aria-controls="attendance">
+    <i class="fas fa-bullhorn"></i>
+    <p>Attendance</p>
+    <span class="caret"></span>
+  </a>
+  <div class="collapse" id="attendance">
+    <ul class="nav nav-collapse">
+      <li><a href="mark_attendance.php"><i class="fas fa-eye"></i> Mark Attendance</a></li>
+      <li><a href="show_attendance.php"><i class="fas fa-eye"></i> View Attendance</a></li>
+    </ul>
+  </div>
+</li>
 <!-- Report -->
 <li class="nav-item">
   <a data-bs-toggle="collapse" href="#report" role="button" aria-expanded="false" aria-controls="report">

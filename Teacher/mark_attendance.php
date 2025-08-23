@@ -1,9 +1,9 @@
 <?php
-include('instructorHeader.php'); // adjust path as needed
+include('teacherHeader.php'); // adjust path as needed
 // --- Check login ---
 $profile = getUserByID($_SESSION["uid"]);
 $roleName = getRoleNameById($profile["user_type"]);
-if (!isset($_SESSION["uid"]) || $roleName != "Instructor") {
+if (!isset($_SESSION["uid"]) || $roleName != "Teacher") {
     echo "You are not authorized to view this page.";
     exit;
 }

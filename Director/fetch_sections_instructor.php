@@ -12,22 +12,27 @@ if($selected_class && $academic_year){
     $grade = substr($selected_class, 0, 2);   // '9', '10', '11', '12'
     $type  = substr($selected_class, 2);      // '', 'S', 'N'
 
-    // For 11/12 social/natural, filter by class_type column OR section_name pattern
-    if($grade == '11' || $grade == '12'){
-        if($type == 'S'){
-            $where = "(s.class_type='social' OR s.section_name LIKE '".$grade."S%')";
-        } elseif($type == 'N'){
-            $where = "(s.class_type='natural' OR s.section_name LIKE '".$grade."N%')";
-        } else {
-            $where = "s.section_name LIKE '".$grade."%'";
+    // Build strict filters: match grade by section_name prefix and class_type precisely
+    $grade_only = mysqli_real_escape_string($conn, $grade);
+    $grade_like = $grade_only . '%';
+    $whereParts = ["s.section_name LIKE '".$grade_like."'"];
+
+    if ($grade === '11' || $grade === '12') {
+        if ($type === 'S') {
+            $whereParts[] = "UPPER(s.class_type) = 'SOCIAL'";
+        } elseif ($type === 'N') {
+            $whereParts[] = "UPPER(s.class_type) = 'NATURAL'";
         }
+        // if no S/N provided, show both SOCIAL and NATURAL of that grade
     } else {
-        // For 9/10 general
-        $where = "s.class_type='general' AND s.section_name LIKE '".$grade."%'";
+        // For 9/10, restrict to GENERAL
+        $whereParts[] = "UPPER(s.class_type) = 'GENERAL'";
     }
 
+    $where = implode(' AND ', $whereParts);
+
     $sections_q = mysqli_query($conn, "
-        SELECT s.cid, s.section_name, ai.instructor_id AS assigned_instructor
+        SELECT s.cid, s.section_name, s.class_type, ai.instructor_id AS assigned_instructor
         FROM sections s
         LEFT JOIN assign_instructor ai 
             ON ai.section_id = s.cid AND ai.academic_year = '$year_safe'
@@ -36,6 +41,8 @@ if($selected_class && $academic_year){
     ");
 
     while($sec = mysqli_fetch_assoc($sections_q)){
+        // Normalize class_type for UI display
+        $sec['class_type'] = ucfirst(strtolower($sec['class_type']));
         $response[] = $sec;
     }
 }

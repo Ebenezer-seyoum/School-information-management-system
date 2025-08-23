@@ -14,13 +14,13 @@ include('directorHeader.php');
 <div class="container">
   <div class="page-inner">
     <div class="page-header">
-     <h3 class="fw-bold mb-3">Manage Teacher</h3>
+     <h3 class="fw-bold mb-3">view Instructor</h3>
       <ul class="breadcrumbs mb-3">
         <li class="nav-home"><a href="#"><i class="icon-home"></i></a></li>
         <li class="separator"><i class="icon-arrow-right"></i></li>
-        <li class="nav-item"><a href="#">Manage Teacher</a></li>
+        <li class="nav-item"><a href="#">Manage Instructor</a></li>
         <li class="separator"><i class="icon-arrow-right"></i></li>
-        <li class="nav-item"><a href="#">View Teacher</a></li>
+        <li class="nav-item"><a href="#">View Instructor</a></li>
       </ul>
    </div>
 </div>

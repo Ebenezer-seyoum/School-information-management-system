@@ -1,9 +1,9 @@
 <?php
-include('instructorHeader.php'); // adjust path as needed
+include('teacherHeader.php'); // adjust path as needed
 // --- Check login ---
 $profile = getUserByID($_SESSION["uid"]);
 $roleName = getRoleNameById($profile["user_type"]);
-if (!isset($_SESSION["uid"]) || $roleName != "Instructor") {
+if (!isset($_SESSION["uid"]) || $roleName != "Teacher") {
     echo "You are not authorized to view this page.";
     exit;
 }
@@ -135,7 +135,7 @@ document.querySelectorAll(".view-students").forEach(btn => {
 function loadAttendanceSheet(classId, semester){
   const target = document.getElementById('studentsTable');
   target.innerHTML = "Loading...";
-  fetch("fetch_view_attendance.php?class_id=" + classId + "&semester=" + semester)
+  fetch("fetch_show_attendance.php?class_id=" + classId + "&semester=" + semester)
     .then(res => res.text())
     .then(html => { target.innerHTML = html; })
     .catch(() => { target.innerHTML = "<div class='text-danger'>Failed to load.</div>"; });
