@@ -23,7 +23,7 @@ if (isset($_GET["sid"])) {
      <ul class="breadcrumbs mb-3">
        <li class="nav-home"><a href="#"><i class="icon-home"></i></a></li>
        <li class="separator"><i class="icon-arrow-right"></i></li>
-       <li class="nav-item"><a href="#">Manage Student</a></li>
+       <li class="nav-item"><a href="#">Student Management</a></li>
        <li class="separator"><i class="icon-arrow-right"></i></li>
        <li class="nav-item"><a href="#">View Detail</a></li>
      </ul>
@@ -124,9 +124,10 @@ if (isset($_GET["sid"])) {
                   <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['username']); ?>" disabled>
                 </div>
                 <div class="col-md-6">
-                  <label class="form-label">Class Type</label>
-                  <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['role_type']); ?>" disabled>
-                </div>
+              <label class="form-label">Password</label>
+              <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['password']); ?>" disabled>
+            </div>
+            
               </div>
             </div>
           </div>
@@ -255,13 +256,9 @@ if (isset($_GET["sid"])) {
               <label class="form-label">Previous School</label>
               <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['previous_school']); ?>" disabled>
             </div>
-            <div class="col-md-6">
-              <label class="form-label">Academic Status Before Joining</label>
-              <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['academic_status']); ?>" disabled>
-            </div>
           </div>
           <div class="row mb-3">
-            <div class="col-md-12">
+            <div class="col-md-6">
               <label class="form-label">Previous Documents</label>
               <?php if (!empty($userProfile['previous_documents'])): ?>
                 <a href="<?php echo htmlspecialchars($userProfile['previous_documents']); ?>" target="_blank" class="form-control d-block">View Document</a>

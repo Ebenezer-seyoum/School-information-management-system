@@ -4,7 +4,7 @@ $uid = $_GET['uid'] ?? null;
 
 $user = null;
 if ($uid) {
-    $user = getUserByID($uid); // Get one user row
+    $user = getUserByID($uid); 
 }
 $roleName = getRoleNameById($user["user_type"]);
 ?>

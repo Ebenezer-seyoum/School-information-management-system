@@ -120,7 +120,7 @@ if (isset($_SESSION["uid"]) && ($roleName == "Admin")) {
     <td style="border: 2px solid black;"><?php echo $status; ?></td>
      <td style="border: 2px solid black;">
         <a href="viewUserDetail.php?uid=<?= $user['uid']; ?>" class="btn btn-sm btn-info">
-          <i class="fa fa-eye"></i>
+          <i class="fa fa-eye"></i> Details
         </a>
       </td>
     <td style="border: 2px solid black;">

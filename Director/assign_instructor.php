@@ -38,8 +38,10 @@ while($t = mysqli_fetch_assoc($teachers_q)) {
     <!-- Class & Academic Year -->
     <div class="d-flex justify-content-center mb-4">
       <div class="card shadow-lg border-0 rounded-4 p-4" style="max-width:700px; width:100%;">
-        <div class="row g-3 align-items-end">
-            <h3 class="fw-bold mb-3 text-center">Assign Instructors to Sections</h3>
+        <div class="text-center mb-3">
+            <h5 class="fw-bold">Select Section and Academic Year</h5>
+            <p class="text-muted">Choose the section and academic year to view/assign subjects to teachers</p>
+            <div class="row g-3 align-items-end">
           <div class="col-md-6">
             <label class="form-label fw-semibold">Class Type</label>
             <select id="classTypeSelect" class="form-select form-select-lg">
@@ -57,7 +59,7 @@ while($t = mysqli_fetch_assoc($teachers_q)) {
             <input type="text" id="academicYear" class="form-control form-control-lg" placeholder="e.g. 2017">
           </div>
           <div class="col-md-2 d-grid">
-            <button type="button" id="showSectionsBtn" class="btn btn-primary btn-md">Show Sections</button>
+            <button type="button" id="showSectionsBtn" class="btn btn-primary btn-md">Assign Instructor</button>
           </div>
         </div>
       </div>
@@ -95,7 +97,7 @@ while($t = mysqli_fetch_assoc($teachers_q)) {
     </div>
   </div>
 </div>
-
+</div>
 <!-- JS -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

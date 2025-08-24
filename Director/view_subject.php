@@ -8,13 +8,13 @@ $sections = mysqli_query($conn,"SELECT * FROM sections ORDER BY class_type, sect
 <div class="container">
   <div class="page-inner">
     <div class="page-header">
-      <h3 class="fw-bold mb-3">View Classes</h3>
+      <h3 class="fw-bold mb-3">View Subject</h3>
       <ul class="breadcrumbs mb-3">
         <li class="nav-home"><a href="#"><i class="icon-home"></i></a></li>
         <li class="separator"><i class="icon-arrow-right"></i></li>
-        <li class="nav-item"><a href="#">Manage Class</a></li>
+        <li class="nav-item"><a href="#">Subject Management</a></li>
         <li class="separator"><i class="icon-arrow-right"></i></li>
-        <li class="nav-item"><a href="#">View Class</a></li>
+        <li class="nav-item"><a href="#">View Subject</a></li>
       </ul>
     </div>
 <!-- Section Selection (Professional & Centered) -->

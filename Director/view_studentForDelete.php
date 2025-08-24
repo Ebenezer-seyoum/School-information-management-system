@@ -1,31 +1,19 @@
 <?php
-include('directorHeader.php'); // or directorHeader.php if director login
+include('directorHeader.php'); 
 
 $profile = getUserByID($_SESSION["uid"]);
 $roleName = getRoleNameById($profile["user_type"]);
 
-if (isset($_SESSION["uid"]) && ($roleName == "Director")) { // Director role
+if (isset($_SESSION["uid"]) && ($roleName == "Director")) { 
 ?>
-
-<!-- CSS for profile image -->
-<style>
-  .profile-img {
-    width: 30px; 
-    height: 30px;
-    border-radius: 50%; 
-    object-fit: cover; 
-  }
-</style>
-
-<!-- Page Header -->
 <div class="container">
   <div class="page-inner">
     <div class="page-header">
-      <h3 class="fw-bold mb-3">Manage Students</h3>
+      <h3 class="fw-bold mb-3">Delete Student</h3>
       <ul class="breadcrumbs mb-3">
         <li class="nav-home"><a href="#"><i class="icon-home"></i></a></li>
         <li class="separator"><i class="icon-arrow-right"></i></li>
-        <li class="nav-item"><a href="#">Manage Students</a></li>
+        <li class="nav-item"><a href="#">Student Management</a></li>
         <li class="separator"><i class="icon-arrow-right"></i></li>
         <li class="nav-item"><a href="#">Delete Student</a></li>
       </ul>
@@ -43,12 +31,18 @@ if (isset($_SESSION["uid"]) && ($roleName == "Director")) { // Director role
                     <h4 class="mb-0">View all students</h4>
                   </div>
                   <div class="col-12 col-md-6">
-                    <form method="GET">
-                      <div class="input-group">
-                        <input type="text" name="search" id="studentSearch" class="form-control" 
-                        style="font-weight: bold;" placeholder="Search by ID, Name...">
-                      </div>
-                    </form>
+                     <form method="GET">
+    <div class="search-box">
+  <div class="input-group">
+    <span class="input-group-text bg-primary text-white">
+      <i class="fas fa-search"></i>
+    </span>
+    <input type="text" name="search" id="userSearch" 
+           class="form-control search-input"
+           placeholder="Search by ID, Name, or Role...">
+    <button class="btn btn-primary" type="button">
+      Search
+    </button>
                   </div>
                 </div>
               </div>
@@ -59,11 +53,11 @@ $success = $allErr = "";
 // Delete student
 if (isset($_GET["dsid"])) {
     $dsid = mysqli_real_escape_string($conn, $_GET["dsid"]); // Use mysqli_real_escape_string for security
-    $studentQuery = mysqli_query($conn, "SELECT sid, first_name, father_name FROM students WHERE sid = '$dsid'");
+    $studentQuery = mysqli_query($conn, "SELECT sid, student_id, first_name, father_name FROM students WHERE sid = '$dsid'");
     $studentData = mysqli_fetch_assoc($studentQuery);
 
     if ($studentData) {
-        $sidDisplay = $studentData['sid'];
+        $sidDisplay = $studentData['student_id'];
         $studentName = $studentData['first_name'] . " " . $studentData['father_name'];
 
         // Check for linked records in assign_student table
@@ -107,6 +101,7 @@ if (isset($_GET['search']) && !empty(trim($_GET['search']))) {
         <tr>
           <th style="border: 2px solid black;">#</th>
           <th style="border: 2px solid black;">Student ID</th>
+          <th style="border: 2px solid black;">Student Photo</th>
           <th style="border: 2px solid black;">First Name</th>
           <th style="border: 2px solid black;">Father Name</th>
           <th style="border: 2px solid black;">View Details</th>
@@ -122,11 +117,14 @@ if (mysqli_num_rows($studentsQuery) > 0) {
         <tr>
           <td style="border: 2px solid black;"><?php echo $no; ?></td>
           <td style="border: 2px solid black;"><?php echo htmlspecialchars($student['student_id']); ?></td>
+          <td style="border: 2px solid black;"><img class="profile-img" src="<?php echo $student["student_photo"]; ?>" alt="Profile Picture" width="100" height="100"></td>
           <td style="border: 2px solid black;"><?php echo htmlspecialchars($student['first_name']); ?></td>
           <td style="border: 2px solid black;"><?php echo htmlspecialchars($student['father_name']); ?></td>
           <td style="border: 2px solid black;">
-            <a href="delete_student.php?sid=<?= htmlspecialchars($student['sid']); ?>" class="btn btn-sm btn-info"><i class="fa fa-eye"></i></a>
-          </td>
+        <a href="view_studentDetail.php?sid=<?= $student['sid']; ?>" class="btn btn-sm btn-info">
+          <i class="fa fa-eye"></i> Details
+        </a>
+      </td>
           <td style="border: 2px solid black;">
             <a href="#" class="btn btn-danger shadow btn-xs sharp" onclick="deleteStudent(<?php echo htmlspecialchars($student['sid']); ?>)">
               <i class="fa fa-trash fa-lg"></i>

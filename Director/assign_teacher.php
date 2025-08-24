@@ -11,13 +11,13 @@ while($t=mysqli_fetch_assoc($teachers_q)) $teachers_array[$t['uid']] = htmlspeci
 <div class="container">
   <div class="page-inner">
     <div class="page-header">
-      <h3 class="fw-bold mb-3">Account Details</h3>
+      <h3 class="fw-bold mb-3">Assign Teacher</h3>
       <ul class="breadcrumbs mb-3">
         <li class="nav-home"><a href="#"><i class="icon-home"></i></a></li>
         <li class="separator"><i class="icon-arrow-right"></i></li>
-        <li class="nav-item"><a href="#">Manage Account</a></li>
+        <li class="nav-item"><a href="#">Teacher Management</a></li>
         <li class="separator"><i class="icon-arrow-right"></i></li>
-        <li class="nav-item"><a href="#">Account Details</a></li>
+        <li class="nav-item"><a href="#">Assign Teacher</a></li>
       </ul>
   </div>
 <!-- end page header -->
@@ -52,7 +52,7 @@ while($t=mysqli_fetch_assoc($teachers_q)) $teachers_array[$t['uid']] = htmlspeci
             <input type="text" id="academicYear" class="form-control form-control-lg" placeholder="e.g. 2017">
           </div>
           <div class="col-md-2 d-grid">
-            <button type="button" id="showSubjectsBtn" class="btn btn-primary btn-md">Show Subjects</button>
+            <button type="button" id="showSubjectsBtn" class="btn btn-primary btn-md">Assign Teacher</button>
           </div>
         </div>
       </div>

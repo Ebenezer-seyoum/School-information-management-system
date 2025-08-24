@@ -98,12 +98,20 @@ $sections = mysqli_query($conn, "SELECT * FROM sections ORDER BY section_name AS
        <li class="nav-item"><a href="#">Transfer Student</a></li>
      </ul>
   </div>
-
         <!-- Search Bar -->
         <div class="mb-3">
-            <form method="GET">
-                <input type="text" name="search" value="<?= htmlspecialchars($search) ?>" class="form-control" placeholder="Search by IdNumber, Name...">
-            </form>
+          <form method="GET">
+    <div class="search-box">
+  <div class="input-group">
+    <span class="input-group-text bg-primary text-white">
+      <i class="fas fa-search"></i>
+    </span>
+    <input type="text" name="search" id="userSearch" 
+           class="form-control search-input"
+           placeholder="Search by ID, Name, or Role...">
+    <button class="btn btn-primary" type="button">
+      Search
+    </button>
         </div>
 
         <!-- Students Table -->

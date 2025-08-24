@@ -346,56 +346,6 @@ if (isset($_POST["update"]) && $_SERVER["REQUEST_METHOD"] == "POST") {
         $previous_documents = $userProfile['previous_documents'];
     }
 
-    // // If all validations pass, update the profile
-    // if ($test) {
-    //     if (userExist($sid) == 1) {
-    //         $update_success = updateStudentProfile($sid, [
-    //             'first_name' => $first_name,
-    //             'father_name' => $father_name,
-    //             'grand_father_name' => $grand_father_name,
-    //             'gender' => $gender,
-    //             'dob' => $dob,
-    //             'email' => $email,
-    //             'phone' => $phone,
-    //             'birth_place' => $birth_place,
-    //             'nationality' => $nationality,
-    //             'region' => $region,
-    //             'zone' => $zone,
-    //             'woreda' => $woreda,
-    //             'kebele' => $kebele,
-    //             'mother_name' => $mother_name,
-    //             'father_contact' => $father_contact,
-    //             'mother_contact' => $mother_contact,
-    //             'father_occupation' => $father_occupation,
-    //             'mother_occupation' => $mother_occupation,
-    //             'emergency_contact_name' => $emergency_contact_name,
-    //             'emergency_contact_phone' => $emergency_contact_phone,
-    //             'blood_group' => $blood_group,
-    //             'medical_condition' => $medical_condition,
-    //             'other_condition' => $other_condition,
-    //             'disabilities' => $disabilities,
-    //             'previous_school' => $previous_school,
-    //             'academic_status' => $academic_status,
-    //             'student_photo' => $student_photo,
-    //             'previous_documents' => $previous_documents
-    //         ]);
-
-    //         if ($update_success) {
-    //             $success = "Student profile updated successfully!";
-    //             $Notif_msg = "Student profile updated.";
-    //             $sql_Notif = "INSERT INTO notifications (user_id, message) VALUES ('$sid', '$Notif_msg')";
-    //             mysqli_query($conn, $sql_Notif);
-    //             header('refresh:2');
-    //             $userProfile = getStudentSidByID($sid);
-    //         } else {
-    //             $allErr = "Something went wrong during update";
-    //         }
-    //     } else {
-    //         $allErr = "No student found with the given ID";
-    //     }
-    // }
-
-
     if ($test == true) {
      if (studentExist($sid) == 1) {
          $encryptedPassword = encryptPassword($password);
@@ -416,13 +366,6 @@ if (isset($_POST["update"]) && $_SERVER["REQUEST_METHOD"] == "POST") {
             $allErr = "There is no user associated with the given information";
         }
     }
-
-
-
-
-
-
-
 }
 ?>
 
@@ -433,9 +376,9 @@ if (isset($_POST["update"]) && $_SERVER["REQUEST_METHOD"] == "POST") {
      <ul class="breadcrumbs mb-3">
        <li class="nav-home"><a href="#"><i class="icon-home"></i></a></li>
        <li class="separator"><i class="icon-arrow-right"></i></li>
-       <li class="nav-item"><a href="#">Manage Student</a></li>
+       <li class="nav-item"><a href="#">Student Management</a></li>
        <li class="separator"><i class="icon-arrow-right"></i></li>
-       <li class="nav-item"><a href="#">Update Profile</a></li>
+       <li class="nav-item"><a href="#">Update student</a></li>
      </ul>
    </div>
 
@@ -458,19 +401,22 @@ if (isset($_POST["update"]) && $_SERVER["REQUEST_METHOD"] == "POST") {
            </div>
            <div class="collapse show" id="personalInfo">
              <div class="card-body">
-               <div class="row">
-                 <div class="col-lg-4 mb-4 text-center">
-                   <img src="<?php echo !empty($userProfile['student_photo']) ? htmlspecialchars($userProfile['student_photo']) : '../assets/img/no.png'; ?>" 
-                        alt="Profile Picture" width="120" height="120" class="mb-2">
-                   <input type="file" name="student_photo" class="form-control" accept="image/*">
-                   <?php if ($profile_pic_err): ?><div class="text-danger"><?php echo $profile_pic_err; ?></div><?php endif; ?>
-                 </div>
-                 <div class="col-lg-8">
-                   <div class="row mb-3">
-                     <div class="col-md-6">
-                       <label class="form-label">Student ID</label>
-                       <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['student_id']); ?>" disabled>
-                     </div>
+                <div class="row">
+     <div class="col-xl-4 col-lg-4">
+       <label class="form-label text-primary">Photo</label>
+   <div class="avatar-upload">
+     <div class="avatar-preview">
+       <div class="user-img">
+       <img class="profile-images" name="profile_picture" src="<?php echo $userProfile["student_photo"]; ?>" 
+        alt="Profile Picture" width="100" height="100">
+       </div>
+   </div>
+   <div class="change-btn mt-2 mb-lg-0 mb-3">
+       <input type="file" class="form-control d-none" id="imageUpload" name="profile_picture" accept=".png, .jpg, .jpeg">
+       <label for="imageUpload" class="dlab-upload mb-0 btn btn-primary btn-sm">Choose File</label>
+       <button type="button" id="removeImage" class="btn btn-danger light remove-img ms-2 btn-sm">Remove</button>
+   </div>
+  </div>
                      <div class="col-md-6">
                        <label class="form-label">First Name</label>
                        <input type="text" class="form-control" name="first_name" value="<?php echo htmlspecialchars($userProfile['first_name']); ?>" required>

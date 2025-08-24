@@ -55,15 +55,15 @@ $success = $allErr = "";
 if (isset($_GET["duid"])) {
   $_SESSION["duid"] = basics($_GET["duid"]);
   $duid = $_SESSION["duid"];
-  $userQuery = mysqli_query($conn, "SELECT idNumber, username FROM users WHERE uid = '$duid'");
+  $userQuery = mysqli_query($conn, "SELECT idNumber, first_name, father_name FROM users WHERE uid = '$duid'");
   $userData = mysqli_fetch_assoc($userQuery);
   $idNumberDisplay = $userData['idNumber'];
-  $usernameDisplay = $userData['username'];  
+  $usernameDisplay = $userData['first_name'].'-'.$userData['father_name'];  
   if (isTeacherAssigned($duid)) {
-    $allErr = "The user (ID: {$idNumberDisplay}, Username: {$usernameDisplay}) cannot be deleted as they are currently assigned to cases.";
+    $allErr = "The user (ID: {$idNumberDisplay}, Username: {$usernameDisplay}) cannot be deleted as they are currently assigned to sections.";
   } else {
       if (deleteUserById($duid) == 1) {
-          $success = "User (ID Number = {$idNumberDisplay}, Username = {$usernameDisplay}) has been deleted successfully.";
+          $success = "User (ID Number = {$idNumberDisplay}, Full Name = {$usernameDisplay}) has been deleted successfully.";
       } else {
           $allErr = "Unable to delete user information for (ID Number = {$idNumberDisplay}, Username = {$usernameDisplay}).";
       }

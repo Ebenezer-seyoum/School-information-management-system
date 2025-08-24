@@ -1,26 +1,16 @@
 <?php
 include('adminHeader.php');
-?>
-<!-- CSS for profile image -->
-<style>
-  .profile-images {
-    width: 80px; 
-    height: 80px;
-    border-radius: 100%; 
-    object-fit: cover; 
-}
-</style>
-<!-- end CSS for profile image -->	 
+?> 
 <div class="container">
   <div class="page-inner">
     <div class="page-header">
-     <h3 class="fw-bold mb-3">All Users</h3>
+     <h3 class="fw-bold mb-3">All Staff</h3>
       <ul class="breadcrumbs mb-3">
         <li class="nav-home"><a href="#"><i class="icon-home"></i></a></li>
         <li class="separator"><i class="icon-arrow-right"></i></li>
-        <li class="nav-item"><a href="#">Manage Users</a></li>
+        <li class="nav-item"><a href="#">Account Management</a></li>
         <li class="separator"><i class="icon-arrow-right"></i></li>
-        <li class="nav-item"><a href="#">View All Users</a></li>
+        <li class="nav-item"><a href="#">View All Staff</a></li>
       </ul>
    </div>
 </div>

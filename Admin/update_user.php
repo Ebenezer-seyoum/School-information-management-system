@@ -165,7 +165,7 @@ if (empty($_POST["password"])) {
     }
     // Check if all validations passed
     if ($test == true) {
-     if (userExist($uid) == 1) {
+     if (userExist($uid) == 0) {
          $encryptedPassword = encryptPassword($password);
       if (updateUser($uid, $idNumber, $profile_pic, $firstName, $fatherName, $gFatherName, $gender,
        $role_type, $username, $encryptedPassword, $email, $phone, $username) == 1) {

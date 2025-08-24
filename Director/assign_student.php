@@ -8,15 +8,23 @@ while($s = mysqli_fetch_assoc($sections_q)) {
     $sections_array[$s['cid']] = $s['section_name'] . ' - ' . $s['class_type'];
 }
 ?>
-
+<!-- Page Header -->
 <div class="container">
-    <div class="page-inner">
-        <div class="page-header">
-            <h3 class="fw-bold mb-3">Assign Students to Class</h3>
-        </div>
-
+         <div class="page-inner">
+            <div class="page-header">
+              <h3 class="fw-bold mb-3">Assign Student</h3>
+    <ul class="breadcrumbs mb-3">
+        <li class="nav-home"><a href="#"><i class="icon-home"></i></a></li>
+         <li class="separator"><i class="icon-arrow-right"></i></li>
+         <li class="nav-item"><a href="#">Student Management</a></li>
+        <li class="separator"><i class="icon-arrow-right"></i></li>
+         <li class="nav-item"><a href="#">Assign Student</a></li>
+    </ul>
+ </div>
+<!-- End Page Header -->
         <div class="card shadow-lg p-4 mb-4">
             <div class="row g-3 align-items-end">
+                <h3 class="fw-bold mb-3 text-center">Assign Students to section</h3>
                 <div class="col-md-5">
                     <label class="form-label fw-semibold">Select Section</label>
                     <select id="sectionSelect" class="form-select">
