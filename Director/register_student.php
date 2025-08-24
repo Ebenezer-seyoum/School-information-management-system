@@ -423,7 +423,6 @@ if (isset($_POST["register"]) && ($_SERVER["REQUEST_METHOD"] == "POST")) {
             );
             if ($result) {
                 $success = "Student successfully registered";
-                header('refresh:2');
             } else {
                 $allErr = "Error occurred during registration: " . mysqli_error($mysql);
             }
@@ -459,14 +458,8 @@ if (isset($_POST["register"]) && ($_SERVER["REQUEST_METHOD"] == "POST")) {
                                 <span class="float-end collapse-arrow">&#9660;</span>
                             </h4>
                         </div>
-                        <div class="collapse show" id="personalInfo">
+                        <div class="collapse" id="personalInfo">
                             <div class="card-body">
-                                <?php if (!empty($success)) { ?>
-                                    <div class="form-control bg-success"><?php echo htmlspecialchars($success); ?></div>
-                                <?php } ?>
-                                <?php if (!empty($allErr)) { ?>
-                                    <div class="form-control bg-danger"><?php echo htmlspecialchars($allErr); ?></div>
-                                <?php } ?>
                                 <div class="row">
                                     <!-- Photo Left Column -->
                                     <div class="col-lg-4 mb-4 text-center">
@@ -536,7 +529,11 @@ if (isset($_POST["register"]) && ($_SERVER["REQUEST_METHOD"] == "POST")) {
                                             </div>
                                             <div class="form-group col-12 col-md-6 mb-3">
                                                 <label for="phone">Phone Number<span class="text-danger">*</span></label>
-                                                <input id="phone" type="text" class="form-control" name="phone" value="<?php echo htmlspecialchars($phone); ?>" />
+                                                <div class="input-group">
+                                                    <span class="input-group-text">+251</span>
+                                                    <input id="phone" type="text" class="form-control" name="phone" placeholder="9XXXXXXXX" value="<?php echo htmlspecialchars($phone); ?>" />
+                                                </div>
+                                                <small class="text-muted">Enter the number without country code; it will be saved with +251.</small>
                                                 <span class="text-danger"><?php echo htmlspecialchars($phone_err); ?></span>
                                             </div>
                                         </div>
@@ -599,7 +596,10 @@ if (isset($_POST["register"]) && ($_SERVER["REQUEST_METHOD"] == "POST")) {
                                             </div>
                                             <div class="form-group col-12 col-md-6 mb-3">                     
                                                 <label for="password" class="d-block">Password <span class="text-danger">*</span></label>
-                                                <input type="password" id="password" name="password" class="form-control" onkeyup="checkADDPassword()" />
+                                                <div class="input-group">
+                                                    <input type="password" id="password" name="password" class="form-control" onkeyup="checkADDPassword()" />
+                                                    <button type="button" class="btn btn-outline-secondary toggle-password" data-target="#password">Show</button>
+                                                </div>
                                                 <ul id="password-checklist" style="list-style: none; padding: 0; display: none;">
                                                     <li id="lower" style="color: red;">❌ One lowercase letter</li>
                                                     <li id="upper" style="color: red;">❌ One uppercase letter</li>
@@ -610,7 +610,10 @@ if (isset($_POST["register"]) && ($_SERVER["REQUEST_METHOD"] == "POST")) {
                                             </div>
                                             <div class="form-group col-12 col-md-6 mb-3">
                                                 <label for="confirm_password" class="d-block">Confirm Password <span class="text-danger">*</span></label>
-                                                <input id="confirm_password" type="password" class="form-control" name="confirm_password" />
+                                                <div class="input-group">
+                                                    <input id="confirm_password" type="password" class="form-control" name="confirm_password" />
+                                                    <button type="button" class="btn btn-outline-secondary toggle-password" data-target="#confirm_password">Show</button>
+                                                </div>
                                                 <span class="text-danger"><?php echo htmlspecialchars($confirmPassword_err); ?></span>
                                             </div>
                                         </div>
@@ -643,12 +646,20 @@ if (isset($_POST["register"]) && ($_SERVER["REQUEST_METHOD"] == "POST")) {
                                     </div>
                                     <div class="form-group col-md-6 mb-3">
                                         <label for="father_contact">Father’s Contact Number <span class="text-danger">*</span></label>
-                                        <input type="text" name="father_contact" id="father_contact" class="form-control" value="<?php echo htmlspecialchars($father_contact); ?>">
+                                        <div class="input-group">
+                                            <span class="input-group-text">+251</span>
+                                            <input type="text" name="father_contact" id="father_contact" class="form-control" placeholder="9XXXXXXXX" value="<?php echo htmlspecialchars($father_contact); ?>">
+                                        </div>
+                                        <small class="text-muted">Enter the number without country code; it will be saved with +251.</small>
                                         <span class="text-danger"><?php echo htmlspecialchars($father_contact_err); ?></span>
                                     </div>
                                     <div class="form-group col-md-6 mb-3">
                                         <label for="mother_contact">Mother’s Contact Number <span class="text-danger">*</span></label>
-                                        <input type="text" name="mother_contact" id="mother_contact" class="form-control" value="<?php echo htmlspecialchars($mother_contact); ?>">
+                                        <div class="input-group">
+                                            <span class="input-group-text">+251</span>
+                                            <input type="text" name="mother_contact" id="mother_contact" class="form-control" placeholder="9XXXXXXXX" value="<?php echo htmlspecialchars($mother_contact); ?>">
+                                        </div>
+                                        <small class="text-muted">Enter the number without country code; it will be saved with +251.</small>
                                         <span class="text-danger"><?php echo htmlspecialchars($mother_contact_err); ?></span>
                                     </div>
                                     <div class="form-group col-md-6 mb-3">
@@ -683,7 +694,11 @@ if (isset($_POST["register"]) && ($_SERVER["REQUEST_METHOD"] == "POST")) {
                                     </div>
                                     <div class="form-group col-md-6 mb-3">
                                         <label for="emergency_contact_phone">Contact Phone <span class="text-danger">*</span></label>
-                                        <input type="text" name="emergency_contact_phone" id="emergency_contact_phone" class="form-control" value="<?php echo htmlspecialchars($emergency_contact_phone); ?>">
+                                        <div class="input-group">
+                                            <span class="input-group-text">+251</span>
+                                            <input type="text" name="emergency_contact_phone" id="emergency_contact_phone" class="form-control" placeholder="9XXXXXXXX" value="<?php echo htmlspecialchars($emergency_contact_phone); ?>">
+                                        </div>
+                                        <small class="text-muted">Enter the number without country code; it will be saved with +251.</small>
                                         <span class="text-danger"><?php echo htmlspecialchars($emergency_contact_phone_err); ?></span>
                                     </div>
                                 </div>
@@ -769,8 +784,8 @@ if (isset($_POST["register"]) && ($_SERVER["REQUEST_METHOD"] == "POST")) {
                         </div>
                     </div>
                     <!-- Submit -->
-                    <div class="text-center">
-                        <button type="submit" name="register" class="btn btn-primary">Register Student</button>
+                    <div class="text-center mt-3">
+                        <button type="submit" name="register" id="registerBtn" class="btn btn-primary btn-lg px-5 py-3 shadow-sm rounded-3">Register Student</button>
                     </div>
                 </form>
             </section>
@@ -785,3 +800,74 @@ if (isset($mysql) && $mysql instanceof mysqli) {
     mysqli_close($mysql);
 }
 ?>
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    const successMsg = <?php echo json_encode($success ?? ''); ?>;
+    const fieldErrors = <?php
+        // Aggregate all non-empty error messages into an array
+        $errorMessages = [];
+        foreach ([
+            $student_id_err,$student_photo_err,$firstName_err,$fatherName_err,$gFatherName_err,$gender_err,$email_err,$nationality_err,
+            $region_err,$zone_err,$woreda_err,$kebele_err,$dob_err,$birth_place_err,$emergency_contact_name_err,$emergency_contact_phone_err,
+            $username_err,$password_err,$confirmPassword_err,$phone_err,$father_full_name_err,$mother_name_err,$father_contact_err,$mother_contact_err,
+            $father_occupation_err,$mother_occupation_err,$blood_group_err,$medical_condition_err,$other_condition_err,$disabilities_err,
+            $previous_school_err,$previous_documents_err,$allErr
+        ] as $err){ if(!empty($err)) $errorMessages[] = $err; }
+        echo json_encode(array_values(array_unique($errorMessages)));
+    ?>;
+
+    if (successMsg) {
+        Swal.fire({
+            icon: 'success',
+            title: 'Registration Successful',
+            text: successMsg,
+            confirmButtonText: 'OK'
+        }).then(() => { window.location.reload(); });
+    } else if (fieldErrors && fieldErrors.length) {
+        const listHtml = '<ul style="text-align:left;margin:0;padding-left:20px;">' + fieldErrors.map(e => '<li>'+e+'</li>').join('') + '</ul>';
+        Swal.fire({
+            icon: 'error',
+            title: 'Please fix the following',
+            html: listHtml,
+            confirmButtonText: 'Got it'
+        });
+    }
+});
+</script>
+<script>
+// Toggle password visibility buttons
+document.addEventListener('click', function(e){
+    const btn = e.target.closest('.toggle-password');
+    if(!btn) return;
+    const targetSel = btn.getAttribute('data-target');
+    const input = document.querySelector(targetSel);
+    if(!input) return;
+    const showing = input.type === 'text';
+    input.type = showing ? 'password' : 'text';
+    btn.textContent = showing ? 'Show' : 'Hide';
+});
+
+// Normalize phone to include +251 on submit
+document.getElementById('studentForm')?.addEventListener('submit', function(){
+    function normalizeEthiopiaPhone(input){
+        if(!input) return;
+        let v = (input.value || '').trim();
+        if(/^\+251/.test(v)) return input.value = v; // already prefixed
+        if(/^0\d{9}$/.test(v)) return input.value = '+251' + v.slice(1);
+        if(/^9\d{8}$/.test(v)) return input.value = '+251' + v;
+        // leave as-is; server-side validator will catch invalid
+        input.value = v;
+    }
+    normalizeEthiopiaPhone(document.getElementById('phone'));
+    normalizeEthiopiaPhone(document.getElementById('father_contact'));
+    normalizeEthiopiaPhone(document.getElementById('mother_contact'));
+    normalizeEthiopiaPhone(document.getElementById('emergency_contact_phone'));
+});
+</script>
+<style>
+/* Hide inline success/error blocks; SweetAlert will display messages */
+.form-control.bg-success, .form-control.bg-danger { display: none !important; }
+</style>
+</script>

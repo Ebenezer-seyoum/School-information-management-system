@@ -414,7 +414,7 @@ if (isset($_POST["update"]) && $_SERVER["REQUEST_METHOD"] == "POST") {
                  <div class="col-lg-4 mb-4 text-center">
                    <img src="<?php echo !empty($userProfile['student_photo']) ? htmlspecialchars($userProfile['student_photo']) : '../assets/img/no.png'; ?>" 
                         alt="Profile Picture" width="120" height="120" class="mb-2">
-                   <input type="file" name="student_photo" class="form-control" accept="image/*">
+    
                    <?php if ($profile_pic_err): ?><div class="text-danger"><?php echo htmlspecialchars($profile_pic_err); ?></div><?php endif; ?>
                  </div>
                  <div class="col-lg-8">

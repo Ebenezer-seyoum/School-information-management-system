@@ -94,6 +94,62 @@
  });
 });
 </script>
+<!-- Global modal styling: blue header, white title/close, unified width -->
+<style>
+  .modal-header { background-color: #0d6efd !important; color: #fff !important; }
+  .modal-header .modal-title { color: #fff !important; }
+  .modal-header .btn-close { filter: invert(1) grayscale(100%) brightness(200%); opacity: 1; }
+  .modal-footer { background-color: #f8f9fa; }
+  /* Unify modal width across sizes */
+  @media (min-width: 576px) {
+    .modal .modal-dialog,
+    .modal .modal-dialog.modal-lg,
+    .modal .modal-dialog.modal-xl { max-width: 800px !important; }
+  }
+</style>
+<!-- Ensure every modal is large and has proper close controls -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.modal').forEach(function (modalEl) {
+      modalEl.addEventListener('show.bs.modal', function () {
+        // Normalize dialog size: remove other explicit sizes and enforce modal-lg
+        const dlg = modalEl.querySelector('.modal-dialog');
+        if (dlg) {
+          dlg.classList.remove('modal-sm', 'modal-xl');
+          if (!dlg.classList.contains('modal-lg')) dlg.classList.add('modal-lg');
+        }
+
+        // Ensure top close (X)
+        const header = modalEl.querySelector('.modal-header');
+        if (header && !header.querySelector('.btn-close')) {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'btn-close';
+          btn.setAttribute('data-bs-dismiss', 'modal');
+          btn.setAttribute('aria-label', 'Close');
+          header.appendChild(btn);
+        }
+
+        // Ensure footer and bottom Close button
+        let footer = modalEl.querySelector('.modal-footer');
+        if (!footer) {
+          footer = document.createElement('div');
+          footer.className = 'modal-footer';
+          const content = modalEl.querySelector('.modal-content');
+          if (content) content.appendChild(footer);
+        }
+        if (footer && !footer.querySelector('[data-bs-dismiss="modal"]')) {
+          const closeBtn = document.createElement('button');
+          closeBtn.type = 'button';
+          closeBtn.className = 'btn btn-secondary';
+          closeBtn.setAttribute('data-bs-dismiss', 'modal');
+          closeBtn.textContent = 'Close';
+          footer.appendChild(closeBtn);
+        }
+      });
+    });
+  });
+  </script>
 <!-- script for blocking and unblocking users -->
 <script>
     setTimeout(function () {

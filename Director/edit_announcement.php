@@ -47,15 +47,9 @@ $announcements_res = mysqli_query($conn, "SELECT a.*, u.first_name, u.father_nam
                 <li class="separator"><i class="icon-arrow-right"></i></li>
                 <li class="nav-item"><a href="#">Announcements</a></li>
                 <li class="separator"><i class="icon-arrow-right"></i></li>
-                <li class="nav-item"><a href="#">View Announcements</a></li>
+                <li class="nav-item"><a href="#">Update Announcements</a></li>
             </ul>
         </div>
-<div class="container">
-    <div class="page-inner">
-        <div class="page-header mb-3">
-            <h3 class="fw-bold">Announcements</h3>
-        </div>
-
         <!-- Alerts -->
         <?php if($success): ?>
             <div class="alert alert-success alert-dismissible fade show"><?= htmlspecialchars($success) ?>
@@ -71,6 +65,20 @@ $announcements_res = mysqli_query($conn, "SELECT a.*, u.first_name, u.father_nam
         <!-- Announcements Table -->
         <div class="card shadow-sm">
             <div class="card-body">
+                <h3 class="fw-bold">Announcements</h3>
+                  <form method="GET">
+    <div class="search-box">
+  <div class="input-group">
+    <span class="input-group-text bg-primary text-white">
+      <i class="fas fa-search"></i>
+    </span>
+    <input type="text" name="search" id="userSearch" 
+           class="form-control search-input"
+           placeholder="Search by ID, Name, or Role...">
+    <button class="btn btn-primary" type="button">
+      Search
+    </button>
+        </div>  
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered text-center">
                         <thead class="table-light">

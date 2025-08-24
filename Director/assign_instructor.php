@@ -21,6 +21,11 @@ while($t = mysqli_fetch_assoc($teachers_q)) {
     $instructors_array[$t['uid']] = htmlspecialchars($t['full_name']);
   }
 }
+
+// Academic years from assign_student
+$yrsRes = mysqli_query($conn, "SELECT DISTINCT academic_year FROM assign_student ORDER BY academic_year DESC");
+$assignYears = [];
+while($y = mysqli_fetch_assoc($yrsRes)) $assignYears[] = $y['academic_year'];
 ?>
 <!-- page header -->
 <div class="container">
@@ -56,7 +61,12 @@ while($t = mysqli_fetch_assoc($teachers_q)) {
           </div>
           <div class="col-md-4">
             <label class="form-label fw-semibold">Academic Year</label>
-            <input type="text" id="academicYear" class="form-control form-control-lg" placeholder="e.g. 2017">
+            <select id="academicYear" class="form-select form-select-lg">
+              <option value="">-- Select Academic Year --</option>
+              <?php foreach($assignYears as $ay): ?>
+                <option value="<?= htmlspecialchars($ay) ?>"><?= htmlspecialchars($ay) ?></option>
+              <?php endforeach; ?>
+            </select>
           </div>
           <div class="col-md-2 d-grid">
             <button type="button" id="showSectionsBtn" class="btn btn-primary btn-md">Assign Instructor</button>
@@ -72,7 +82,7 @@ while($t = mysqli_fetch_assoc($teachers_q)) {
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title fw-bold" id="sectionsModalLabel">Sections & Assign Instructors</h5>
+        <h5 class="modal-title fw-bold text-primary" id="sectionsModalLabel">Sections & Assign Instructors</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
@@ -88,9 +98,9 @@ while($t = mysqli_fetch_assoc($teachers_q)) {
             </thead>
             <tbody id="sectionsTableBody"></tbody>
           </table>
-          <div class="text-end">
-            <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-success">Assign Selected</button>
+          <div class="modal-footer d-flex justify-content-end">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-success ms-2">Assign Selected</button>
           </div>
         </form>
       </div>

@@ -35,9 +35,14 @@ if (isset($_SESSION["uid"]) && ($roleName == "Director")) {
             <div class="card">
               <div class="card-header d-flex justify-content-between align-items-center">
                 <h4 class="mb-0">All Classes</h4>
-                <form method="GET" class="d-flex">
-                  <input type="text" name="search" id="userSearch" class="form-control" 
-                    placeholder="Search by section name or class type...">
+                <form method="GET" class="d-flex w-100">
+                  <div class="search-box w-100">
+                    <div class="input-group">
+                      <span class="input-group-text bg-primary text-white"><i class="fas fa-search"></i></span>
+                      <input type="text" name="search" id="userSearch" class="form-control search-input" placeholder="Search by ID, Name, or Role...">
+                      <button class="btn btn-primary" type="button" aria-label="Search">Search</button>
+                    </div>
+                  </div>
                 </form>
               </div>
 
@@ -100,7 +105,16 @@ if (isset($_SESSION["uid"]) && ($roleName == "Director")) {
         <div class="form-inline mb-3">
           <div>
             <label for="academicYearModal" class="form-label">Academic Year</label>
-            <input type="text" id="academicYearModal" class="form-control" placeholder="e.g. 2024/2025">
+            <select id="academicYearModal" class="form-control">
+              <option value="">-- Select Academic Year --</option>
+              <?php
+              $yrs = mysqli_query($conn, "SELECT DISTINCT academic_year FROM assign_student ORDER BY academic_year DESC");
+              while($r = mysqli_fetch_assoc($yrs)){
+                $ay = htmlspecialchars($r['academic_year']);
+                echo "<option value='{$ay}'>{$ay}</option>";
+              }
+              ?>
+            </select>
           </div>
           <div>
             <label for="semesterModal" class="form-label">Semester</label>

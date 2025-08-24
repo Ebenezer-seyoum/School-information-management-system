@@ -32,6 +32,52 @@
 	<script src="../assets/js/kaiadmin.min.js"></script>
 	<script src="../assets/js/profile.js"></script>
 	<script src="../assets/js/main.js"></script>
+  <!-- Global modal styling: blue header, large size, and close controls -->
+  <style>
+    .modal-header { background-color: #0d6efd !important; color: #fff !important; }
+    .modal-header .modal-title { color: #fff !important; }
+    .modal-header .btn-close { filter: invert(1) grayscale(100%) brightness(200%); opacity: 1; }
+    .modal-footer { background-color: #f8f9fa; }
+    @media (min-width: 576px) {
+      .modal .modal-dialog,
+      .modal .modal-dialog.modal-lg,
+      .modal .modal-dialog.modal-xl { max-width: 800px !important; }
+    }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('.modal').forEach(function (modalEl) {
+        modalEl.addEventListener('show.bs.modal', function () {
+          const dlg = modalEl.querySelector('.modal-dialog');
+          if (dlg && !dlg.classList.contains('modal-lg')) dlg.classList.add('modal-lg');
+          const header = modalEl.querySelector('.modal-header');
+          if (header && !header.querySelector('.btn-close')) {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'btn-close';
+            btn.setAttribute('data-bs-dismiss', 'modal');
+            btn.setAttribute('aria-label', 'Close');
+            header.appendChild(btn);
+          }
+          let footer = modalEl.querySelector('.modal-footer');
+          if (!footer) {
+            footer = document.createElement('div');
+            footer.className = 'modal-footer';
+            const content = modalEl.querySelector('.modal-content');
+            if (content) content.appendChild(footer);
+          }
+          if (footer && !footer.querySelector('[data-bs-dismiss="modal"]')) {
+            const closeBtn = document.createElement('button');
+            closeBtn.type = 'button';
+            closeBtn.className = 'btn btn-secondary';
+            closeBtn.setAttribute('data-bs-dismiss', 'modal');
+            closeBtn.textContent = 'Close';
+            footer.appendChild(closeBtn);
+          }
+        });
+      });
+    });
+  </script>
 	<script>
 		$('#lineChart').sparkline([102,109,120,99,110,105,115], {
 			type: 'line',

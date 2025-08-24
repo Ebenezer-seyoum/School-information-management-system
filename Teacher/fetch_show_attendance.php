@@ -54,7 +54,13 @@ if (mysqli_num_rows($res) > 0) {
             </div>
             
             <div>
-              <input type='text' id='searchInput' class='form-control form-control-sm' placeholder='Search student...'>
+              <div class='search-box w-100'>
+                <div class='input-group input-group-sm'>
+                  <span class='input-group-text bg-primary text-white'><i class='fas fa-search'></i></span>
+                  <input type='text' id='searchInput' class='form-control form-control-sm search-input' placeholder='Search by ID, Name, or Role...'>
+                  <button class='btn btn-primary btn-sm' type='button' id='searchTrigger' aria-label='Search'>Search</button>
+                </div>
+              </div>
             </div>
           </div>";
 

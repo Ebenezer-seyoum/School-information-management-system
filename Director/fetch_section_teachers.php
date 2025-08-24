@@ -32,11 +32,24 @@ if($section_id && $academic_year){
             LIMIT 1
         ");
         $assigned_teacher = mysqli_fetch_assoc($check_q)['teacher_id'] ?? null;
+        $assigned_teacher_name = null;
+        if ($assigned_teacher) {
+            // Map to name from preloaded teachers array
+            if (isset($teachers_array[$assigned_teacher])) {
+                $assigned_teacher_name = $teachers_array[$assigned_teacher];
+            } else {
+                // Fallback query (should rarely happen)
+                $tq = mysqli_query($conn, "SELECT CONCAT(first_name,' ',father_name) AS full_name FROM users WHERE uid=".(int)$assigned_teacher." LIMIT 1");
+                $tr = mysqli_fetch_assoc($tq);
+                $assigned_teacher_name = $tr ? htmlspecialchars($tr['full_name']) : null;
+            }
+        }
 
         $result[] = [
             'suid' => $sub['suid'],
             'subject_name' => $sub['subject_name'],
             'assigned_teacher' => $assigned_teacher,
+            'assigned_teacher_name' => $assigned_teacher_name,
             'teachers' => $teachers_array
         ];
     }

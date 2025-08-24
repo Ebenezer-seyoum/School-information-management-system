@@ -69,7 +69,7 @@ include('directorHeader.php');
           </div>
         </div>
       </div>
-      <a href="view_AllStudentdetail.php?sid=<?php echo $user['sid']; ?>" class="btn btn-primary btn-sm w-50 me-2"><i class="fa-solid fa-user me-2"></i>Detail</a>                                                       
+      <a href="view_AllStudentdetailreadonly.php?sid=<?php echo $user['sid']; ?>" class="btn btn-primary btn-sm w-50 me-2"><i class="fa-solid fa-user me-2"></i>Detail</a>                                                       
     </div>
   </div>
 </div>

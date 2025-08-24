@@ -1,6 +1,12 @@
 <?php
 include('studentHeader.php');
 ?>
+<?php
+// Academic years from assign_student for student view
+$yrsRes = mysqli_query($conn, "SELECT DISTINCT academic_year FROM assign_student ORDER BY academic_year DESC");
+$assignYears = [];
+while($y = mysqli_fetch_assoc($yrsRes)) $assignYears[] = $y['academic_year'];
+?>
 
 <div class="container">
   <div class="page-inner">
@@ -25,7 +31,12 @@ include('studentHeader.php');
         <div class="row g-3 align-items-end">
           <div class="col-md-8">
             <label class="form-label fw-semibold">Academic Year</label>
-            <input type="text" id="academicYear" class="form-control form-control-lg" placeholder="e.g. 2017">
+            <select id="academicYear" class="form-select form-select-lg">
+              <option value="">-- Select Academic Year --</option>
+              <?php foreach($assignYears as $ay): ?>
+                <option value="<?= htmlspecialchars($ay) ?>"><?= htmlspecialchars($ay) ?></option>
+              <?php endforeach; ?>
+            </select>
           </div>
           <div class="col-md-4 d-grid">
             <button type="button" id="showClassesBtn" class="btn btn-primary btn-md">Show Classes</button>
@@ -44,7 +55,7 @@ include('studentHeader.php');
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title fw-bold" id="classSubjectsModalLabel">Class Subjects & Teachers</h5>
+        <h5 class="modal-title fw-bold text-primary" id="classSubjectsModalLabel">Class Subjects & Teachers</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -58,6 +69,9 @@ include('studentHeader.php');
           </thead>
           <tbody id="classSubjectsTableBody"></tbody>
         </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>

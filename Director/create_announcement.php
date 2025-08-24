@@ -40,16 +40,20 @@ $announcements_res = mysqli_query($conn, "SELECT a.*, u.first_name, u.father_nam
                                           ORDER BY a.start_date DESC");
 ?>
 
+<!-- page header -->
 <div class="container">
-    <div class="page-inner">
-        <div class="page-header">
-            <h3 class="fw-bold mb-3">Create Announcement</h3>
-            <ul class="breadcrumbs mb-3">
-                <li class="nav-home"><a href="#"><i class="icon-home"></i></a></li>
-                <li class="separator"><i class="icon-arrow-right"></i></li>
-                <li class="nav-item"><a href="#">Announcements</a></li>
-            </ul>
-        </div>
+  <div class="page-inner">
+    <div class="page-header">
+      <h3 class="fw-bold mb-3">create announcement</h3>
+      <ul class="breadcrumbs mb-3">
+        <li class="nav-home"><a href="#"><i class="icon-home"></i></a></li>
+        <li class="separator"><i class="icon-arrow-right"></i></li>
+        <li class="nav-item"><a href="#">announcement</a></li>
+        <li class="separator"><i class="icon-arrow-right"></i></li>
+        <li class="nav-item"><a href="#">create announcement</a></li>
+      </ul>
+  </div>
+<!-- end page header -->
 
         <?php if($success): ?>
             <div class="alert alert-success alert-dismissible fade show"><?= htmlspecialchars($success) ?>

@@ -49,7 +49,7 @@ if (isset($_POST["register"]) && $_SERVER["REQUEST_METHOD"] == "POST") {
                     mysqli_query($conn, "INSERT INTO curriculum_subjects (class_id, subject_id) VALUES ($sec_id, $subject_id)");
                 }
 
-                $success = "Successfully registered subject and assigned to sections!";
+                $success = "✅ Successfully registered subject and assigned to sections!";
                 header("refresh:2"); // reload after 2 seconds
             } else {
                 $allErr = "Error while inserting subject: " . mysqli_error($conn);
@@ -66,6 +66,17 @@ $grouped_sections = [];
 while ($row = mysqli_fetch_assoc($sections)) {
     $grouped_sections[$row['class_type']][] = $row;
 }
+// Enforce display order: GENERAL and NATURAL on first row, SOCIAL below
+$preferredOrder = ['GENERAL','NATURAL','SOCIAL'];
+$ordered_groups = [];
+foreach ($preferredOrder as $key) {
+    if (isset($grouped_sections[$key])) {
+        $ordered_groups[$key] = $grouped_sections[$key];
+        unset($grouped_sections[$key]);
+    }
+}
+// Append any remaining groups (if any)
+foreach ($grouped_sections as $k=>$v) { $ordered_groups[$k] = $v; }
 ?>
 
 <div class="container">
@@ -84,58 +95,65 @@ while ($row = mysqli_fetch_assoc($sections)) {
         <div class="main-content">
             <section class="section">
                 <div class="row justify-content-center">
-                    <div class="col-md-8">
-                        <div class="card">
-                            <div class="card-header"><h4>Register Subject</h4></div>
+                    <div class="col-md-10">
+                        <div class="card shadow-lg">
+                            <div class="card-header bg-primary text-white">
+                                <h4 class="mb-0">Register Subject</h4>
+                            </div>
 
                             <?php if (!empty($success)) { ?>
-                                <div class="form-control bg-success text-white"><?php echo $success; ?></div>
+                                <div class="alert alert-success m-3"><?php echo $success; ?></div>
                             <?php } ?>
                             <?php if (!empty($allErr)) { ?>
-                                <div class="form-control bg-danger text-white"><?php echo $allErr; ?></div>
+                                <div class="alert alert-danger m-3"><?php echo $allErr; ?></div>
                             <?php } ?>
 
                             <div class="card-body">
                                 <form method="POST">
                                     <div class="row mb-3">
-                                        <div class="form-group col-md-6">
-                                            <label for="subject_name">Subject Name</label>
+                                        <div class="col-md-6">
+                                            <label for="subject_name" class="form-label fw-bold">Subject Name</label>
                                             <input id="subject_name" type="text" class="form-control" name="subject_name" value="<?= htmlspecialchars($subject_name) ?>">
                                             <span class="text-danger"><?= $subject_name_err ?></span>
                                         </div>
-                                        <div class="form-group col-md-6">
-                                            <label for="abbreviation_name">Abbreviation</label>
+                                        <div class="col-md-6">
+                                            <label for="abbreviation_name" class="form-label fw-bold">Abbreviation</label>
                                             <input id="abbreviation_name" type="text" class="form-control" name="abbreviation_name" value="<?= htmlspecialchars($abbreviation_name) ?>">
                                             <span class="text-danger"><?= $abbreviation_name_err ?></span>
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label>Assign to Sections</label>
-                                        <div class="row">
-                                            <?php
-                                            $col_width = intval(12 / count($grouped_sections));
-                                            foreach ($grouped_sections as $class_type => $secs) { ?>
-                                                <div class="col-md-<?= $col_width ?> mb-3">
-                                                    <h6 class="fw-bold text-center"><?= htmlspecialchars($class_type) ?></h6>
-                                                    <div class="form-check my-1">
-                                                        <input type="checkbox" class="form-check-input select-all" data-group="<?= htmlspecialchars($class_type) ?>" id="select_all_<?= htmlspecialchars($class_type) ?>">
-                                                        <label class="form-check-label fw-bold" for="select_all_<?= htmlspecialchars($class_type) ?>">Select All <?= htmlspecialchars($class_type) ?></label>
-                                                    </div>
-                                                    <?php foreach ($secs as $s) { ?>
-                                                        <div class="form-check my-1">
-                                                            <input class="form-check-input <?= htmlspecialchars($class_type) ?>" type="checkbox" name="section_ids[]" value="<?= $s['cid'] ?>" id="section_<?= $s['cid'] ?>">
-                                                            <label class="form-check-label" for="section_<?= $s['cid'] ?>"><?= htmlspecialchars($s['section_name']) ?></label>
+                                    <!-- Sections Selection -->
+                                    <div class="form-group mt-3">
+                                        <label class="fw-bold mb-2">Assign to Sections</label>
+                                                <div class="row g-3"> <!-- g-3 = spacing between cards -->
+                                                    <?php foreach ($ordered_groups as $class_type => $secs) { ?>
+                                                    <div class="col-12 col-md-6"> <!-- 2 per row on md+, full width on xs -->
+                                                    <div class="card h-100 border shadow-sm">
+                                                        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                                                            <span class="fw-bold"><?= htmlspecialchars($class_type) ?></span>
+                                                            <div>
+                                                                <input type="checkbox" class="form-check-input select-all" data-group="<?= htmlspecialchars($class_type) ?>" id="select_all_<?= htmlspecialchars($class_type) ?>">
+                                                                <label class="form-check-label small" for="select_all_<?= htmlspecialchars($class_type) ?>">Select All</label>
+                                                            </div>
                                                         </div>
-                                                    <?php } ?>
+                                                        <div class="card-body p-2" style="max-height:220px; overflow-y:auto;">
+                                                            <?php foreach ($secs as $s) { ?>
+                                                                <div class="form-check my-1">
+                                                                    <input class="form-check-input <?= htmlspecialchars($class_type) ?>" type="checkbox" name="section_ids[]" value="<?= $s['cid'] ?>" id="section_<?= $s['cid'] ?>">
+                                                                    <label class="form-check-label" for="section_<?= $s['cid'] ?>"><?= htmlspecialchars($s['section_name']) ?></label>
+                                                                </div>
+                                                            <?php } ?>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             <?php } ?>
                                         </div>
                                         <span class="text-danger"><?= $section_err ?></span>
                                     </div>
 
-                                    <div class="form-group mt-3">
-                                        <input type="submit" name="register" class="btn btn-primary btn-lg btn-block" value="Register">
+                                    <div class="form-group mt-4 text-center">
+                                        <input type="submit" name="register" class="btn btn-primary btn-lg px-5" value="Register Subject">
                                     </div>
                                 </form>
                             </div>

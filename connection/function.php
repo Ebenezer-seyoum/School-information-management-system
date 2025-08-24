@@ -1360,6 +1360,36 @@ function fetchAssignedStudents($conn, $search = '') {
     return mysqli_query($conn, $students_query);
 }
 
+// Fetch students by section & academic year 
+function fetchStudentsBySectionAndYear($conn, $section_id, $academic_year) {
+    // Escape inputs to avoid SQL injection
+    $section_id    = (int)$section_id;
+    $academic_year = mysqli_real_escape_string($conn, $academic_year);
+
+    $sql = "
+        SELECT s.sid, s.student_id, s.first_name, s.father_name, s.student_photo,
+               sec.cid AS section_id, sec.section_name, sec.class_type
+        FROM assign_student ast
+        JOIN students s ON ast.student_id = s.sid
+        JOIN sections sec ON ast.section_id = sec.cid
+        WHERE ast.section_id = '$section_id'
+          AND ast.academic_year = '$academic_year'
+        ORDER BY s.first_name ASC
+    ";
+
+    $result = mysqli_query($conn, $sql);
+
+    if (!$result) {
+        die("Query failed: " . mysqli_error($conn));
+    }
+
+    $students = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $students[] = $row;
+    }
+    return $students;
+}
+
 // Get current assignment for an instructor
 function getInstructorCurrentAssignment($conn, $instructor_id) {
     $instructor_id = intval($instructor_id);
@@ -1476,39 +1506,53 @@ function updateStudent($student_id, $student_photo, $firstName, $fatherName, $gF
     $other_condition, $disabilities, $previous_school, $previous_documents)
 {
     global $conn;
-    $query = mysqli_query($conn, "UPDATE studens SET 
-        profile_picture='$student_photo', 
-        first_name='$firstName',
-        father_name='$fatherName', 
-        grandfather_name='$gFatherName', 
-        gender='$gender',
-        email='$email', 
-        nationality='$nationality',
-        region='$region',
-        zone='$zone',
-        woreda='$woreda',
-        kebele='$kebele',
-        date_of_birth='$dob',
-        birth_place='$birth_place',
-        emergency_contact_name='$emergency_contact_name',
-        emergency_contact_phone='$emergency_contact_phone',
-        username='$username',
-        password='$encryptedPassword',
-        phone='$phone',
-        father_full_name='$father_full_name',
-        mother_name='$mother_name',
-        father_contact='$father_contact',
-        mother_contact='$mother_contact',
-        father_occupation='$father_occupation',
-        mother_occupation='$mother_occupation',
-        blood_group='$blood_group',
-        medical_condition='$medical_condition',
-        other_condition='$other_condition',
-        disabilities='$disabilities',
-        previous_school='$previous_school',
-        previous_documents='$previous_documents'
-        WHERE student_id='$student_id'
-    ");
+
+    // Coerce FK ids to integers when possible
+    $region = (int)$region;
+    $zone = (int)$zone;
+    $woreda = (int)$woreda;
+
+    // Build dynamic SET clause to avoid overwriting password when not provided
+    $set = [];
+    $set[] = "student_photo='" . mysqli_real_escape_string($conn, $student_photo) . "'";
+    $set[] = "first_name='" . mysqli_real_escape_string($conn, $firstName) . "'";
+    $set[] = "father_name='" . mysqli_real_escape_string($conn, $fatherName) . "'";
+    $set[] = "grand_father_name='" . mysqli_real_escape_string($conn, $gFatherName) . "'";
+    $set[] = "gender='" . mysqli_real_escape_string($conn, $gender) . "'";
+    $set[] = "email='" . mysqli_real_escape_string($conn, $email) . "'";
+    $set[] = "nationality='" . mysqli_real_escape_string($conn, $nationality) . "'";
+    $set[] = "region='" . mysqli_real_escape_string($conn, (string)$region) . "'";
+    $set[] = "zone='" . mysqli_real_escape_string($conn, (string)$zone) . "'";
+    $set[] = "woreda='" . mysqli_real_escape_string($conn, (string)$woreda) . "'";
+    $set[] = "kebele='" . mysqli_real_escape_string($conn, $kebele) . "'";
+    $set[] = "dob='" . mysqli_real_escape_string($conn, $dob) . "'";
+    $set[] = "birth_place='" . mysqli_real_escape_string($conn, $birth_place) . "'";
+    $set[] = "emergency_contact_name='" . mysqli_real_escape_string($conn, $emergency_contact_name) . "'";
+    $set[] = "emergency_contact_phone='" . mysqli_real_escape_string($conn, $emergency_contact_phone) . "'";
+    $set[] = "username='" . mysqli_real_escape_string($conn, $username) . "'";
+    if (!empty($encryptedPassword)) {
+        $set[] = "password='" . mysqli_real_escape_string($conn, $encryptedPassword) . "'";
+    }
+    $set[] = "phone='" . mysqli_real_escape_string($conn, $phone) . "'";
+    // Update parent info including father's full name
+    $set[] = "father_full_name='" . mysqli_real_escape_string($conn, $father_full_name) . "'";
+    $set[] = "mother_name='" . mysqli_real_escape_string($conn, $mother_name) . "'";
+    $set[] = "father_contact='" . mysqli_real_escape_string($conn, $father_contact) . "'";
+    $set[] = "mother_contact='" . mysqli_real_escape_string($conn, $mother_contact) . "'";
+    $set[] = "father_occupation='" . mysqli_real_escape_string($conn, $father_occupation) . "'";
+    $set[] = "mother_occupation='" . mysqli_real_escape_string($conn, $mother_occupation) . "'";
+    $set[] = "blood_group='" . mysqli_real_escape_string($conn, $blood_group) . "'";
+    $set[] = "medical_condition='" . mysqli_real_escape_string($conn, $medical_condition) . "'";
+    $set[] = "other_condition='" . mysqli_real_escape_string($conn, $other_condition) . "'";
+    $set[] = "disabilities='" . mysqli_real_escape_string($conn, $disabilities) . "'";
+    $set[] = "previous_school='" . mysqli_real_escape_string($conn, $previous_school) . "'";
+    $set[] = "previous_documents='" . mysqli_real_escape_string($conn, $previous_documents) . "'";
+
+    $setClause = implode(", ", $set);
+    // Here $student_id is actually the numeric sid
+    $sid_esc = mysqli_real_escape_string($conn, (string)$student_id);
+    $sql = "UPDATE students SET $setClause WHERE sid='$sid_esc'";
+    $query = mysqli_query($conn, $sql);
 
     if ($query) {
         return 1;

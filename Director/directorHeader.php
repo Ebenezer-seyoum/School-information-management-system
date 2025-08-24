@@ -1,9 +1,6 @@
 <?php
 ob_start();
 session_start();
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 //error_reporting(0);
 include '../connection/connection.php';
 include '../connection/function.php';
@@ -12,7 +9,7 @@ include '../connection/function.php';
 <html lang="en">
 <head>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-	<title>SIMS  Dashboard</title>
+	<title>BSIMS  Dashboard</title>
 	<meta content='width=device-width,initial-scale=1.0,shrink-to-fit=no'name='viewport'/>
 	<link rel="icon" href="../assets/img/icon.png" type="image/x-icon"/>
 	<!-- Fonts and icons -->
@@ -286,8 +283,8 @@ if (isset($_SESSION["uid"]) and ($roleName == "Director")) {
             <li><a href="register_student.php"><i class="fas fa-user-plus"></i> Register Student</a></li>
             <li><a href="view_studentForUpdate.php"><i class="fas fa-user-edit"></i> Update Student</a></li>
             <li><a href="view_studentForDelete.php"><i class="fas fa-user-times"></i> Delete Student</a></li>
-            <li><a href="assign_student.php"><i class="fas fa-user-slash"></i>Assign Student</a></li>
-            <li><a href="view_transfer_student.php"><i class="fas fa-user-slash"></i>Transfer Student</a></li>
+           <li><a href="assign_student.php"><i class="fas fa-user-plus"></i> Assign Student</a></li>
+           <li><a href="view_transfer_student.php"><i class="fas fa-exchange-alt"></i> Transfer Student</a></li>
             <li><a href="promote_student.php"><i class="fas fa-user-graduate"></i>Promote Student</a></li>
             <li><a href="report_card.php"><i class="fas fa-file-alt"></i> Generate Report Cards</a></li>
             <li><a href="view_allStudents.php"><i class="fas fa-users"></i> View All Students</a></li>
@@ -304,7 +301,7 @@ if (isset($_SESSION["uid"]) and ($roleName == "Director")) {
         <div class="collapse" id="teachers">
           <ul class="nav nav-collapse">
             <li><a href="assign_teacher.php"><i class="fas fa-user-plus"></i> Assign Teacher</a></li>
-            <li><a href="view_transfer_teacher.php"><i class="fas fa-user-slash"></i>Transfer Teacher</a></li>
+            <li><a href="view_transfer_teacher.php"><i class="fas fa-exchange-alt"></i>Transfer Teacher</a></li>
             <li><a href="view_AllTeacher.php"><i class="fas fa-users"></i> View All Teachers</a></li>
           </ul>
         </div>
@@ -319,7 +316,7 @@ if (isset($_SESSION["uid"]) and ($roleName == "Director")) {
         <div class="collapse" id="instructors">
           <ul class="nav nav-collapse">
             <li><a href="assign_instructor.php"><i class="fas fa-user-plus"></i> Assign Instructor</a></li>
-            <li><a href="view_transfer_instructor.php"><i class="fas fa-user-slash"></i>Transfer Instructor</a></li>
+            <li><a href="view_transfer_instructor.php"><i class="fas fa-exchange-alt"></i>Transfer Instructor</a></li>
             <li><a href="view_Allnstructor.php"><i class="fas fa-users"></i> View All Instructors</a></li>
           </ul>
         </div>

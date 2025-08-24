@@ -49,7 +49,16 @@ while($t=mysqli_fetch_assoc($teachers_q)) $teachers_array[$t['uid']] = htmlspeci
           </div>
           <div class="col-md-4">
             <label class="form-label fw-semibold">Academic Year</label>
-            <input type="text" id="academicYear" class="form-control form-control-lg" placeholder="e.g. 2017">
+            <select id="academicYear" class="form-select form-select-lg">
+              <option value="">-- Select Academic Year --</option>
+              <?php
+              $yrs = mysqli_query($conn, "SELECT DISTINCT academic_year FROM assign_student ORDER BY academic_year DESC");
+              while($r = mysqli_fetch_assoc($yrs)){
+                $ay = htmlspecialchars($r['academic_year']);
+                echo "<option value='{$ay}'>{$ay}</option>";
+              }
+              ?>
+            </select>
           </div>
           <div class="col-md-2 d-grid">
             <button type="button" id="showSubjectsBtn" class="btn btn-primary btn-md">Assign Teacher</button>

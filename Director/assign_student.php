@@ -7,6 +7,11 @@ $sections_array = [];
 while($s = mysqli_fetch_assoc($sections_q)) {
     $sections_array[$s['cid']] = $s['section_name'] . ' - ' . $s['class_type'];
 }
+
+// Fetch academic years from assign_student for selects
+$years_q = mysqli_query($conn, "SELECT DISTINCT academic_year FROM assign_student ORDER BY academic_year DESC");
+$years = [];
+while($y = mysqli_fetch_assoc($years_q)) { $years[] = $y['academic_year']; }
 ?>
 <!-- Page Header -->
 <div class="container">
@@ -25,6 +30,7 @@ while($s = mysqli_fetch_assoc($sections_q)) {
         <div class="card shadow-lg p-4 mb-4">
             <div class="row g-3 align-items-end">
                 <h3 class="fw-bold mb-3 text-center">Assign Students to section</h3>
+                <p class="text-muted mb-0 text-center">Choose a section and year to assign students.</p>
                 <div class="col-md-5">
                     <label class="form-label fw-semibold">Select Section</label>
                     <select id="sectionSelect" class="form-select">
@@ -34,10 +40,15 @@ while($s = mysqli_fetch_assoc($sections_q)) {
                         <?php endforeach; ?>
                     </select>
                 </div>
-                <div class="col-md-5">
-                    <label class="form-label fw-semibold">Academic Year</label>
-                    <input type="text" id="academicYear" class="form-control" placeholder="e.g. 2017">
-                </div>
+                                <div class="col-md-5">
+                                        <label class="form-label fw-semibold">Academic Year</label>
+                                        <select id="academicYear" class="form-select">
+                                                <option value="">-- Select Academic Year --</option>
+                                                <?php foreach($years as $yr): ?>
+                                                    <option value="<?= htmlspecialchars($yr) ?>"><?= htmlspecialchars($yr) ?></option>
+                                                <?php endforeach; ?>
+                                        </select>
+                                </div>
                 <div class="col-md-2 d-grid">
                     <button type="button" id="showCountsBtn" class="btn btn-primary">Show Students</button>
                 </div>
@@ -68,7 +79,7 @@ while($s = mysqli_fetch_assoc($sections_q)) {
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title fw-bold">All Students in Section</h5>
+                <h5 class="modal-title fw-bold text-primary">All Students in Section</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
@@ -84,6 +95,9 @@ while($s = mysqli_fetch_assoc($sections_q)) {
                     <tbody id="allStudentsBody"></tbody>
                 </table>
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
         </div>
     </div>
 </div>
@@ -93,7 +107,7 @@ while($s = mysqli_fetch_assoc($sections_q)) {
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title fw-bold">Assign Students to Section</h5>
+                <h5 class="modal-title fw-bold text-primary">Assign Students to Section</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">

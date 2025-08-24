@@ -124,7 +124,13 @@ $classes = $selectedYear ? fetchAssignedClasses($conn,$uid,$selectedYear) : [];
             </div>
             <div class="col-md-6">
               <label>Search Student:</label>
-              <input type="text" id="searchStudent" class="form-control" placeholder="Search by Name or SID">
+              <div class="search-box w-100">
+                <div class="input-group">
+                  <span class="input-group-text bg-primary text-white"><i class="fas fa-search"></i></span>
+                  <input type="text" id="searchStudent" class="form-control search-input" placeholder="Search by ID, Name, or Role...">
+                  <button class="btn btn-primary" type="button" id="searchTrigger" aria-label="Search">Search</button>
+                </div>
+              </div>
             </div>
           </div>
           <div id="studentsContainer">Loading...</div>

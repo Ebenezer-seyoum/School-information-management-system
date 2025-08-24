@@ -36,8 +36,19 @@ if (!isset($_SESSION["uid"]) || $roleName != "Director") {
             <div class="card">
               <div class="card-header d-flex justify-content-between align-items-center">
                 <h4 class="mb-0">All Instructors</h4>
-                <form method="GET" class="d-flex">
-                  <input type="text" name="search" value="<?= htmlspecialchars($_GET['search'] ?? '') ?>" class="form-control" placeholder="Search by name or ID">
+                <form method="GET">
+                  <div class="search-box">
+                    <div class="input-group">
+                      <span class="input-group-text bg-primary text-white">
+                        <i class="fas fa-search"></i>
+                      </span>
+                      <input type="text" name="search" id="userSearch"
+                             class="form-control search-input"
+                             value="<?= htmlspecialchars($_GET['search'] ?? '') ?>"
+                             placeholder="Search by ID, Name, or Role...">
+                      <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                  </div>
                 </form>
               </div>
               <div class="card-body table-responsive">

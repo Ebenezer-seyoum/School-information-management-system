@@ -40,82 +40,91 @@ $years = fetchAssignedYears($conn);
 $selectedYear = $_GET['academic_year'] ?? ($years[0]??null);
 $classes = $selectedYear ? fetchClassesByYear($conn,$selectedYear) : [];
 ?>
-
+<!-- Page Header -->
 <div class="container">
   <div class="page-inner">
     <div class="page-header">
-      <h3 class="fw-bold mb-3">Add Marks (Director)</h3>
+      <h3 class="fw-bold mb-3">Manage Students</h3>
+      <ul class="breadcrumbs mb-3">
+        <li class="nav-home"><a href="#"><i class="icon-home"></i></a></li>
+        <li class="separator"><i class="icon-arrow-right"></i></li>
+        <li class="nav-item"><a href="#">Manage Students</a></li>
+        <li class="separator"><i class="icon-arrow-right"></i></li>
+        <li class="nav-item"><a href="#">Delete Student</a></li>
+      </ul>
     </div>
 
-    <!-- Academic Year Selection -->
-    <form method="GET" class="mb-3">
-      <label>Academic Year:</label>
-      <select name="academic_year" class="form-control w-auto d-inline-block">
-        <?php foreach($years as $y): ?>
-          <option value="<?= htmlspecialchars($y) ?>" <?= ($y==$selectedYear)?'selected':'' ?>><?= htmlspecialchars($y) ?></option>
-        <?php endforeach; ?>
-      </select>
-      <button class="btn btn-primary btn-sm">Show Classes</button>
-    </form>
-
-    <!-- Classes List -->
-    <div class="accordion" id="classesAccordion">
-      <?php if(count($classes)>0): $classNo=0; ?>
-        <?php foreach($classes as $c): $classNo++; ?>
-          <div class="accordion-item">
-            <h2 class="accordion-header" id="heading<?= $classNo ?>">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<?= $classNo ?>">
-                <?= htmlspecialchars($c['section_name'].' - '.$c['class_type']) ?>
-              </button>
-            </h2>
-            <div id="collapse<?= $classNo ?>" class="accordion-collapse collapse" data-bs-parent="#classesAccordion">
-              <div class="accordion-body">
-                <ul class="list-group">
-                  <?php 
-                    $subjects = fetchSubjectsByClass($conn,$c['cid']);
-                    if(count($subjects)>0):
-                      foreach($subjects as $s):
-                        // Check assigned teacher
-                        $teacher_res = mysqli_query($conn,"SELECT teacher_id FROM assign_teacher 
-                            WHERE section_id=".$c['cid']." AND subject_id=".$s['suid']." 
-                              AND academic_year='$selectedYear' LIMIT 1");
-                        $teacher_assigned = mysqli_num_rows($teacher_res)>0;
-
-                        if($teacher_assigned){
-                            $teacher_row = mysqli_fetch_assoc($teacher_res);
-                            $teacher_info = getUserByID($teacher_row['teacher_id']);
-                            $teacher_name = $teacher_info['first_name'].' '.$teacher_info['father_name'];
-                        } else {
-                            $teacher_name = '';
-                        }
-                  ?>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                      <?= htmlspecialchars($s['subject_abbr'].' ('.$s['subject_name'].')') ?>
-                      <button class="btn <?= $teacher_assigned?'btn-success':'btn-secondary' ?> btn-sm add-marks-btn"
-                              data-section="<?= (int)$c['cid'] ?>"
-                              data-subject="<?= (int)$s['suid'] ?>"
-                              data-year="<?= htmlspecialchars($selectedYear) ?>"
-                              data-teacher="<?= htmlspecialchars($teacher_name) ?>"
-                              data-subject-name="<?= htmlspecialchars($s['subject_name']) ?>"
-                              data-section-name="<?= htmlspecialchars($c['section_name'].' - '.$c['class_type']) ?>"
-                              data-assigned="<?= $teacher_assigned?'1':'0' ?>">
-                        <?= $teacher_assigned?'Add/Edit Marks':'No Teacher Assigned' ?>
-                      </button>
-                    </li>
-                  <?php endforeach; else: ?>
-                    <li class="list-group-item text-danger">No subjects found for this class.</li>
-                  <?php endif; ?>
-                </ul>
-              </div>
+    <!-- Filter First: Section + Academic Year (like view_class.php) -->
+    <div class="row mb-4">
+      <div class="col-12 d-flex justify-content-center">
+        <div class="card shadow-lg border-0 rounded-4 p-4" style="max-width:800px; width:100%;">
+          <div class="text-center mb-3">
+            <h5 class="fw-bold">Select Section and Academic Year</h5>
+            <p class="text-muted mb-0">Choose a section and year to add/edit marks.</p>
+          </div>
+          <div class="row g-3 align-items-end">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Section</label>
+              <select id="sectionSelect" class="form-select form-select-lg">
+                <option value="">-- Select Section --</option>
+                <?php
+                $sections = mysqli_query($conn,"SELECT cid, section_name, class_type FROM sections ORDER BY class_type, section_name ASC");
+                $grouped_sections = [];
+                while($sec=mysqli_fetch_assoc($sections)) $grouped_sections[$sec['class_type']][] = $sec;
+                foreach($grouped_sections as $type => $secs): ?>
+                  <optgroup label="<?= htmlspecialchars($type) ?>">
+                    <?php foreach($secs as $s): ?>
+                      <option value="<?= (int)$s['cid'] ?>" data-type="<?= htmlspecialchars($s['class_type']) ?>"><?= htmlspecialchars($s['section_name']) ?></option>
+                    <?php endforeach; ?>
+                  </optgroup>
+                <?php endforeach; ?>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">Academic Year</label>
+              <select id="academicYear" class="form-select form-select-lg">
+                <option value="">-- Select Academic Year --</option>
+                <?php foreach($years as $y): ?>
+                  <option value="<?= htmlspecialchars($y) ?>" <?= ($y==$selectedYear)?'selected':'' ?>><?= htmlspecialchars($y) ?></option>
+                <?php endforeach; ?>
+              </select>
+            </div>
+            <div class="col-md-2 d-grid">
+              <button type="button" id="showSubjectsBtn" class="btn btn-primary btn-md">Show Sections</button>
             </div>
           </div>
-        <?php endforeach; ?>
-      <?php else: ?>
-        <p class="text-danger">No classes found for the selected year.</p>
-      <?php endif; ?>
+        </div>
+      </div>
     </div>
   </div>
 </div>
+
+<!-- Subjects picker Modal -->
+<div class="modal fade" id="subjectsModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Subjects for <span id="subjectsModalSection"></span> • <span id="subjectsModalYear"></span></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>#</th><th>Subject</th><th>Assigned Teacher</th><th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="subjectsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+  </div>
 
 <!-- Modal for Marks -->
 <div class="modal fade" id="addMarksModal" tabindex="-1">
@@ -159,6 +168,100 @@ $classes = $selectedYear ? fetchClassesByYear($conn,$selectedYear) : [];
 document.addEventListener('DOMContentLoaded', function(){
   let current = {};
 
+  // Filter-first: show subjects list in modal
+  document.getElementById('showSubjectsBtn').addEventListener('click', function(){
+    const secSel = document.getElementById('sectionSelect');
+    const yearSel = document.getElementById('academicYear');
+    const sectionId = secSel.value;
+    const year = yearSel.value;
+    const sectionName = secSel.options[secSel.selectedIndex]?.text || '';
+    if(!sectionId || !year){
+      Swal.fire('Warning','Please select section and academic year','warning');
+      return;
+    }
+
+    document.getElementById('subjectsModalSection').textContent = sectionName;
+    document.getElementById('subjectsModalYear').textContent = year;
+    const body = document.getElementById('subjectsTableBody');
+    body.innerHTML = '<tr><td colspan="4" class="text-center"><span class="spinner-border spinner-border-sm me-2"></span>Loading subjects…</td></tr>';
+    new bootstrap.Modal(document.getElementById('subjectsModal')).show();
+
+    // Fetch subjects and teacher assignments (single request each)
+    Promise.all([
+      fetch('fetch_section_subjects.php',{
+        method:'POST',
+        headers:{'Content-Type':'application/x-www-form-urlencoded'},
+        body:'section_id='+encodeURIComponent(sectionId)
+      }).then(r=>r.json()),
+      fetch('fetch_section_teachers.php',{
+        method:'POST',
+        headers:{'Content-Type':'application/x-www-form-urlencoded'},
+        body:`section_id=${encodeURIComponent(sectionId)}&academic_year=${encodeURIComponent(year)}`
+      }).then(r=>r.json())
+    ])
+    .then(([subjects, assignments])=>{
+      if(!Array.isArray(subjects) || subjects.length===0){
+        body.innerHTML = '<tr><td colspan="4" class="text-center text-danger">No subjects found.</td></tr>';
+        return;
+      }
+      const assignMap = new Map();
+      if(Array.isArray(assignments)){
+        assignments.forEach(a=> assignMap.set(String(a.suid||a.subject_id), a));
+      }
+      body.innerHTML='';
+      let idx=0;
+      subjects.forEach(sub=>{
+        const a = assignMap.get(String(sub.suid)) || {};
+        const teacherName = a.assigned_teacher_name || '';
+        const assigned = !!teacherName;
+        const badge = assigned 
+          ? '<span class="badge bg-success">Assigned</span>' 
+          : '<span class="badge bg-secondary">Unassigned</span>';
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${++idx}</td>
+          <td>${(sub.abbreviation_name?sub.abbreviation_name+ ' - ':'') + sub.subject_name} ${badge}</td>
+          <td>${teacherName || '<span class="text-muted">No Teacher</span>'}</td>
+          <td>
+            <button class="btn ${assigned?'btn-success':'btn-secondary'} btn-sm openAddMarksBtn" 
+                    data-section="${sectionId}" data-year="${year}" data-subject="${sub.suid}" 
+                    data-subject-name="${sub.subject_name}" data-section-name="${sectionName}" 
+                    data-teacher="${teacherName}" data-assigned="${assigned?1:0}" ${assigned?'':'disabled'}>
+              ${assigned?'Add/Edit Marks':'No Teacher Assigned'}
+            </button>
+          </td>`;
+        body.appendChild(tr);
+      });
+
+      // bind open buttons
+      document.querySelectorAll('.openAddMarksBtn').forEach(btn=>{
+        btn.addEventListener('click', function(){
+          const assigned = this.dataset.assigned==='1';
+          if(!assigned){ Swal.fire('Error','No teacher assigned for this subject','error'); return; }
+          current.section = this.dataset.section;
+          current.subject = this.dataset.subject;
+          current.year = this.dataset.year;
+
+          document.getElementById('modalYear').innerText = current.year;
+          document.getElementById('modalSection').innerText = this.dataset.sectionName;
+          document.getElementById('modalSubject').innerText = this.dataset.subjectName;
+          document.getElementById('teacherName').innerText = this.dataset.teacher;
+
+          const form = document.getElementById('marksForm');
+          form.querySelector('input[name="academic_year"]').value = current.year;
+          form.querySelector('input[name="section_id"]').value = current.section;
+          form.querySelector('input[name="subject_id"]').value = current.subject;
+
+          loadStudents();
+          new bootstrap.Modal(document.getElementById('addMarksModal')).show();
+        });
+      });
+    })
+    .catch(()=>{
+      body.innerHTML = '<tr><td colspan="4" class="text-center text-danger">Failed to load data.</td></tr>';
+    });
+  });
+
   function loadStudents(){
     const sem = document.getElementById('semesterSelect').value;
     fetch(`ajax_fetch_students.php?section_id=${current.section}&subject_id=${current.subject}&year=${current.year}&semester=${sem}`)
@@ -168,32 +271,7 @@ document.addEventListener('DOMContentLoaded', function(){
       });
   }
 
-  document.querySelectorAll('.add-marks-btn').forEach(btn=>{
-    btn.addEventListener('click', function(){
-      const assigned = this.dataset.assigned==='1';
-      if(!assigned){
-        Swal.fire('Error','No teacher assigned for this subject','error'); 
-        return;
-      }
-
-      current.section = this.dataset.section;
-      current.subject = this.dataset.subject;
-      current.year = this.dataset.year;
-
-      document.getElementById('modalYear').innerText = current.year;
-      document.getElementById('modalSection').innerText = this.dataset.sectionName;
-      document.getElementById('modalSubject').innerText = this.dataset.subjectName;
-      document.getElementById('teacherName').innerText = this.dataset.teacher;
-
-      const form = document.getElementById('marksForm');
-      form.querySelector('input[name="academic_year"]').value = current.year;
-      form.querySelector('input[name="section_id"]').value = current.section;
-      form.querySelector('input[name="subject_id"]').value = current.subject;
-
-      loadStudents();
-      new bootstrap.Modal(document.getElementById('addMarksModal')).show();
-    });
-  });
+  // legacy binding removed; buttons are bound after subjects table renders
 
   document.getElementById('semesterSelect').addEventListener('change', loadStudents);
 

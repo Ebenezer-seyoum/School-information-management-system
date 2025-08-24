@@ -121,7 +121,7 @@ if (mysqli_num_rows($studentsQuery) > 0) {
           <td style="border: 2px solid black;"><?php echo htmlspecialchars($student['first_name']); ?></td>
           <td style="border: 2px solid black;"><?php echo htmlspecialchars($student['father_name']); ?></td>
           <td style="border: 2px solid black;">
-        <a href="view_studentDetail.php?sid=<?= $student['sid']; ?>" class="btn btn-sm btn-info">
+        <a href="view_studentDetail_For_delete.php?sid=<?= $student['sid']; ?>" class="btn btn-sm btn-info">
           <i class="fa fa-eye"></i> Details
         </a>
       </td>

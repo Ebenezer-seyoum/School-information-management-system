@@ -134,29 +134,71 @@ $mpdf->SetTitle('Report Card - ' . $student['first_name']);
 $studentFullName = $student['first_name'].' '.$student['father_name'].' '.$student['grand_father_name'];
 
 $html1 = "
-<div style='text-align:center;'>
-    <h3>ሲዳማ ክልል አስተዳደር | Sidama National Regional Government</h3>
-    <h4>ቢላቴ ዙሪያ ወረዳ | Bilate Zuriya Woreda</h4>
-    <h4>ባለላ የላይንኪ ዲሪሚ ሮሲ ሚኒ ሮሳኖቴ ጉማ | Balela Secondary School</h4>
-    <h2 style='margin-top:10px;'>STUDENT REPORT CARD / የተማሪ ደብዳቤ</h2>
-    <p>Academic Year / የትምህርት አመት: <b>$academic_year</b></p>
-</div>
+<div style='border:1px solid #000; padding:20px; width:700px; font-family: Arial, Helvetica, sans-serif;'>
+    
+    <!-- Title Section -->
+    <div style='text-align:center; margin-bottom:20px;'>
+        <h3 style='margin:0;'>ሲዳማ ክልል አስተዳደር | Sidama National Regional Government</h3>
+        <h4 style='margin:0;'>ቢላቴ ዙሪያ ወረዳ | Bilate Zuriya Woreda</h4>
+        <h4 style='margin:0;'>ባለላ ከፍተኛ ት/ቤት | Balela Secondary School</h4>
+        <h2 style='margin-top:10px; text-decoration:underline;'>STUDENT REPORT CARD / የተማሪ ደብዳቤ</h2>
+        <p>Academic Year / የትምህርት አመት: <b>$academic_year</b></p>
+    </div>
 
-<div style='margin-top:20px;'>
-    <h3>Student Information / የተማሪ መረጃ</h3>
-    <p><b>Name / ስም:</b> — $studentFullName</p>
-    <p><b>Gender / ፆታ:</b> — {$student['gender']}</p>
-    <p><b>Age / እድሜ:</b> — $age ዓመት</p>
-    <p><b>Address / አድራሻ:</b> — {$student['woreda']}, {$student['kebele']}</p>
-    <p><b>Class / ክፍል:</b> — $section_id</p>
-    <p><b>Promotion Status / የማሻሻያ ሁኔታ:</b> — $promotionStatus</p>
-</div>
+    <!-- Student Info Section -->
+    <div style='margin-top:20px; line-height:2; font-size:15px;'>
+        <p>
+            <b>የተማሪ ስም (Name of Student):</b> 
+            <span style='display:inline-block; border-bottom:1px solid #000; min-width:400px;'>
+                $studentFullName
+            </span>
+        </p>
+        
+        <p>
+            <b>ፆታ (Sex):</b> 
+            <span style='display:inline-block; border-bottom:1px solid #000; min-width:100px;'>$student[gender]</span>
+            
+            &nbsp;&nbsp;&nbsp; 
+            
+            <b>እድሜ (Age):</b> 
+            <span style='display:inline-block; border-bottom:1px solid #000; min-width:100px;'>$age</span>
+        </p>
+        
+        <p>
+            <b>አድራሻ ከተማ (Address Town):</b> 
+            <span style='display:inline-block; border-bottom:1px solid #000; min-width:200px;'>{$student['woreda']}</span>
+            
+            &nbsp;&nbsp;&nbsp; 
+            
+            <b>ቀበሌ (Kebele):</b> 
+            <span style='display:inline-block; border-bottom:1px solid #000; min-width:100px;'>{$student['kebele']}</span>
+        </p>
+        
+        <p>
+            <b>ክፍል (Class / Grade):</b> 
+            <span style='display:inline-block; border-bottom:1px solid #000; min-width:100px;'>$section_id</span>
+        </p>
+        
+        <p>
+            <b>From:</b> 
+            <span style='display:inline-block; border-bottom:1px solid #000; min-width:80px;'></span>
+            
+            &nbsp;&nbsp;&nbsp; 
+            
+            <b>Promoted to Grade:</b> 
+            <span style='display:inline-block; border-bottom:1px solid #000; min-width:80px;'>$promotionStatus</span>
+        </p>
+    </div>
 
-<div style='margin-top:40px;'>
-    <p><b>Director Name / የዳይሬክተር ስም: ______________________ </b></p>
-    <p style='margin-top:60px;'>Signature / ፊርማ: ______________________</p>
+    <!-- Director Section -->
+    <div style='margin-top:50px;'>
+        <p><b>የዳይሬክተር ስም (Director's Name):</b>______________________</p>
+        <p><b>Signature / ፊርማ:</b> ______________________</p>
+    </div>
+
 </div>
 ";
+
 
 // Add base CSS to prefer Ethiopic-capable fonts
 $mpdf->WriteHTML("<style>body{font-family:'Abyssinica SIL','DejaVu Sans',sans-serif;}</style>");

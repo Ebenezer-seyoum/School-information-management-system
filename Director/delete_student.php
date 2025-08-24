@@ -45,9 +45,16 @@ if (isset($_SESSION["uid"]) && ($roleName == "Director")) { // Director role
                   </div>
                   <div class="col-12 col-md-6">
                     <form method="GET">
-                      <div class="input-group">
-                        <input type="text" name="search" id="studentSearch" class="form-control" 
-                        style="font-weight: bold;" placeholder="Search by ID, Name...">
+                      <div class="search-box">
+                        <div class="input-group">
+                          <span class="input-group-text bg-primary text-white">
+                            <i class="fas fa-search"></i>
+                          </span>
+                          <input type="text" name="search" id="userSearch" class="form-control search-input" 
+                                 style="font-weight: bold;" placeholder="Search by ID, Name, or Role..."
+                                 value="<?= htmlspecialchars($_GET['search'] ?? '') ?>">
+                          <button class="btn btn-primary" type="submit">Search</button>
+                        </div>
                       </div>
                     </form>
                   </div>

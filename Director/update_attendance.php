@@ -11,92 +11,70 @@ if (!isset($_SESSION["uid"]) || $roleName != "Director") {
 
 // --- Helpers ---
 function fetchAcademicYears($conn) {
-    $res = mysqli_query($conn, "SELECT DISTINCT academic_year 
-                                FROM assign_instructor
-                                ORDER BY academic_year DESC");
-    $years = [];
-    while ($r = mysqli_fetch_assoc($res)) {
-        $years[] = $r['academic_year'];
-    }
-    return $years;
-}
-function fetchAllClasses($conn, $year) {
-    $yearEsc = mysqli_real_escape_string($conn, $year);
-    $sql = "SELECT at.hid, at.section_id, at.academic_year,
-                   s.section_name, s.class_type, i.first_name, i.father_name
-            FROM assign_instructor at
-            LEFT JOIN sections s ON at.section_id = s.cid
-            LEFT JOIN users i ON at.instructor_id = i.uid
-            WHERE at.academic_year = '$yearEsc'
-            ORDER BY s.section_name ASC";
-    $res = mysqli_query($conn, $sql);
-    $rows = [];
-    while ($r = mysqli_fetch_assoc($res)) $rows[] = $r;
-    return $rows;
+  $res = mysqli_query($conn, "SELECT DISTINCT academic_year FROM assign_instructor ORDER BY academic_year DESC");
+  $years = [];
+  while ($r = mysqli_fetch_assoc($res)) $years[] = $r['academic_year'];
+  return $years;
 }
 
 // --- Main ---
 $years = fetchAcademicYears($conn);
-$selectedYear = $_GET['academic_year'] ?? ($years[0] ?? null);
-$classes = $selectedYear ? fetchAllClasses($conn, $selectedYear) : [];
 ?>
-
+<!-- page header -->
 <div class="container">
   <div class="page-inner">
     <div class="page-header">
-      <h3 class="fw-bold mb-3">All Classes (Director View)</h3>
-    </div>
+      <h3 class="fw-bold mb-3">Update attendance</h3>
+      <ul class="breadcrumbs mb-3">
+        <li class="nav-home"><a href="#"><i class="icon-home"></i></a></li>
+        <li class="separator"><i class="icon-arrow-right"></i></li>
+        <li class="nav-item"><a href="#">Attendance Management</a></li>
+        <li class="separator"><i class="icon-arrow-right"></i></li>
+        <li class="nav-item"><a href="#">Update attendance</a></li>
+      </ul>
+  </div>
+<!-- end page header -->
 
-    <form method="GET" class="mb-3">
-      <label for="academic_year">Select Academic Year:</label>
-      <select name="academic_year" id="academic_year" class="form-control w-auto d-inline-block">
-        <?php foreach ($years as $year): ?>
-          <option value="<?= htmlspecialchars($year) ?>" <?= ($year == $selectedYear) ? 'selected' : '' ?>>
-            <?= htmlspecialchars($year) ?>
-          </option>
-        <?php endforeach; ?>
-      </select>
-      <button type="submit" class="btn btn-primary btn-sm">Show Classes</button>
-    </form>
-
-    <div class="card">
-      <div class="card-body table-responsive">
-        <table class="table table-hover text-center align-middle">
-          <thead class="table-secondary">
-            <tr>
-              <th>#</th>
-              <th>Class</th>
-              <th>Class Type</th>
-              <th>Instructor</th>
-              <th>Academic Year</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php if (count($classes) > 0): $no=1; ?>
-              <?php foreach ($classes as $c): ?>
-                <tr>
-                  <td><?= $no++ ?></td>
-                  <td><?= htmlspecialchars($c['section_name']) ?></td>
-                  <td><?= htmlspecialchars($c['class_type']) ?></td>
-                  <td><?= htmlspecialchars($c['first_name'].' '.$c['father_name']) ?></td>
-                  <td><?= htmlspecialchars($c['academic_year']) ?></td>
-                  <td>
-                    <button type="button"
-                            class="btn btn-warning btn-sm view-students"
-                            data-class-id="<?= (int)$c['hid'] ?>"
-                            data-class-name="<?= htmlspecialchars($c['section_name'].' - '.$c['class_type']) ?>"
-                            data-year="<?= htmlspecialchars($c['academic_year']) ?>">
-                      Update Attendance
-                    </button>
-                  </td>
-                </tr>
-              <?php endforeach; ?>
-            <?php else: ?>
-              <tr><td colspan="6" class="text-danger">No classes for this year.</td></tr>
-            <?php endif; ?>
-          </tbody>
-        </table>
+    <!-- Filter First: Section + Academic Year -->
+    <div class="row mb-4">
+      <div class="col-12 d-flex justify-content-center">
+        <div class="card shadow-lg border-0 rounded-4 p-4" style="max-width:800px; width:100%;">
+          <div class="text-center mb-3">
+            <h5 class="fw-bold">Select Section and Academic Year</h5>
+            <p class="text-muted mb-0">Choose a section and year to update attendance.</p>
+          </div>
+          <div class="row g-3 align-items-end">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Section</label>
+              <select id="sectionSelect" class="form-select form-select-lg">
+                <option value="">-- Select Section --</option>
+                <?php
+                $sections = mysqli_query($conn,"SELECT cid, section_name, class_type FROM sections ORDER BY class_type, section_name ASC");
+                $grouped_sections = [];
+                while($sec=mysqli_fetch_assoc($sections)) $grouped_sections[$sec['class_type']][] = $sec;
+                foreach($grouped_sections as $type => $secs): ?>
+                  <optgroup label="<?= htmlspecialchars($type) ?>">
+                    <?php foreach($secs as $s): ?>
+                      <option value="<?= (int)$s['cid'] ?>" data-type="<?= htmlspecialchars($s['class_type']) ?>"><?= htmlspecialchars($s['section_name']) ?></option>
+                    <?php endforeach; ?>
+                  </optgroup>
+                <?php endforeach; ?>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">Academic Year</label>
+              <select id="academicYear" class="form-select form-select-lg">
+                <option value="">-- Select Academic Year --</option>
+                <?php foreach ($years as $y): ?>
+                  <option value="<?= htmlspecialchars($y) ?>"><?= htmlspecialchars($y) ?></option>
+                <?php endforeach; ?>
+              </select>
+            </div>
+            <div class="col-md-2 d-grid">
+              <button type="button" id="openUpdateBtn" class="btn btn-primary btn-md">view sections</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -106,10 +84,16 @@ $classes = $selectedYear ? fetchAllClasses($conn, $selectedYear) : [];
 <div class="modal fade" id="studentsModal" tabindex="-1" aria-labelledby="studentsModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl modal-dialog-scrollable">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="studentsModalLabel">Update Attendance</h5>
-        <!-- ✅ Only ONE search bar here -->
-        <input type="text" id="searchInput" class="form-control ms-3" placeholder="Search student..." style="width: 250px;">
+      <div class="modal-header w-100">
+        <div class="d-flex align-items-center w-100 gap-2">
+          <h5 class="modal-title mb-0" id="studentsModalLabel">Update Attendance</h5>
+          <div class="ms-auto" style="min-width: 280px;">
+            <div class="input-group">
+              <span class="input-group-text bg-primary text-white"><i class="fas fa-search"></i></span>
+              <input type="text" id="searchInput" class="form-control" placeholder="Search student...">
+            </div>
+          </div>
+        </div>
       </div>
       <div class="modal-body">
         <!-- Date Range Filter -->
@@ -137,19 +121,31 @@ document.addEventListener("DOMContentLoaded", function () {
   let currentClassId = null;
   let currentSemester = 1;
 
-  // Open modal -> fetch attendance
-  document.querySelectorAll(".view-students").forEach(btn => {
-    btn.addEventListener("click", function () {
-      currentClassId = this.dataset.classId;
-      const className = this.dataset.className;
-      const year = this.dataset.year;
-
-      document.getElementById("studentsModalLabel").innerText =
-        "Update Attendance • " + className + " (" + year + ")";
-
+  // Filter-first open
+  document.getElementById('openUpdateBtn').addEventListener('click', function(){
+    const secSel = document.getElementById('sectionSelect');
+    const yearSel = document.getElementById('academicYear');
+    const sectionId = secSel.value;
+    const year = yearSel.value;
+    const sectionName = secSel.options[secSel.selectedIndex]?.text || '';
+    const classType = secSel.options[secSel.selectedIndex]?.getAttribute('data-type') || '';
+    if(!sectionId || !year){
+      Swal.fire('Warning','Please select section and academic year','warning');
+      return;
+    }
+    fetch('get_class_id.php',{
+      method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body:`section_id=${encodeURIComponent(sectionId)}&academic_year=${encodeURIComponent(year)}`
+    }).then(r=>r.json()).then(data=>{
+      if(!data || !data.success){
+        Swal.fire('Error', (data&&data.message)?data.message:'Combination not found','error');
+        return;
+      }
+      currentClassId = data.class_id;
+      document.getElementById("studentsModalLabel").innerText = `Update Attendance • ${sectionName} - ${classType} (${year})`;
       loadAttendanceEditor(currentClassId, currentSemester);
       studentsModal.show();
-    });
+    }).catch(()=> Swal.fire('Error','Failed to resolve class','error'));
   });
 
   function loadAttendanceEditor(classId, semester, fromDate='', toDate='', search=''){

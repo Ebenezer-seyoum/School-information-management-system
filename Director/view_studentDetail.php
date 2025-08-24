@@ -4,6 +4,11 @@ include('directorHeader.php');
 if (isset($_GET["sid"])) {
     $sid = basics($_GET["sid"]);
     $userProfile = getStudentSidByID($sid);
+  // Decrypt password for display
+  $decrypted_password = '';
+  if ($userProfile && !empty($userProfile['password'])) {
+    $decrypted_password = decryptPassword($userProfile['password']) ?: '';
+  }
     if (!$userProfile) {
         echo "<p>No student found.</p>";
         include('footer.php');
@@ -124,9 +129,9 @@ if (isset($_GET["sid"])) {
                   <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['username']); ?>" disabled>
                 </div>
                 <div class="col-md-6">
-              <label class="form-label">Password</label>
-              <input type="text" class="form-control" value="<?php echo htmlspecialchars($userProfile['password']); ?>" disabled>
-            </div>
+                  <label class="form-label">Password</label>
+                  <input type="text" class="form-control" value="<?php echo htmlspecialchars($decrypted_password); ?>" disabled>
+                </div>
             
               </div>
             </div>

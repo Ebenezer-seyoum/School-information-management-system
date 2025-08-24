@@ -200,7 +200,13 @@ if ($selectedClass && $selectedYear) {
     <!-- Promoted Students Table -->
     <div class="col-md-6">
         <h5 class="text-success">Promoted Students</h5>
-        <input type="text" class="form-control mb-2" id="searchPromoted" placeholder="Search promoted student...">
+                <div class="search-box w-100 mb-2">
+                    <div class="input-group">
+                        <span class="input-group-text bg-primary text-white"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control search-input" id="searchPromoted" placeholder="Search by ID, Name, or Role...">
+                        <button class="btn btn-primary" type="button" id="searchPromotedBtn" aria-label="Search">Search</button>
+                    </div>
+                </div>
         <div class="table-responsive" style="max-height:400px; overflow-y:auto;">
             <table class="table table-bordered table-striped" id="promotedTable">
                 <thead class="table-success">
@@ -224,7 +230,13 @@ if ($selectedClass && $selectedYear) {
     <!-- Not Promoted Students Table -->
     <div class="col-md-6">
         <h5 class="text-danger">Not Promoted Students</h5>
-        <input type="text" class="form-control mb-2" id="searchNotPromoted" placeholder="Search not promoted student...">
+                <div class="search-box w-100 mb-2">
+                    <div class="input-group">
+                        <span class="input-group-text bg-primary text-white"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control search-input" id="searchNotPromoted" placeholder="Search by ID, Name, or Role...">
+                        <button class="btn btn-primary" type="button" id="searchNotPromotedBtn" aria-label="Search">Search</button>
+                    </div>
+                </div>
         <div class="table-responsive" style="max-height:400px; overflow-y:auto;">
             <table class="table table-bordered table-striped" id="notPromotedTable">
                 <thead class="table-danger">

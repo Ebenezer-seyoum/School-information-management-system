@@ -1,6 +1,12 @@
 <?php
 include('studentHeader.php'); 
 ?>
+<?php
+// Academic years from assign_student for student view
+$yrsRes = mysqli_query($conn, "SELECT DISTINCT academic_year FROM assign_student ORDER BY academic_year DESC");
+$assignYears = [];
+while($y = mysqli_fetch_assoc($yrsRes)) $assignYears[] = $y['academic_year'];
+?>
 <div class="container">
   <div class="page-inner">
     <div class="page-header">
@@ -24,7 +30,12 @@ include('studentHeader.php');
         <div class="row g-3 align-items-end">
           <div class="col-md-8">
             <label class="form-label fw-semibold">Academic Year</label>
-            <input type="text" id="academicYear" class="form-control form-control-lg" placeholder="e.g. 2017">
+            <select id="academicYear" class="form-select form-select-lg">
+              <option value="">-- Select Academic Year --</option>
+              <?php foreach($assignYears as $ay): ?>
+                <option value="<?= htmlspecialchars($ay) ?>"><?= htmlspecialchars($ay) ?></option>
+              <?php endforeach; ?>
+            </select>
           </div>
           <div class="col-md-4 d-grid">
             <button type="button" id="showClassesBtn" class="btn btn-primary btn-md">Show Classes</button>
@@ -93,9 +104,9 @@ $(function(){
 
   // Fetch and render classes for a selected year
   $('#showClassesBtn').click(function(){
-    const year = $('#academicYear').val().trim();
+    const year = $('#academicYear').val();
     if(!year){
-      Swal.fire('Warning','Please enter academic year','warning');
+      Swal.fire('Warning','Please select academic year','warning');
       return;
     }
 
