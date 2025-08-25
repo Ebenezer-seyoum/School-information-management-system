@@ -1,0 +1,21 @@
+የተማሪ ስም
+Name of Student
+
+ፆታ                                                   እድሜ
+gender                                            age
+
+Address  / አድራሻ
+Woreda                                        Kebele
+ወረዳ                                               ቀበሌ
+
+የትምህርት አመት
+Academic Year
+
+ክፍል
+Grade
+
+ከ                ወደ             ክፍል ተዛውሯል/ለች
+From           promoted to grade
+
+የት/ቤቱ ርዕሰ መምህር ስም                                                                            ፊርማ
+Director's Name                                                                                           Signature

@@ -1,5 +1,11 @@
 <?php
 include 'connection.php';
+// Load Composer autoloader for Andegna (Ethiopian calendar)
+// This path is relative to the connection/ directory
+if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
+    require_once __DIR__ . '/../vendor/autoload.php';
+}
+use Andegna\DateTimeFactory as ETDateFactory;
 // --- Encryption configuration ---
 define('ENCRYPT_METHOD', 'AES-256-CBC');
 define('SECRET_KEY', 'your-strong-secret-key'); 
@@ -23,6 +29,70 @@ function basics($data)
     $data = htmlspecialchars($data);
     return $data;
 }
+
+// ================= Ethiopian Calendar Helpers (Andegna) =================
+// Contract:
+// - Store dates in DB as Gregorian (YYYY-MM-DD[ HH:MM:SS]) for integrity and SQL operations.
+// - Display dates to users in Ethiopian calendar via these helpers.
+// - Convert ET input (year,month,day) to Gregorian for DB when needed.
+
+/**
+ * Convert a Gregorian date string (Y-m-d or Y-m-d H:i:s) to Ethiopian formatted string.
+ * @param string|null $gregDate
+ * @param string $format Ethiopian format using Andegna tokens (e.g., 'Y-m-d', 'F d, Y')
+ * @return string
+ */
+function et_format_from_greg(?string $gregDate, string $format = 'Y-m-d'): string {
+    if (!$gregDate) return '';
+    try {
+        $dt = new DateTime($gregDate);
+        $et = ETDateFactory::fromDateTime($dt);
+        return $et->format($format);
+    } catch (Throwable $e) {
+        return '';
+    }
+}
+
+/**
+ * Convert an Ethiopian date (Y, m, d) to Gregorian string (Y-m-d).
+ * @return string Gregorian date or empty string on error
+ */
+function greg_from_et_components($etYear, $etMonth, $etDay): string {
+    try {
+        $et = ETDateFactory::of((int)$etYear, (int)$etMonth, (int)$etDay);
+        return $et->toGregorian()->format('Y-m-d');
+    } catch (Throwable $e) {
+        return '';
+    }
+}
+
+/**
+ * Ethiopian now formatted.
+ */
+function et_now(string $format = 'Y-m-d'): string {
+    try {
+        return ETDateFactory::now()->format($format);
+    } catch (Throwable $e) {
+        return '';
+    }
+}
+
+/**
+ * Convenience: format a MySQL DATETIME/TIMESTAMP to Ethiopian date-time.
+ */
+function et_format_datetime(?string $gregDateTime, string $dateFormat = 'Y-m-d', string $timeFormat = 'H:i'): string {
+    if (!$gregDateTime) return '';
+    try {
+        $dt = new DateTime($gregDateTime);
+        $et = ETDateFactory::fromDateTime($dt);
+        $date = $et->format($dateFormat);
+        $time = $dt->format($timeFormat); // keep time numeric
+        return $date . ' ' . $time;
+    } catch (Throwable $e) {
+        return '';
+    }
+}
+// ================= End Ethiopian Calendar Helpers =================
 //open validation
 function validateIdNumber($data)
 {

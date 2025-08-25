@@ -114,25 +114,6 @@ if (isset($_SESSION["uid"]) && ($roleName == "Director")) {
   </div>
 </div>
 
-<!-- Preview PDF Modal -->
-<div class="modal fade" id="previewPdfModal" tabindex="-1" aria-labelledby="previewPdfModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="previewPdfModalLabel">Report Card Preview</h5>
-        <div class="d-flex gap-2">
-          <a id="previewOpenNewTab" href="#" target="_blank" class="btn btn-sm btn-outline-primary">Open in new tab</a>
-          <a id="previewDownload" href="#" target="_blank" class="btn btn-sm btn-outline-success">Download</a>
-        </div>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body p-0" style="height: 80vh;">
-        <iframe id="reportPdfIframe" src="" style="width:100%; height:100%; border:0;"></iframe>
-      </div>
-    </div>
-  </div>
-  </div>
-
 <script>
 // Filter-first: pick a section, then open modal to pick year/semester and view students
 document.getElementById('showStudentsBtn').addEventListener('click', function(){
@@ -178,27 +159,6 @@ document.getElementById('showStudentsBtn').addEventListener('click', function(){
   semesterInput.onchange = fetchStudents;
 });
 
-// Delegated handler: open preview modal for report
-(function(){
-  const container = document.getElementById('studentsList');
-  if(!container) return;
-  container.addEventListener('click', function(e){
-    const btn = e.target.closest && e.target.closest('.preview-btn');
-    if(!btn) return;
-    const url = btn.dataset.previewUrl;
-    if(!url) return;
-    const openBtn = document.getElementById('previewOpenNewTab');
-    const downloadBtn = document.getElementById('previewDownload');
-    if (openBtn) openBtn.href = url;
-    if (downloadBtn) {
-      const dlUrl = url.includes('mode=preview') ? url.replace('mode=preview','mode=download') : (url + (url.includes('?') ? '&' : '?') + 'mode=download');
-      downloadBtn.href = dlUrl;
-    }
-    const iframe = document.getElementById('reportPdfIframe');
-    if (iframe) iframe.src = url;
-    new bootstrap.Modal(document.getElementById('previewPdfModal')).show();
-  });
-})();
 </script>
 
 <?php
