@@ -20,7 +20,7 @@ if($section_id && $academic_year){
     $teachers_q = mysqli_query($conn, "SELECT uid, CONCAT(first_name,' ',father_name) AS full_name FROM users WHERE user_type=1 ORDER BY first_name ASC");
     $teachers_array = [];
     while($t = mysqli_fetch_assoc($teachers_q)){
-        $teachers_array[$t['uid']] = htmlspecialchars($t['full_name']);
+    $teachers_array[$t['uid']] = htmlspecialchars($t['full_name'], ENT_QUOTES, 'UTF-8');
     }
 
     while($sub = mysqli_fetch_assoc($subjects_q)){
@@ -46,8 +46,8 @@ if($section_id && $academic_year){
         }
 
         $result[] = [
-            'suid' => $sub['suid'],
-            'subject_name' => $sub['subject_name'],
+            'suid' => (int)$sub['suid'],
+            'subject_name' => htmlspecialchars($sub['subject_name'], ENT_QUOTES, 'UTF-8'),
             'assigned_teacher' => $assigned_teacher,
             'assigned_teacher_name' => $assigned_teacher_name,
             'teachers' => $teachers_array

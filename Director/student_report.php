@@ -14,6 +14,7 @@ if (!$user || getRoleNameById($user['user_type']) !== "Director") {
 // --- Filters ---
 $academic_year   = $_GET['academic_year'] ?? '';
 $disabilities     = $_GET['disabilities'] ?? '';
+$promote_status   = isset($_GET['promote_status']) ? $_GET['promote_status'] : '';
 $class_id        = $_GET['class_id'] ?? '';
 $gender          = $_GET['gender'] ?? '';
 $from_admission  = $_GET['from_admission'] ?? '';
@@ -34,7 +35,7 @@ $to_birth        = $_GET['to_birth'] ?? '';
       </ul>
     </div>
 
-    <!-- Filters -->
+  <!-- Filters -->
     <div class="card mb-3">
       <div class="card-body">
         <form method="GET" action="">
@@ -87,6 +88,16 @@ $to_birth        = $_GET['to_birth'] ?? '';
                 <option value="none" <?= ($disabilities=="none") ? 'selected' : '' ?>>none</option>
               </select>
             </div>
+            <!-- Promote Status -->
+            <div class="col-md-3">
+              <label>Promote Status</label>
+              <select name="promote_status" class="form-select form-select-sm" onchange="this.form.submit()">
+                <option value="">All</option>
+                <option value="0" <?= ($promote_status==='0') ? 'selected' : '' ?>>Ongoing</option>
+                <option value="1" <?= ($promote_status==='1') ? 'selected' : '' ?>>Not Promoted</option>
+                <option value="2" <?= ($promote_status==='2') ? 'selected' : '' ?>>Promoted</option>
+              </select>
+            </div>
             <!-- Reset -->
             <div class="col-md-3 align-self-end">
               <a href="student_report.php" class="btn btn-secondary btn-sm w-100">Reset Filters</a>
@@ -119,6 +130,7 @@ $to_birth        = $_GET['to_birth'] ?? '';
                 <th>Admission Date</th>
                 <th>Birth Date</th>
                 <th>disabilities</th>
+                <th>Promote Status</th>
               </tr>
             </thead>
             <tbody>
@@ -126,7 +138,7 @@ $to_birth        = $_GET['to_birth'] ?? '';
               $sql = "SELECT s.sid, s.student_id, s.first_name, s.father_name, s.grand_father_name, s.gender,
                              r.name AS region, z.name AS zone, W.name AS woreda, s.disabilities,
                              sec.section_name, sec.class_type, a.academic_year, s.created_at AS admission_date,
-                              s.dob AS birth_date
+                              s.dob AS birth_date, a.promote_status
                       FROM students s
                       JOIN assign_student a ON s.sid = a.student_id
                       JOIN sections sec ON a.section_id = sec.cid
@@ -141,12 +153,17 @@ $to_birth        = $_GET['to_birth'] ?? '';
               if($disabilities) $sql .= " AND s.disabilities='".mysqli_real_escape_string($conn,$disabilities)."'";
               if($from_admission && $to_admission) $sql .= " AND s.created_at BETWEEN '".mysqli_real_escape_string($conn,$from_admission)."' AND '".mysqli_real_escape_string($conn,$to_admission)."'";
               if($from_birth && $to_birth) $sql .= " AND s.dob BETWEEN '".mysqli_real_escape_string($conn,$from_birth)."' AND '".mysqli_real_escape_string($conn,$to_birth)."'";
+              if($promote_status !== '' && in_array($promote_status, ['0','1','2'], true)) $sql .= " AND a.promote_status = ".(int)$promote_status;
 
         $res = mysqli_query($conn, $sql);
         if(mysqli_num_rows($res) > 0){
           $no = 1;
           while($r = mysqli_fetch_assoc($res)){
-                      echo "<tr>
+          // Map promote status
+          $ps = isset($r['promote_status']) ? (int)$r['promote_status'] : null;
+          $psLabel = ($ps===0 ? 'Ongoing' : ($ps===1 ? 'Not Promoted' : ($ps===2 ? 'Promoted' : '')));
+
+          echo "<tr>
                               <td>".$no++."</td>
                               <td>".htmlspecialchars($r['student_id'])."</td>
                               <td>".htmlspecialchars($r['first_name']." ".$r['father_name']." ".$r['grand_father_name'])."</td>
@@ -159,7 +176,8 @@ $to_birth        = $_GET['to_birth'] ?? '';
                               <td>".htmlspecialchars($r['academic_year'])."</td>
                               <td>".htmlspecialchars($r['admission_date'])."</td>
                               <td>".htmlspecialchars($r['birth_date'])."</td>
-                              <td>".htmlspecialchars($r['disabilities'])."</td>
+            <td>".htmlspecialchars($r['disabilities'])."</td>
+            <td>".htmlspecialchars($psLabel)."</td>
                             </tr>";
                   }
               }
@@ -191,7 +209,7 @@ $(function(){
     $tbl.DataTable({
       dom: 'Bfrtip',
       pageLength: 25,
-  columns: [null, null, null, null, null, null, null, null, null, null, null, null,null],
+  columns: [null, null, null, null, null, null, null, null, null, null, null, null, null, null],
       language: { emptyTable: 'No students found' },
       buttons: [
         { extend: 'copyHtml5', text: 'Copy', className: 'btn btn-sm btn-secondary', exportOptions: { columns: ':visible', modifier: { page: 'all' } } },

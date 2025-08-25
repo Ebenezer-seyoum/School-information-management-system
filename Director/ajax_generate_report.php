@@ -9,6 +9,7 @@ $sid           = $_GET['sid'] ?? null;
 $section_id    = $_GET['section_id'] ?? null;
 $academic_year = $_GET['academic_year'] ?? null;
 $mode          = $_GET['mode'] ?? 'download'; 
+$semesterSel   = $_GET['semester'] ?? 'all';
 
 if (!$sid || !$section_id || !$academic_year) {
     die('Missing parameters.');
@@ -130,13 +131,21 @@ function getClassRank($conn, $section_id, $academic_year, $semester, $sid) {
 }
 
 // --- Semester totals & absence ---
-list($sem1Sum, $sem1Avg) = calcTotalsBySemester($allSubjects, $marksMap, 1);
-list($sem2Sum, $sem2Avg) = calcTotalsBySemester($allSubjects, $marksMap, 2);
-$sem1AbsentTotal = getTotalAbsence($conn, $sid, $section_id, $academic_year, 1);
-$sem2AbsentTotal = getTotalAbsence($conn, $sid, $section_id, $academic_year, 2);
+$sem1Sum = $sem1Avg = $sem2Sum = $sem2Avg = 0;
+$sem1AbsentTotal = $sem2AbsentTotal = 0;
+$sem1Rank = $sem2Rank = '-';
+$sem1Total = $sem2Total = 0;
+if ($semesterSel === 'all' || (string)$semesterSel === '1') {
+    list($sem1Sum, $sem1Avg) = calcTotalsBySemester($allSubjects, $marksMap, 1);
+    $sem1AbsentTotal = getTotalAbsence($conn, $sid, $section_id, $academic_year, 1);
+    list($sem1Rank, $sem1Total) = getClassRank($conn, $section_id, $academic_year, 1, $sid);
+}
+if ($semesterSel === 'all' || (string)$semesterSel === '2') {
+    list($sem2Sum, $sem2Avg) = calcTotalsBySemester($allSubjects, $marksMap, 2);
+    $sem2AbsentTotal = getTotalAbsence($conn, $sid, $section_id, $academic_year, 2);
+    list($sem2Rank, $sem2Total) = getClassRank($conn, $section_id, $academic_year, 2, $sid);
+}
 $promotionStatus = ($sem2Avg >= 50) ? 'Promoted' : 'Not Promoted';
-list($sem1Rank, $sem1Total) = getClassRank($conn, $section_id, $academic_year, 1, $sid);
-list($sem2Rank, $sem2Total) = getClassRank($conn, $section_id, $academic_year, 2, $sid);
 
 // --- Generate PDF with mPDF ---
 $mpdf = new Mpdf([
@@ -166,16 +175,28 @@ if ($sec && preg_match('/(\d{1,2})/', $sec['section_name'], $m)) {
 // Compute promoted grade number
 $promotedGradeNum = $gradeNum ? $gradeNum + 1 : null;
 
+// Resolve logo paths (used as large header and small center icon)
+$logoAbs = realpath(__DIR__ . '/../assets/img/logo.png');
+$logoAbs = $logoAbs ? str_replace('\\', '/', $logoAbs) : '';
+$logoLarge = $logoAbs ? "<img src='$logoAbs' alt='Logo' style='width:90px;height:auto;display:block;margin:0 auto 6px;'>" : "";
+$logoSmall = $logoAbs ? "<img src='$logoAbs' alt='Logo Icon' style='width:36px;height:auto;display:block;margin:6px auto;'>" : "";
+
 $html1 = "
 <div style='border:1px solid #000; padding:20px; width:700px; font-family: Arial, Helvetica, sans-serif;'>
     
     <!-- Title Section -->
     <div style='text-align:center; margin-bottom:20px;'>
-        <h3 style='margin:0;'>ሲዳማ ክልል አስተዳደር | Sidama National Regional Government</h3>
-        <h4 style='margin:0;'>ቢላቴ ዙሪያ ወረዳ | Bilate Zuriya Woreda</h4>
-        <h4 style='margin:0;'>ባለላ ከፍተኛ ት/ቤት | Balela Secondary School</h4>
-        <h2 style='margin-top:10px;'>የተማሪ ደብዳቤ</h2>
+        " . $logoLarge . "
+        <h3 style='margin:0;'>Sidama National Regional Government</h3>
+        <h3 style='margin:0;'>ሲዳማ ክልል አስተዳደር </h3>
+        <h4 style='margin:0;'>Bilate Zuriya Woreda</h4>
+        <h4 style='margin:0;'>ቢላቴ ዙሪያ ወረዳ </h4>
+        <h4 style='margin:0;'>Balela Secondary School</h4>
+        <h4 style='margin:0;'>ባለላ ከፍተኛ ት/ቤት</h4>
+        " . $logoSmall . "
+        <h2 style='margin-top:6px;'>የተማሪ ደብዳቤ</h2>
         <h3 style='margin:0;'>STUDENT REPORT CARD</h3>
+        <h4 style='margin:0;'>STUDENT REPORT CARD (Sidaamu Afoo)</h4>
     </div>
 
     <!-- Student Info Section -->
@@ -244,7 +265,10 @@ $html1 = "
 // Add base CSS to prefer Ethiopic-capable fonts
 $mpdf->WriteHTML("<style>body{font-family:'Abyssinica SIL','DejaVu Sans',sans-serif;}</style>");
 $mpdf->WriteHTML($html1);
-$mpdf->AddPage();
+// Add second page only when needed
+if ($semesterSel === 'all' || $semesterSel === '1' || $semesterSel === '2') {
+    $mpdf->AddPage();
+}
 
 // --- Page 2: Marks Table ---
 $rowsHtml = ''; $yearlyAvgSum = 0; $yearlyAvgCount = 0;
@@ -265,31 +289,106 @@ $amharicMap = array(
     'Economics' => 'ኢኮኖሚክስ'
 );
 foreach ($allSubjects as $suid => $subName) {
-    $s1 = $marksMap[$suid][1] ?? '-';
-    $s2 = $marksMap[$suid][2] ?? '-';
-    $subDisplay = $amharicMap[$subName] ?? $subName;
-    $avg = ($s1 !== '-' && $s2 !== '-') ? round(($s1+$s2)/2,2) : ($s1 !== '-' ? $s1 : ($s2 !== '-' ? $s2 : '-'));
-    if ($avg !== '-') { $yearlyAvgSum += $avg; $yearlyAvgCount++; }
+    $subAm = $amharicMap[$subName] ?? $subName;
+    $subEn = $subName;
+    $mark1 = $marksMap[$suid][1] ?? '-';
+    $mark2 = $marksMap[$suid][2] ?? '-';
+    // Determine what to show based on selection
+    if ($semesterSel === '1') {
+        $s1 = $mark1;
+        $s2 = '';
+        $avgCell = '';
+    } elseif ($semesterSel === '2') {
+        $s1 = '';
+        $s2 = $mark2;
+        $avgCell = '';
+    } else { // all
+        $s1 = $mark1;
+        $s2 = $mark2;
+        $avg = ($mark1 !== '-' && $mark2 !== '-') ? round(($mark1 + $mark2) / 2, 2) : ($mark1 !== '-' ? $mark1 : ($mark2 !== '-' ? $mark2 : '-'));
+        if ($avg !== '-' && $avg !== '') { $yearlyAvgSum += $avg; $yearlyAvgCount++; }
+        $avgCell = $avg;
+    }
     $rowsHtml .= "<tr>
-        <td>$subDisplay</td>
+        <td><div>$subAm</div><div style='font-size:11px;color:#555;'>$subEn</div></td>
         <td align='center'>$s1</td>
         <td align='center'>$s2</td>
-        <td align='center'>$avg</td>
+        <td align='center'>$avgCell</td>
     </tr>";
 }
 $yearAvg = $yearlyAvgCount ? round($yearlyAvgSum/$yearlyAvgCount,2) : 0;
 
-$html2 = "
-<h3>Marks Table / የነጥብ ሰንጠረዥ</h3>
-<table border='1' cellpadding='5'>
-<tr><th>Subject / ትምህርት</th><th>1st Sem / 1ኛ መ/ዓ/ት</th><th>2nd Sem / 2ኛ መ/ዓ/ት</th><th>Average / አማካኝ</th></tr>
-$rowsHtml
-<tr><td>Absence / የቀረበት ቀን</td><td align='center'>$sem1AbsentTotal</td><td align='center'>$sem2AbsentTotal</td><td>-</td></tr>
-<tr><td>Total / ጠቅላላ ነጥብ</td><td align='center'>$sem1Sum</td><td align='center'>$sem2Sum</td><td>-</td></tr>
-<tr><td>Average / አማካኝ</td><td align='center'>$sem1Avg</td><td align='center'>$sem2Avg</td><td>$yearAvg</td></tr>
-<tr><td>Rank / ደረጃ</td><td align='center'>" . ($sem1Rank === '-' ? '-' : ($sem1Rank . '/' . $sem1Total)) . "</td><td align='center'>" . ($sem2Rank === '-' ? '-' : ($sem2Rank . '/' . $sem2Total)) . "</td><td>-</td></tr>
-</table>
-";
+// Build marks table according to semester selection
+if ($semesterSel === '1') {
+    $html2 = "
+    <h3>Marks Table / የነጥብ ሰንጠረዥ - 1ኛ መ/ዓ/ት</h3>
+    <table border='1' cellpadding='5'>
+    <tr><th>Subject / ትምህርት</th><th>1st Sem / 1ኛ መ/ዓ/ት</th></tr>
+    ";
+    $html2 .= str_replace([
+      "<td align='center'>$s2</td>",
+      "<td align='center'>$avg</td>"
+    ], '', $rowsHtml);
+    $html2 .= "
+    <tr><td>Absence / የቀረበት ቀን</td><td align='center'>$sem1AbsentTotal</td></tr>
+    <tr><td>Total / ጠቅላላ ነጥብ</td><td align='center'>$sem1Sum</td></tr>
+    <tr><td>Average / አማካኝ</td><td align='center'>$sem1Avg</td></tr>
+    <tr><td>Rank / ደረጃ</td><td align='center'>" . ($sem1Rank === '-' ? '-' : ($sem1Rank . '/' . $sem1Total)) . "</td></tr>
+    </table>";
+} elseif ($semesterSel === '2') {
+    $html2 = "
+    <h3>Marks Table / የነጥብ ሰንጠረዥ - 2ኛ መ/ዓ/ት</h3>
+    <table border='1' cellpadding='5'>
+    <tr><th>Subject / ትምህርት</th><th>2nd Sem / 2ኛ መ/ዓ/ት</th></tr>
+    ";
+    // Build rows for only 2nd semester values
+    $rows2 = '';
+    foreach ($allSubjects as $suid => $subName) {
+        $s2 = $marksMap[$suid][2] ?? '-';
+        $subAm = $amharicMap[$subName] ?? $subName;
+        $subEn = $subName;
+        $rows2 .= "<tr><td><div>$subAm</div><div style='font-size:11px;color:#555;'>$subEn</div></td><td align='center'>$s2</td></tr>";
+    }
+    $html2 .= $rows2;
+    $html2 .= "
+    <tr><td>Absence / የቀረበት ቀን</td><td align='center'>$sem2AbsentTotal</td></tr>
+    <tr><td>Total / ጠቅላላ ነጥብ</td><td align='center'>$sem2Sum</td></tr>
+    <tr><td>Average / አማካኝ</td><td align='center'>$sem2Avg</td></tr>
+    <tr><td>Rank / ደረጃ</td><td align='center'>" . ($sem2Rank === '-' ? '-' : ($sem2Rank . '/' . $sem2Total)) . "</td></tr>
+    </table>";
+} else { // all
+    // Build a unified table with 4 columns; leave non-selected semester/avg blank
+    $html2 = "
+    <h3>Marks Table / የነጥብ ሰንጠረዥ</h3>
+    <table border='1' cellpadding='5'>
+    <tr><th>Subject / ትምህርት</th><th>1st Sem / 1ኛ መ/ዓ/ት</th><th>2nd Sem / 2ኛ መ/ዓ/ት</th><th>Average / አማካኝ</th></tr>
+    $rowsHtml
+    ";
+    // Summary rows with conditional blanks
+    if ($semesterSel === '1') {
+        $html2 .= "
+        <tr><td>Absence / የቀረበት ቀን</td><td align='center'>$sem1AbsentTotal</td><td align='center'></td><td></td></tr>
+        <tr><td>Total / ጠቅላላ ነጥብ</td><td align='center'>$sem1Sum</td><td align='center'></td><td></td></tr>
+        <tr><td>Average / አማካኝ</td><td align='center'>$sem1Avg</td><td align='center'></td><td></td></tr>
+        <tr><td>Rank / ደረጃ</td><td align='center'>" . ($sem1Rank === '-' ? '-' : ($sem1Rank . '/' . $sem1Total)) . "</td><td align='center'></td><td></td></tr>
+        ";
+    } elseif ($semesterSel === '2') {
+        $html2 .= "
+        <tr><td>Absence / የቀረበት ቀን</td><td align='center'></td><td align='center'>$sem2AbsentTotal</td><td></td></tr>
+        <tr><td>Total / ጠቅላላ ነጥብ</td><td align='center'></td><td align='center'>$sem2Sum</td><td></td></tr>
+        <tr><td>Average / አማካኝ</td><td align='center'></td><td align='center'>$sem2Avg</td><td></td></tr>
+        <tr><td>Rank / ደረጃ</td><td align='center'></td><td align='center'>" . ($sem2Rank === '-' ? '-' : ($sem2Rank . '/' . $sem2Total)) . "</td><td></td></tr>
+        ";
+    } else {
+        $html2 .= "
+        <tr><td>Absence / የቀረበት ቀን</td><td align='center'>$sem1AbsentTotal</td><td align='center'>$sem2AbsentTotal</td><td>-</td></tr>
+        <tr><td>Total / ጠቅላላ ነጥብ</td><td align='center'>$sem1Sum</td><td align='center'>$sem2Sum</td><td>-</td></tr>
+        <tr><td>Average / አማካኝ</td><td align='center'>$sem1Avg</td><td align='center'>$sem2Avg</td><td>$yearAvg</td></tr>
+        <tr><td>Rank / ደረጃ</td><td align='center'>" . ($sem1Rank === '-' ? '-' : ($sem1Rank . '/' . $sem1Total)) . "</td><td align='center'>" . ($sem2Rank === '-' ? '-' : ($sem2Rank . '/' . $sem2Total)) . "</td><td>-</td></tr>
+        ";
+    }
+    $html2 .= "</table>";
+}
 
 $mpdf->WriteHTML($html2);
 
@@ -302,6 +401,7 @@ $filename = 'ReportCard_'.$student['student_id'].'.pdf';
 if (ob_get_length()) { @ob_end_clean(); }
 if ($mode === 'download') {
     $mpdf->Output($filename, 'D'); // force download
-} else {
-    $mpdf->Output($filename, 'I'); // inline preview
+} else { // inline or preview
+    // Force inline rendering for iframe in modal
+    $mpdf->Output($filename, 'I');
 }

@@ -11,7 +11,8 @@ if (!isset($_SESSION["uid"]) || $roleName != "Director") {
 
 // --- Helpers ---
 function fetchAcademicYears($conn){
-  $res = mysqli_query($conn, "SELECT DISTINCT academic_year FROM assign_instructor ORDER BY academic_year DESC");
+  // Use student assignments as the source of truth so all academic years appear
+  $res = mysqli_query($conn, "SELECT DISTINCT academic_year FROM assign_student ORDER BY academic_year DESC");
   $years = [];
   while($r = mysqli_fetch_assoc($res)) $years[] = $r['academic_year'];
   return $years;
@@ -97,6 +98,8 @@ $years = fetchAcademicYears($conn);
   </div>
 </div>
 
+<!-- SweetAlert2 (ensure available for Swal.fire) -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 let currentClassId = null;
 let studentsModal = null;
@@ -109,7 +112,11 @@ document.getElementById('viewAttendanceBtn').addEventListener('click', function(
   const sectionName = secSel.options[secSel.selectedIndex]?.text || '';
   const classType = secSel.options[secSel.selectedIndex]?.getAttribute('data-type') || '';
   if(!sectionId || !year){
-    Swal.fire('Warning','Please select section and academic year','warning');
+    if (window.Swal && Swal.fire) {
+      Swal.fire('Warning','Please select section and academic year','warning');
+    } else {
+      alert('Please select section and academic year');
+    }
     return;
   }
   // resolve class id
@@ -119,7 +126,11 @@ document.getElementById('viewAttendanceBtn').addEventListener('click', function(
     body:`section_id=${encodeURIComponent(sectionId)}&academic_year=${encodeURIComponent(year)}`
   }).then(r=>r.json()).then(data=>{
     if(!data || !data.success){
-      Swal.fire('Error', (data&&data.message)?data.message:'Combination not found', 'error');
+      if (window.Swal && Swal.fire) {
+        Swal.fire('Error', (data&&data.message)?data.message:'Combination not found', 'error');
+      } else {
+        alert((data&&data.message)?data.message:'Combination not found');
+      }
       return;
     }
     currentClassId = data.class_id;

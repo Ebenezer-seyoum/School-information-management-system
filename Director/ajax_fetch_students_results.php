@@ -4,7 +4,8 @@ include('../connection/connection.php');
 if (isset($_GET['section_id'], $_GET['academic_year'], $_GET['semester'])) {
     $section_id = (int)$_GET['section_id'];
     $academic_year = mysqli_real_escape_string($conn, $_GET['academic_year']);
-    $semester = (int)$_GET['semester']; // 1 or 2
+    $semRaw = $_GET['semester'];
+    $semester = ($semRaw === 'all') ? 'all' : (int)$semRaw; // 'all', 1 or 2
 
     // Fetch students assigned to this section and academic year
     $query = "
@@ -23,24 +24,26 @@ if (isset($_GET['section_id'], $_GET['academic_year'], $_GET['semester'])) {
             <input type="text" id="studentSearch" class="form-control" placeholder="Search student by name or ID...">
         </div>
 
-        <table class="table table-bordered table-striped" id="studentTable">
+    <table class="table table-bordered table-striped" id="studentTable">
             <thead class="table-primary">
                 <tr>
+            <th>No.</th>
                     <th>Student ID</th>
                     <th>Full Name</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-        <?php
-        while ($row = mysqli_fetch_assoc($result)) {
+    <?php
+    $counter = 1;
+    while ($row = mysqli_fetch_assoc($result)) {
             // Preview URL for modal
             $previewUrl = 'ajax_generate_report.php?' . http_build_query(array(
                 'sid' => (int)$row['sid'],
                 'section_id' => $section_id,
                 'academic_year' => $academic_year,
                 'semester' => $semester,
-                'mode' => 'preview'
+                'mode' => 'inline'
             ));
             // Download URL
             $downloadUrl = 'ajax_generate_report.php?' . http_build_query(array(
@@ -51,8 +54,9 @@ if (isset($_GET['section_id'], $_GET['academic_year'], $_GET['semester'])) {
                 'mode' => 'download'
             ));
 
-            echo '<tr>
-                    <td>' . htmlspecialchars($row['student_id'], ENT_QUOTES, 'UTF-8') . '</td>
+        echo '<tr>
+            <td>' . ($counter++) . '</td>
+            <td>' . htmlspecialchars($row['student_id'], ENT_QUOTES, 'UTF-8') . '</td>
                     <td>' . htmlspecialchars($row['first_name'] . ' ' . $row['father_name'], ENT_QUOTES, 'UTF-8') . '</td>
                     <td>
                         <button type="button" class="btn btn-sm btn-primary preview-btn" 
@@ -95,11 +99,11 @@ if (isset($_GET['section_id'], $_GET['academic_year'], $_GET['semester'])) {
             const searchInput = document.getElementById('studentSearch');
             const table = document.getElementById('studentTable').getElementsByTagName('tbody')[0];
 
-            searchInput.addEventListener('keyup', function() {
+        searchInput.addEventListener('keyup', function() {
                 const filter = this.value.toLowerCase();
                 Array.from(table.rows).forEach(row => {
-                    const name = row.cells[1].textContent.toLowerCase();
-                    const id = row.cells[0].textContent.toLowerCase();
+            const id = row.cells[1].textContent.toLowerCase();
+            const name = row.cells[2].textContent.toLowerCase();
                     row.style.display = (name.includes(filter) || id.includes(filter)) ? '' : 'none';
                 });
             });

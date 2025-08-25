@@ -99,7 +99,7 @@ if (isset($_SESSION["uid"]) && ($roleName == "Director")) {
           <div>
             <label for="semesterModal" class="form-label">Semester</label>
             <select id="semesterModal" class="form-control">
-              <option value="">Select Semester</option>
+              <option value="all" selected>All</option>
               <option value="1">Semester 1</option>
               <option value="2">Semester 2</option>
             </select>
@@ -155,14 +155,14 @@ document.getElementById('showStudentsBtn').addEventListener('click', function(){
   const academicYearInput = document.getElementById('academicYearModal');
   const semesterInput = document.getElementById('semesterModal');
   academicYearInput.value = '';
-  semesterInput.value = '';
+  semesterInput.value = 'all';
   modalTitle.textContent = `Students in Class: ${sectionName}`;
   studentsList.innerHTML = 'Please select academic year and semester...';
 
   function fetchStudents(){
     const year = academicYearInput.value.trim();
     const semester = semesterInput.value;
-    if(year && semester){
+  if(year && semester){
       modalTitle.textContent = `Students in Class: ${sectionName} | ${year} | Semester ${semester}`;
       fetch(`ajax_fetch_students_results.php?section_id=${sectionId}&academic_year=${encodeURIComponent(year)}&semester=${semester}`)
         .then(res=>res.text())

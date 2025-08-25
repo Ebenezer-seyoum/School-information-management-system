@@ -146,6 +146,63 @@
           closeBtn.textContent = 'Close';
           footer.appendChild(closeBtn);
         }
+
+        // Deduplicate: keep a single footer Close button
+        if (footer) {
+          const footerCloseBtns = footer.querySelectorAll('[data-bs-dismiss="modal"]');
+          footerCloseBtns.forEach((btn, idx) => { if (idx > 0) btn.remove(); });
+        }
+
+        // Remove any extra Close buttons inside modal-body to avoid two Close buttons on screen
+        const body = modalEl.querySelector('.modal-body');
+        if (body && footer) {
+          body.querySelectorAll('[data-bs-dismiss="modal"]').forEach(btn => btn.remove());
+        }
+
+        // Add a unified search bar to the header if the modal contains a table and no search exists yet
+        const header = modalEl.querySelector('.modal-header');
+        const hasTable = body && body.querySelector('table');
+        const existingSearch = header && header.querySelector('[data-role="modal-search"]');
+        if (header && hasTable && !existingSearch) {
+          const wrap = document.createElement('div');
+          wrap.className = 'ms-auto';
+          wrap.style.minWidth = '260px';
+          wrap.setAttribute('data-role', 'modal-search');
+          wrap.innerHTML = `
+            <div class="input-group input-group-sm">
+              <span class="input-group-text bg-primary text-white"><i class="bi bi-search"></i></span>
+              <input type="text" class="form-control" placeholder="Search..." aria-label="Search in modal">
+            </div>
+          `;
+          header.appendChild(wrap);
+
+          const input = wrap.querySelector('input');
+          input.addEventListener('input', function(){
+            const term = this.value.toLowerCase();
+            const tables = body.querySelectorAll('table');
+            tables.forEach(function(tbl){
+              try {
+                if (window.jQuery && window.jQuery.fn && window.jQuery.fn.DataTable && window.jQuery.fn.DataTable.isDataTable(tbl)) {
+                  const dt = window.jQuery(tbl).DataTable();
+                  dt.search(term).draw();
+                } else {
+                  const rows = tbl.tBodies && tbl.tBodies.length ? tbl.tBodies[0].rows : [];
+                  Array.from(rows).forEach(function(row){
+                    const txt = row.textContent ? row.textContent.toLowerCase() : '';
+                    row.style.display = txt.indexOf(term) !== -1 ? '' : 'none';
+                  });
+                }
+              } catch (e) {
+                // Fallback manual filter
+                const rows = tbl.tBodies && tbl.tBodies.length ? tbl.tBodies[0].rows : [];
+                Array.from(rows).forEach(function(row){
+                  const txt = row.textContent ? row.textContent.toLowerCase() : '';
+                  row.style.display = txt.indexOf(term) !== -1 ? '' : 'none';
+                });
+              }
+            });
+          });
+        }
       });
     });
   });

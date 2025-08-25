@@ -1,10 +1,15 @@
 <?php
 include('directorHeader.php');
 
-// Fetch all teachers
+// Fetch all teachers (build a list so JSON preserves IDs)
 $teachers_q = mysqli_query($conn, "SELECT uid, CONCAT(first_name,' ',father_name) AS full_name FROM users WHERE user_type=1 ORDER BY first_name ASC");
-$teachers_array = [];
-while($t=mysqli_fetch_assoc($teachers_q)) $teachers_array[$t['uid']] = htmlspecialchars($t['full_name']);
+$teachers_list = [];
+while($t = mysqli_fetch_assoc($teachers_q)){
+  $teachers_list[] = [
+    'uid' => (int)$t['uid'],
+    'name' => htmlspecialchars($t['full_name'])
+  ];
+}
 ?>
 
 <!-- page header -->
@@ -89,11 +94,11 @@ while($t=mysqli_fetch_assoc($teachers_q)) $teachers_array[$t['uid']] = htmlspeci
             </thead>
             <tbody id="subjectsTableBody"></tbody>
           </table>
-          <div class="text-end">
-            <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-success">Assign Teachers</button>
-          </div>
         </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success" form="assignTeachersForm">Assign Teachers</button>
       </div>
     </div>
   </div>
@@ -108,7 +113,8 @@ while($t=mysqli_fetch_assoc($teachers_q)) $teachers_array[$t['uid']] = htmlspeci
 
 <script>
 $(function(){
-    const teachers = <?php echo json_encode($teachers_array); ?>;
+  // Fallback teacher list (not used if response provides per-item teachers)
+  const fallbackTeachers = <?php echo json_encode($teachers_list); ?>;
 
     // Show subjects modal
     $('#showSubjectsBtn').click(function(){
@@ -125,29 +131,46 @@ $(function(){
                 html = '<tr><td colspan="3" class="text-center">No subjects found for this section.</td></tr>';
             } else {
                 res.forEach((item, index)=>{
-                    if(item.assigned_teacher){
-                        html += `<tr>
-                            <td>${index+1}</td>
-                            <td>${item.subject_name}</td>
-                            <td>${teachers[item.assigned_teacher]}</td>
-                        </tr>`;
+                    const teacherEntries = item.teachers && typeof item.teachers === 'object' && Object.keys(item.teachers).length
+                      ? Object.entries(item.teachers).map(([tid, name]) => ({ uid: tid, name }))
+                      : fallbackTeachers;
+                    if (item.assigned_teacher) {
+            const displayName = item.assigned_teacher_name || (item.teachers && item.teachers[item.assigned_teacher]) || 'Assigned';
+                      html += `<tr>
+                        <td>${index+1}</td>
+                        <td>${item.subject_name}</td>
+                        <td>
+              <span class=\"badge bg-light text-dark border rounded-pill fw-semibold px-3 py-2 fs-6\" title=\"Already assigned\">${displayName}</span>
+                        </td>
+                      </tr>`;
                     } else {
-                        html += `<tr>
-                            <td>${index+1}</td>
-                            <td>${item.subject_name}</td>
-                            <td>
-                              <select name="subject_teacher[${item.suid}]" class="form-select select2">
-                                <option value="">Assign Teacher</option>
-                                ${Object.entries(teachers).map(([tid, tname]) => `<option value="${tid}">${tname}</option>`).join('')}
-                              </select>
-                            </td>
-                        </tr>`;
+                      const options = [
+                        `<option value=\"\">Assign Teacher</option>`,
+                        ...teacherEntries.map(t => `<option value=\"${t.uid}\">${t.name}</option>`) 
+                      ].join('');
+                      html += `<tr>
+                        <td>${index+1}</td>
+                        <td>${item.subject_name}</td>
+                        <td>
+                          <select name=\"subject_teacher[${item.suid}]\" class=\"form-select select2\">${options}</select>
+                        </td>
+                      </tr>`;
                     }
                 });
             }
             $('#subjectsTableBody').html(html);
-            $('#subjectsModal').modal('show');
-            $('.select2').select2({ placeholder: "Select teacher...", width:'100%' });
+            const $modal = $('#subjectsModal');
+            $modal.modal('show');
+            // Initialize Select2 within modal to ensure dropdown renders above
+            $('.select2').each(function(){
+              const $sel = $(this);
+              $sel.select2({
+                placeholder: 'Select teacher...',
+                width: '100%',
+                dropdownParent: $modal,
+                allowClear: true
+              });
+            });
         }, 'json');
     });
 
@@ -159,7 +182,12 @@ $(function(){
 
         // Count unassigned subjects
         let unassignedCount = 0;
-        $('#subjectsTableBody select').each(function(){
+        const $selects = $('#subjectsTableBody select');
+        if ($selects.length === 0) {
+          Swal.fire('Info','All subjects are already assigned. Nothing to save.','info');
+          return;
+        }
+        $selects.each(function(){
             if(!$(this).val()) unassignedCount++;
         });
 

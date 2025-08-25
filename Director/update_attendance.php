@@ -11,7 +11,8 @@ if (!isset($_SESSION["uid"]) || $roleName != "Director") {
 
 // --- Helpers ---
 function fetchAcademicYears($conn) {
-  $res = mysqli_query($conn, "SELECT DISTINCT academic_year FROM assign_instructor ORDER BY academic_year DESC");
+  // Pull academic years from student assignments, not instructor, to include all years
+  $res = mysqli_query($conn, "SELECT DISTINCT academic_year FROM assign_student ORDER BY academic_year DESC");
   $years = [];
   while ($r = mysqli_fetch_assoc($res)) $years[] = $r['academic_year'];
   return $years;
