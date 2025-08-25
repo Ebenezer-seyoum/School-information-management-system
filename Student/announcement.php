@@ -43,15 +43,23 @@ $sql .= " ORDER BY a.start_date DESC";
 $announcements = mysqli_query($conn, $sql);
 ?>
 
-<div class="container my-4">
-    <div class="page-header mb-4">
-        <h2 class="fw-bold">📢 Announcements</h2>
-        <p class="text-muted">View all announcements relevant to your classes.</p>
-    </div>
-
+<div class="container">
+    <div class="page-inner">
+        <div class="page-header">
+            <h3 class="fw-bold mb-3">Announcements</h3>
+            <ul class="breadcrumbs mb-3">
+                <li class="nav-home"><a href="#"><i class="icon-home"></i></a></li>
+                <li class="separator"><i class="icon-arrow-right"></i></li>
+                <li class="nav-item"><a href="#">Announcements</a></li>
+                <li class="separator"><i class="icon-arrow-right"></i></li>
+                <li class="nav-item"><a href="#">View Announcements</a></li>
+            </ul>
+        </div>
     <!-- Filters Card -->
     <div class="card mb-4 shadow-sm">
         <div class="card-body">
+             <h2 class="fw-bold text-center">📢 Announcements</h2>
+        <p class="text-muted text-center">View all announcements relevant to your classes and school.</p>
             <form method="GET" action="" class="row g-3 align-items-end">
                 <div class="col-md-3">
                     <label for="filter_type" class="form-label">Filter Type</label>

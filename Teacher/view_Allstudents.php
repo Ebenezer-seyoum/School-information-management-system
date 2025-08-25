@@ -35,7 +35,6 @@ $students = getStudentsBySection($conn, $classInfo['section_id'], $classInfo['ac
   <thead class="table-dark text-center">
     <tr>
       <th>#</th>
-      <th>Profile</th>
       <th>Student ID</th>
       <th>First Name</th>
       <th>Father Name</th>
@@ -47,14 +46,6 @@ $students = getStudentsBySection($conn, $classInfo['section_id'], $classInfo['ac
       <?php foreach ($students as $s): ?>
         <tr>
           <td><?= $no++ ?></td>
-          <td>
-            <a href="student_profile.php?sid=<?= urlencode($s['sid']) ?>" target="_blank">
-              <img src="<?= htmlspecialchars($s['student_photo']) ?>" 
-                   alt="Profile" 
-                   class="rounded-circle border border-dark shadow-sm"
-                   style="width: 80px; height: 80px; object-fit: cover;">
-            </a>
-          </td>
           <td><strong><?= htmlspecialchars($s['student_id']) ?></strong></td>
           <td><?= htmlspecialchars($s['first_name']) ?></td>
           <td><?= htmlspecialchars($s['father_name']) ?></td>

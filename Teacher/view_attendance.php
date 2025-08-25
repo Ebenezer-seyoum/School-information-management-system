@@ -39,13 +39,20 @@ $years = fetchAcademicYears($conn);
 $selectedYear = $_GET['academic_year'] ?? ($years[0] ?? null);
 $classes = $selectedYear ? fetchAllClasses($conn, $selectedYear) : [];
 ?>
-
+<!-- page header -->
 <div class="container">
   <div class="page-inner">
     <div class="page-header">
-      <h3 class="fw-bold mb-3">All Classes (Director View)</h3>
-    </div>
-
+      <h3 class="fw-bold mb-3">Attendance Records</h3>
+      <ul class="breadcrumbs mb-3">
+        <li class="nav-home"><a href="#"><i class="icon-home"></i></a></li>
+        <li class="separator"><i class="icon-arrow-right"></i></li>
+        <li class="nav-item"><a href="#">Class Management</a></li>
+        <li class="separator"><i class="icon-arrow-right"></i></li>
+        <li class="nav-item"><a href="#">Attendance Records</a></li>
+      </ul>
+  </div>
+<!-- end page header -->
     <!-- Select Academic Year -->
     <form method="GET" class="mb-3">
         <label for="academic_year">Select Academic Year:</label>
