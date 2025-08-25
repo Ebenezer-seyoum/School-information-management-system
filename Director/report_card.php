@@ -30,60 +30,40 @@ if (isset($_SESSION["uid"]) && ($roleName == "Director")) {
 
     <div class="main-content">
       <section class="section">
-        <div class="row">
-          <div class="col-12">
-            <div class="card">
-              <div class="card-header d-flex justify-content-between align-items-center">
-                <h4 class="mb-0">All Classes</h4>
-                <form method="GET" class="d-flex w-100">
-                  <div class="search-box w-100">
-                    <div class="input-group">
-                      <span class="input-group-text bg-primary text-white"><i class="fas fa-search"></i></span>
-                      <input type="text" name="search" id="userSearch" class="form-control search-input" placeholder="Search by ID, Name, or Role...">
-                      <button class="btn btn-primary" type="button" aria-label="Search">Search</button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-
-              <div class="card-body table-responsive">
-                <table class="table table-hover align-middle text-center" id="classTable">
-                  <thead class="table-secondary">
-                    <tr>
-                      <th>#</th>
-                      <th>Section Name</th>
-                      <th>Class Type</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <?php
+        <div class="container d-flex justify-content-center align-items-center" style="min-height:300px;">
+          <div class="card shadow-lg border-0 rounded-4 p-4" style="max-width:600px; width:100%;">
+            <div class="text-center mb-4">
+              <h4 class="fw-bold">Select Section to Generate Report Card</h4>
+              <p class="text-muted">Choose a section from the dropdown below</p>
+            </div>
+            <div class="row g-3 align-items-center">
+              <div class="col-12">
+                <label for="sectionSelect" class="form-label fw-semibold">Section</label>
+                <select id="sectionSelect" class="form-select form-select-lg">
+                  <option value="">-- Select Section --</option>
+                  <?php
                     $classes = getAllSections();
-                    $no = 1;
+                    $grouped = [];
                     if (!empty($classes)) {
                       foreach ($classes as $cls) {
-                        ?>
-                        <tr>
-                          <td><?= $no ?></td>
-                          <td><?= $cls['section_name'] ?></td>
-                          <td><?= $cls['class_type'] ?></td>
-                          <td>
-                            <button class="btn btn-info btn-sm view-students-btn" 
-                              data-section-id="<?= $cls['cid'] ?>" 
-                              data-section-name="<?= $cls['section_name'] ?>">
-                              View Students
-                            </button>
-                          </td>
-                        </tr>
-                        <?php
-                        $no++;
+                        $grouped[$cls['class_type']][] = $cls;
                       }
-                    } else {
-                      echo '<tr><td colspan="4" class="text-center text-danger">No classes found.</td></tr>';
+                      foreach ($grouped as $type => $secs) {
+                        echo '<optgroup label="'.htmlspecialchars($type).'">';
+                        foreach ($secs as $s) {
+                          $id = (int)$s['cid'];
+                          $label = htmlspecialchars($s['section_name'].' ('.$s['class_type'].')');
+                          $nameOnly = htmlspecialchars($s['section_name']);
+                          echo "<option value='{$id}' data-name='{$nameOnly}'>{$label}</option>";
+                        }
+                        echo '</optgroup>';
+                      }
                     }
-                    ?>
-                  </tbody>
-                </table>
+                  ?>
+                </select>
+              </div>
+              <div class="col-12 d-grid mt-3">
+                <button id="showStudentsBtn" type="button" class="btn btn-primary btn-lg">Show Students</button>
               </div>
             </div>
           </div>
@@ -154,63 +134,59 @@ if (isset($_SESSION["uid"]) && ($roleName == "Director")) {
   </div>
 
 <script>
-// Event listener for "View Students" button
-document.querySelectorAll('.view-students-btn').forEach(button => {
-  button.addEventListener('click', function() {
-    const sectionId = this.dataset.sectionId;
-    const sectionName = this.dataset.sectionName;
-    const modalTitle = document.getElementById('studentsModalLabel');
-    const studentsList = document.getElementById('studentsList');
+// Filter-first: pick a section, then open modal to pick year/semester and view students
+document.getElementById('showStudentsBtn').addEventListener('click', function(){
+  const sel = document.getElementById('sectionSelect');
+  const sectionId = sel.value;
+  const sectionName = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].dataset.name : '';
+  const modalTitle = document.getElementById('studentsModalLabel');
+  const studentsList = document.getElementById('studentsList');
 
-    // Show modal
-    var studentsModal = new bootstrap.Modal(document.getElementById('studentsModal'));
-    studentsModal.show();
+  if(!sectionId){
+    alert('Please select a section first.');
+    return;
+  }
 
-    // Reset inputs
-    const academicYearInput = document.getElementById('academicYearModal');
-    const semesterInput = document.getElementById('semesterModal');
-    academicYearInput.value = '';
-    semesterInput.value = '';
-    modalTitle.textContent = `Students in Class: ${sectionName}`;
-    studentsList.innerHTML = 'Please select academic year and semester...';
+  // Show modal
+  var studentsModal = new bootstrap.Modal(document.getElementById('studentsModal'));
+  studentsModal.show();
 
-    // Fetch function
-    function fetchStudents() {
-      const year = academicYearInput.value.trim();
-      const semester = semesterInput.value;
-      if(year && semester) {
-        modalTitle.textContent = `Students in Class: ${sectionName} | ${year} | Semester ${semester}`;
-        fetch(`ajax_fetch_students_results.php?section_id=${sectionId}&academic_year=${year}&semester=${semester}`)
-          .then(res => res.text())
-          .then(data => {
-            studentsList.innerHTML = data;
-          })
-          .catch(err => { studentsList.innerHTML = 'Error fetching students'; });
-      } else {
-        modalTitle.textContent = `Students in Class: ${sectionName}`;
-        studentsList.innerHTML = 'Please select academic year and semester...';
-      }
+  // Reset inputs
+  const academicYearInput = document.getElementById('academicYearModal');
+  const semesterInput = document.getElementById('semesterModal');
+  academicYearInput.value = '';
+  semesterInput.value = '';
+  modalTitle.textContent = `Students in Class: ${sectionName}`;
+  studentsList.innerHTML = 'Please select academic year and semester...';
+
+  function fetchStudents(){
+    const year = academicYearInput.value.trim();
+    const semester = semesterInput.value;
+    if(year && semester){
+      modalTitle.textContent = `Students in Class: ${sectionName} | ${year} | Semester ${semester}`;
+      fetch(`ajax_fetch_students_results.php?section_id=${sectionId}&academic_year=${encodeURIComponent(year)}&semester=${semester}`)
+        .then(res=>res.text())
+        .then(html=>{ studentsList.innerHTML = html; })
+        .catch(()=>{ studentsList.innerHTML = 'Error fetching students'; });
+    } else {
+      modalTitle.textContent = `Students in Class: ${sectionName}`;
+      studentsList.innerHTML = 'Please select academic year and semester...';
     }
+  }
 
-    academicYearInput.oninput = fetchStudents;
-    semesterInput.onchange = fetchStudents;
-
-  });
+  academicYearInput.oninput = fetchStudents;
+  semesterInput.onchange = fetchStudents;
 });
 
-// Delegated handlers inside the modal content so injected scripts are not required
+// Delegated handler: open preview modal for report
 (function(){
   const container = document.getElementById('studentsList');
-  if (!container) return;
-
-  // Handle Show Report button clicks (preview in dedicated modal)
+  if(!container) return;
   container.addEventListener('click', function(e){
     const btn = e.target.closest && e.target.closest('.preview-btn');
-    if (!btn) return;
+    if(!btn) return;
     const url = btn.dataset.previewUrl;
-    if (!url) return;
-
-    // Setup links
+    if(!url) return;
     const openBtn = document.getElementById('previewOpenNewTab');
     const downloadBtn = document.getElementById('previewDownload');
     if (openBtn) openBtn.href = url;
@@ -218,24 +194,9 @@ document.querySelectorAll('.view-students-btn').forEach(button => {
       const dlUrl = url.includes('mode=preview') ? url.replace('mode=preview','mode=download') : (url + (url.includes('?') ? '&' : '?') + 'mode=download');
       downloadBtn.href = dlUrl;
     }
-
-    // Set iframe and open modal
     const iframe = document.getElementById('reportPdfIframe');
     if (iframe) iframe.src = url;
-    const modal = new bootstrap.Modal(document.getElementById('previewPdfModal'));
-    modal.show();
-  });
-
-  // Handle search inside injected table
-  container.addEventListener('input', function(e){
-    if (e.target && e.target.id === 'studentSearch') {
-      const filter = e.target.value.toLowerCase();
-      const rows = container.querySelectorAll('#studentTable tbody tr');
-      rows.forEach(function(row){
-        const text = row.innerText.toLowerCase();
-        row.style.display = text.includes(filter) ? '' : 'none';
-      });
-    }
+    new bootstrap.Modal(document.getElementById('previewPdfModal')).show();
   });
 })();
 </script>

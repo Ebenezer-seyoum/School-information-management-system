@@ -79,45 +79,34 @@ $classes      = $selectedYear ? fetchAssignedClasses($conn, $_SESSION["uid"], $s
         <button type="submit" class="btn btn-primary btn-sm">Show Classes</button>
     </form>
 
-    <!-- Classes Table -->
-    <div class="card">
-      <div class="card-body table-responsive">
-        <table class="table table-hover text-center align-middle" id="classTable">
-          <thead class="table-secondary">
-            <tr>
-              <th>#</th>
-              <th>Class</th>
-              <th>Subject</th>
-              <th>Academic Year</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php if (count($classes) > 0): $no=1; ?>
-              <?php foreach ($classes as $c): ?>
-                <tr>
-                  <td><?= $no++ ?></td>
-                  <td><?= htmlspecialchars($c['section_name'] . ' - ' . $c['class_type']) ?></td>
-                  <td><?= htmlspecialchars($c['subject_name']) ?></td>
-                  <td><?= htmlspecialchars($c['academic_year']) ?></td>
-                  <td>
-                    <button 
-                      type="button"
-                      class="btn btn-primary btn-sm view-students"
-                      data-id="<?= $c['atid'] ?>"
-                      data-class="<?= htmlspecialchars($c['section_name'].' - '.$c['class_type']) ?>"
-                      data-year="<?= htmlspecialchars($c['academic_year']) ?>">
-                        View Students
-                    </button>
-                  </td>
-                </tr>
-              <?php endforeach; ?>
-            <?php else: ?>
-              <tr><td colspan="5" class="text-danger">No classes assigned for this year.</td></tr>
-            <?php endif; ?>
-          </tbody>
-        </table>
-      </div>
+    <!-- Classes as horizontal cards -->
+    <div class="row g-3" id="assignedClasses">
+      <?php if (count($classes) > 0): ?>
+        <?php foreach ($classes as $c): ?>
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="card h-100 shadow-sm border-primary border-2">
+              <div class="card-body d-flex flex-column">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                  <span class="badge bg-primary"><?= htmlspecialchars($c['academic_year']) ?></span>
+                  <span class="badge bg-secondary"><?= htmlspecialchars($c['class_type']) ?></span>
+                </div>
+                <h5 class="card-title mb-1"><?= htmlspecialchars($c['section_name']) ?></h5>
+                <p class="card-text text-muted mb-4">Subject: <?= htmlspecialchars($c['subject_name']) ?></p>
+                <button 
+                  type="button"
+                  class="btn btn-primary mt-auto view-students"
+                  data-id="<?= $c['atid'] ?>"
+                  data-class="<?= htmlspecialchars($c['section_name'].' - '.$c['class_type']) ?>"
+                  data-year="<?= htmlspecialchars($c['academic_year']) ?>">
+                  View Students
+                </button>
+              </div>
+            </div>
+          </div>
+        <?php endforeach; ?>
+      <?php else: ?>
+        <div class="col-12"><div class="alert alert-warning">No classes assigned for this year.</div></div>
+      <?php endif; ?>
     </div>
   </div>
 </div>
@@ -143,7 +132,7 @@ $classes      = $selectedYear ? fetchAssignedClasses($conn, $_SESSION["uid"], $s
 
 <script>
 $(document).ready(function(){
-  $('.view-students').on('click', function(){
+  $(document).on('click', '.view-students', function(){
     let classId   = $(this).data('id');
     let className = $(this).data('class');
     let year      = $(this).data('year');

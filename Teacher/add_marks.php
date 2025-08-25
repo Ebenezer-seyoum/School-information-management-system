@@ -65,37 +65,36 @@ $classes = $selectedYear ? fetchAssignedClasses($conn,$uid,$selectedYear) : [];
     </form>
 
     <div class="card">
-      <div class="card-body table-responsive">
-        <table class="table table-hover text-center align-middle">
-          <thead class="table-secondary">
-            <tr><th>#</th><th>Class</th><th>Subject</th><th>Year</th><th>Action</th></tr>
-          </thead>
-          <tbody>
-            <?php if(count($classes)>0): $no=1; ?>
-              <?php foreach($classes as $c): ?>
-                <tr>
-                  <td><?= $no++ ?></td>
-                  <td><?= htmlspecialchars($c['section_name'].' - '.$c['class_type']) ?></td>
-                  <td><?= htmlspecialchars($c['subject_abbr'].' ('.$c['subject_name'].')') ?></td>
-                  <td><?= htmlspecialchars($c['academic_year']) ?></td>
-                  <td>
-                    <button class="btn btn-success btn-sm add-marks-btn"
-                            data-atid="<?= (int)$c['atid'] ?>"
-                            data-section="<?= (int)$c['section_id'] ?>"
-                            data-subject="<?= (int)$c['subject_id'] ?>"
-                            data-year="<?= htmlspecialchars($c['academic_year']) ?>"
-                            data-class="<?= htmlspecialchars($c['section_name'].' - '.$c['class_type']) ?>"
-                            data-subject-name="<?= htmlspecialchars($c['subject_abbr'].' ('.$c['subject_name'].')') ?>">
-                      Add/Edit Marks
-                    </button>
-                  </td>
-                </tr>
-              <?php endforeach; ?>
-            <?php else: ?>
-              <tr><td colspan="5" class="text-danger">No classes assigned for this year.</td></tr>
-            <?php endif; ?>
-          </tbody>
-        </table>
+      <div class="card-body">
+        <?php if(count($classes)>0): ?>
+          <div class="row g-3">
+            <?php foreach($classes as $c): ?>
+              <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="card h-100 shadow-sm">
+                  <div class="card-body d-flex flex-column">
+                    <h6 class="mb-1"><?= htmlspecialchars($c['section_name']) ?></h6>
+                    <div class="text-muted small mb-2"><?= htmlspecialchars($c['class_type']) ?></div>
+                    <div class="small mb-2"><b>Subject:</b> <?= htmlspecialchars($c['subject_abbr'].' ('.$c['subject_name'].')') ?></div>
+                    <div class="small text-secondary mb-3">Year: <?= htmlspecialchars($c['academic_year']) ?></div>
+                    <div class="mt-auto">
+                      <button class="btn btn-success btn-sm w-100 add-marks-btn"
+                              data-atid="<?= (int)$c['atid'] ?>"
+                              data-section="<?= (int)$c['section_id'] ?>"
+                              data-subject="<?= (int)$c['subject_id'] ?>"
+                              data-year="<?= htmlspecialchars($c['academic_year']) ?>"
+                              data-class="<?= htmlspecialchars($c['section_name'].' - '.$c['class_type']) ?>"
+                              data-subject-name="<?= htmlspecialchars($c['subject_abbr'].' ('.$c['subject_name'].')') ?>">
+                        Add/Edit Marks
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <?php endforeach; ?>
+          </div>
+        <?php else: ?>
+          <div class="text-center text-danger py-3">No classes assigned for this year.</div>
+        <?php endif; ?>
       </div>
     </div>
   </div>

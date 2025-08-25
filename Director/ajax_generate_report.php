@@ -20,9 +20,14 @@ $academic_year = mysqli_real_escape_string($conn, $academic_year);
 
 // --- Fetch student info ---
 $studentQuery = "
-    SELECT first_name, father_name, grand_father_name, dob, gender, student_id, woreda, kebele
-    FROM students
-    WHERE sid = '$sid'
+    SELECT s.first_name, s.father_name, s.grand_father_name, s.dob, s.gender, s.student_id,
+           s.region AS region_id, s.zone AS zone_id, s.woreda AS woreda_id, s.kebele,
+           r.name AS region_name, z.name AS zone_name, w.name AS woreda_name
+    FROM students s
+    LEFT JOIN regions r ON s.region = r.id
+    LEFT JOIN zones z ON s.zone = z.id
+    LEFT JOIN woredas w ON s.woreda = w.id
+    WHERE s.sid = '$sid'
     LIMIT 1
 ";
 $studentRes = mysqli_query($conn, $studentQuery);
@@ -91,6 +96,15 @@ function getTotalAbsence($conn, $sid, $section_id, $academic_year, $semester) {
 }
 
 function getClassRank($conn, $section_id, $academic_year, $semester, $sid) {
+    $section_id = (int)$section_id; $semester = (int)$semester; $sid = (int)$sid;
+    $academic_year = mysqli_real_escape_string($conn, $academic_year);
+
+    // Total students assigned to this section/year
+    $totalRes = mysqli_query($conn, "SELECT COUNT(*) AS total FROM assign_student WHERE section_id='$section_id' AND academic_year='$academic_year'");
+    $totalRow = $totalRes ? mysqli_fetch_assoc($totalRes) : null;
+    $total = (int)($totalRow['total'] ?? 0);
+
+    // Dense rank by average mark for this semester
     $query = "SELECT student_id, AVG(result) AS avg_mark
               FROM marks
               WHERE section_id='$section_id'
@@ -99,12 +113,20 @@ function getClassRank($conn, $section_id, $academic_year, $semester, $sid) {
               GROUP BY student_id
               ORDER BY avg_mark DESC";
     $res = mysqli_query($conn, $query);
-    $rank = 1;
+    if (!$res) return ['-', $total];
+    $rank = 0; $lastAvg = null; $studentRank = '-';
     while ($row = mysqli_fetch_assoc($res)) {
-        if ((int)$row['student_id'] === (int)$sid) return $rank;
-        $rank++;
+        $avg = (float)$row['avg_mark'];
+        if ($lastAvg === null || $avg < $lastAvg - 1e-9) { // new lower score => next rank
+            $rank = $rank === 0 ? 1 : $rank + 1;
+            $lastAvg = $avg;
+        }
+        if ((int)$row['student_id'] === $sid) {
+            $studentRank = $rank;
+            break;
+        }
     }
-    return '-';
+    return [$studentRank, $total];
 }
 
 // --- Semester totals & absence ---
@@ -113,8 +135,8 @@ list($sem2Sum, $sem2Avg) = calcTotalsBySemester($allSubjects, $marksMap, 2);
 $sem1AbsentTotal = getTotalAbsence($conn, $sid, $section_id, $academic_year, 1);
 $sem2AbsentTotal = getTotalAbsence($conn, $sid, $section_id, $academic_year, 2);
 $promotionStatus = ($sem2Avg >= 50) ? 'Promoted' : 'Not Promoted';
-$sem1Rank = getClassRank($conn, $section_id, $academic_year, 1, $sid);
-$sem2Rank = getClassRank($conn, $section_id, $academic_year, 2, $sid);
+list($sem1Rank, $sem1Total) = getClassRank($conn, $section_id, $academic_year, 1, $sid);
+list($sem2Rank, $sem2Total) = getClassRank($conn, $section_id, $academic_year, 2, $sid);
 
 // --- Generate PDF with mPDF ---
 $mpdf = new Mpdf([
@@ -132,6 +154,17 @@ $mpdf->SetTitle('Report Card - ' . $student['first_name']);
 
 // --- Page 1: Student Info ---
 $studentFullName = $student['first_name'].' '.$student['father_name'].' '.$student['grand_father_name'];
+// Resolve class/grade label
+$secRes = mysqli_query($conn, "SELECT section_name, class_type FROM sections WHERE cid = '$section_id' LIMIT 1");
+$sec = $secRes ? mysqli_fetch_assoc($secRes) : null;
+$sectionLabel = $sec ? ($sec['section_name'].' ('.$sec['class_type'].')') : $section_id;
+// Extract numeric grade from section name (e.g., 11A -> 11)
+$gradeNum = null;
+if ($sec && preg_match('/(\d{1,2})/', $sec['section_name'], $m)) {
+    $gradeNum = (int)$m[1];
+}
+// Compute promoted grade number
+$promotedGradeNum = $gradeNum ? $gradeNum + 1 : null;
 
 $html1 = "
 <div style='border:1px solid #000; padding:20px; width:700px; font-family: Arial, Helvetica, sans-serif;'>
@@ -141,8 +174,8 @@ $html1 = "
         <h3 style='margin:0;'>ሲዳማ ክልል አስተዳደር | Sidama National Regional Government</h3>
         <h4 style='margin:0;'>ቢላቴ ዙሪያ ወረዳ | Bilate Zuriya Woreda</h4>
         <h4 style='margin:0;'>ባለላ ከፍተኛ ት/ቤት | Balela Secondary School</h4>
-        <h2 style='margin-top:10px; text-decoration:underline;'>STUDENT REPORT CARD / የተማሪ ደብዳቤ</h2>
-        <p>Academic Year / የትምህርት አመት: <b>$academic_year</b></p>
+        <h2 style='margin-top:10px;'>የተማሪ ደብዳቤ</h2>
+        <h3 style='margin:0;'>STUDENT REPORT CARD</h3>
     </div>
 
     <!-- Student Info Section -->
@@ -165,28 +198,36 @@ $html1 = "
         </p>
         
         <p>
-            <b>አድራሻ ከተማ (Address Town):</b> 
-            <span style='display:inline-block; border-bottom:1px solid #000; min-width:200px;'>{$student['woreda']}</span>
-            
-            &nbsp;&nbsp;&nbsp; 
-            
-            <b>ቀበሌ (Kebele):</b> 
-            <span style='display:inline-block; border-bottom:1px solid #000; min-width:100px;'>{$student['kebele']}</span>
+            <b>Region:</b>
+            <span style='display:inline-block; border-bottom:1px solid #000; min-width:160px;'>{$student['region_name']}</span>
+            &nbsp;&nbsp;&nbsp;
+            <b>Zone:</b>
+            <span style='display:inline-block; border-bottom:1px solid #000; min-width:160px;'>{$student['zone_name']}</span>
+        </p>
+        <p>
+            <b>Woreda:</b>
+            <span style='display:inline-block; border-bottom:1px solid #000; min-width:160px;'>{$student['woreda_name']}</span>
+            &nbsp;&nbsp;&nbsp;
+            <b>ቀበሌ (Kebele):</b>
+            <span style='display:inline-block; border-bottom:1px solid #000; min-width:120px;'>{$student['kebele']}</span>
         </p>
         
         <p>
-            <b>ክፍል (Class / Grade):</b> 
-            <span style='display:inline-block; border-bottom:1px solid #000; min-width:100px;'>$section_id</span>
+            <b>ክፍል (Class / Grade):</b>
+            <span style='display:inline-block; border-bottom:1px solid #000; min-width:160px; text-decoration:underline;'>"
+            . ($gradeNum ? $gradeNum : $sectionLabel) .
+            "</span>
         </p>
         
         <p>
-            <b>From:</b> 
-            <span style='display:inline-block; border-bottom:1px solid #000; min-width:80px;'></span>
-            
-            &nbsp;&nbsp;&nbsp; 
-            
-            <b>Promoted to Grade:</b> 
-            <span style='display:inline-block; border-bottom:1px solid #000; min-width:80px;'>$promotionStatus</span>
+            <b>Promoted to Grade:</b>
+            <span style='display:inline-block; border-bottom:1px solid #000; min-width:120px;'>"
+            . ($promotionStatus === 'Promoted' && $promotedGradeNum ? $promotedGradeNum : 'Not Promoted') .
+            "</span>
+        </p>
+        <p>
+            <b>Academic Year / የትምህርት አመት:</b>
+            <span style='display:inline-block; border-bottom:1px solid #000; min-width:160px;'><b>$academic_year</b></span>
         </p>
     </div>
 
@@ -207,13 +248,30 @@ $mpdf->AddPage();
 
 // --- Page 2: Marks Table ---
 $rowsHtml = ''; $yearlyAvgSum = 0; $yearlyAvgCount = 0;
+// Map common English subject names to Amharic; fallback to original
+$amharicMap = array(
+    'Mathematics' => 'ሒሳብ',
+    'Math' => 'ሒሳብ',
+    'Physics' => 'ፊዚክስ',
+    'Chemistry' => 'ኬሚስትሪ',
+    'Biology' => 'ባዮሎጂ',
+    'English' => 'እንግሊዝኛ',
+    'Amharic' => 'አማርኛ',
+    'Civics' => 'ሲቪክስ',
+    'History' => 'ታሪክ',
+    'Geography' => 'ጂኦግራፊ',
+    'ICT' => 'አይሲቲ',
+    'Physical Education' => 'አካል ብቃት',
+    'Economics' => 'ኢኮኖሚክስ'
+);
 foreach ($allSubjects as $suid => $subName) {
     $s1 = $marksMap[$suid][1] ?? '-';
     $s2 = $marksMap[$suid][2] ?? '-';
+    $subDisplay = $amharicMap[$subName] ?? $subName;
     $avg = ($s1 !== '-' && $s2 !== '-') ? round(($s1+$s2)/2,2) : ($s1 !== '-' ? $s1 : ($s2 !== '-' ? $s2 : '-'));
     if ($avg !== '-') { $yearlyAvgSum += $avg; $yearlyAvgCount++; }
     $rowsHtml .= "<tr>
-        <td>$subName</td>
+        <td>$subDisplay</td>
         <td align='center'>$s1</td>
         <td align='center'>$s2</td>
         <td align='center'>$avg</td>
@@ -229,7 +287,7 @@ $rowsHtml
 <tr><td>Absence / የቀረበት ቀን</td><td align='center'>$sem1AbsentTotal</td><td align='center'>$sem2AbsentTotal</td><td>-</td></tr>
 <tr><td>Total / ጠቅላላ ነጥብ</td><td align='center'>$sem1Sum</td><td align='center'>$sem2Sum</td><td>-</td></tr>
 <tr><td>Average / አማካኝ</td><td align='center'>$sem1Avg</td><td align='center'>$sem2Avg</td><td>$yearAvg</td></tr>
-<tr><td>Rank / ደረጃ</td><td align='center'>$sem1Rank</td><td align='center'>$sem2Rank</td><td>-</td></tr>
+<tr><td>Rank / ደረጃ</td><td align='center'>" . ($sem1Rank === '-' ? '-' : ($sem1Rank . '/' . $sem1Total)) . "</td><td align='center'>" . ($sem2Rank === '-' ? '-' : ($sem2Rank . '/' . $sem2Total)) . "</td><td>-</td></tr>
 </table>
 ";
 

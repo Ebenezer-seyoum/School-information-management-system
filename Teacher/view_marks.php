@@ -154,6 +154,25 @@ document.addEventListener('DOMContentLoaded', function(){
       .then(res=>res.text())
       .then(html=>{
         document.getElementById('studentsContainer').innerHTML = html;
+        // Initialize DataTables if available
+        const tryInitDT = () => {
+          if (window.jQuery && window.jQuery.fn && window.jQuery.fn.DataTable) {
+            const $ = window.jQuery;
+            const table = $('#resultsTable');
+            if (table.length && !$.fn.dataTable.isDataTable(table)) {
+              table.DataTable({
+                pageLength: 25,
+                order: [[2, 'asc']],
+                dom: 'Bfrtip',
+                buttons: ['copy', 'csv', 'excel', 'print']
+              });
+            }
+          } else {
+            // retry shortly until footer scripts are loaded
+            setTimeout(tryInitDT, 100);
+          }
+        };
+        tryInitDT();
       });
   }
 
@@ -189,7 +208,14 @@ document.addEventListener('DOMContentLoaded', function(){
 
   // Search filter
   document.getElementById('searchStudent').addEventListener('keyup', function(){
-    const filter = this.value.toLowerCase();
+    const val = this.value;
+    if (window.jQuery && window.jQuery.fn && window.jQuery.fn.DataTable) {
+      const $ = window.jQuery;
+      const table = $('#resultsTable').DataTable();
+      if (table) { table.search(val).draw(); return; }
+    }
+    // fallback manual filter
+    const filter = val.toLowerCase();
     document.querySelectorAll('#studentsContainer tbody tr').forEach(tr=>{
       tr.style.display = tr.textContent.toLowerCase().includes(filter)?'':'none';
     });
