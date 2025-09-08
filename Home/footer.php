@@ -16,7 +16,7 @@
                         <p>Lorem ipsum dolor sit amet mollis felis dapibus arcu donec viverra. Pede phasellus eget. Etiam maecenas vel vici quis dictum rutrum nec nisi et.</p>  
                     </div><!-- ends: .section-header -->
                     <div class="get_s_btn">
-                        <a href="#" title="">Get Started Now</a>
+                        <!-- <a href="#" title="">Get Started Now</a> -->
                     </div>
                     <img src="Home/images/shapes/bubble_shpe_2.png" alt="" class="shape_t_1"> 
                 </div>                                
