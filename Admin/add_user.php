@@ -87,78 +87,7 @@ if (isset($_POST["register"]) && ($_SERVER["REQUEST_METHOD"] == "POST")) {
         $gFatherName = $_POST["grand_father_name"];
     }
 
-    //validate gender
-    if (empty($_POST["gender"])) {
-        $gender_err = "Please select your gender";
-        $test = false;
-    } else if (validateGender($_POST["gender"]) == 0) {
-        $gender_err = "Invalid input";
-        $test = false;
-    } else {
-        $gender = $_POST["gender"];
-    }
-
-   // Validate email
-if (empty($_POST["email"])) {
-    $email_err = "Please enter your email";
-    $test = false;
-} else {
-    $email = trim($_POST["email"]);
-    if (!validateEmail($email)) {
-        $email_err = "Please enter a valid email address (example: user@domain.com)";
-        $test = false;
-    } else {
-        $email = $_POST["email"];
-    }
-} 
-    //validate username
-    if (empty($_POST["username"])) {
-        $username_err = "Please enter your username";
-        $test = false;
-    } else if (validateName($_POST["username"]) == 0) {
-        $username_err = "Please enter valid username";
-        $test = false;
-    } else {
-        $username = $_POST["username"];
-    }   
-    //validate password
-        if (empty($_POST["password"])) {
-         $password_err = "Please enter your new password";
-         $test = false;
-     } else if (validatePassword($_POST["password"]) == 0) {
-         $password_err = "Please enter a valid password (no invalid symbols)";
-         $test = false;
-     } else {
-         $password = $_POST["password"];
-        $strongPassword = isStrongPassword($password);
-         if ($strongPassword !== true) {
-             $password_err = $strongPassword;
-             $test = false;
-       }
-     }
-
-    //validate password confirmation
-    if (empty($_POST["confirm_password"])) {
-        $confirmPassword_err = "Please enter your new password";
-        $test = false;
-    } else if (validatePassword($_POST["confirm_password"]) == 0) {
-        $confirmPassword_err = "Please enter valid password";
-        $test = false;
-    } else if (comparePasswords($_POST["password"], $_POST["confirm_password"]) == 0) {
-        $confirmPassword_err = "Password did not match";
-    } else {
-        $confirmPassword = $_POST["confirm_password"];
-    }
-      //validate  Phone 
-    if (empty($_POST["phone"])) {
-        $phone_err = "Please enter your id number";
-        $test = false;
-    } else if (validatePhoneNumber($_POST["phone"]) == 0) {
-        $phone_err = "Please enter valid phone number";
-        $test = false;
-    } else {
-        $phone = $_POST["phone"];
-    }
+   
     //validate role_type
     if (empty($_POST["role_type"])) {
         $role_type_err = "Please select role_type";

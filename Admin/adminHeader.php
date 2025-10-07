@@ -264,7 +264,6 @@ include '../connection/function.php';
       <button class="topbar-toggler more"><i class="gg-more-vertical-alt"></i></button>
     </div>
   </div>
-
   <div class="sidebar-wrapper scrollbar scrollbar-inner">
     <div class="sidebar-content">
       <ul class="nav nav-secondary">
