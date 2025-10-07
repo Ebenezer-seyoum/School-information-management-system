@@ -692,7 +692,7 @@ include "Home/header.php";
         <div class="row">
             <div class="col-12 col-sm-12 col-md-6 col-lg-5">
                 <div class="row">
-                    <div class="form-full-box">
+                    <!-- <div class="form-full-box">
                         <div class="form_title">
                             <h2>Become A Membar</h2>
                             <p>Get Instant access to <span>5000+ </span>Video courses </p>
@@ -725,7 +725,7 @@ include "Home/header.php";
                                 </div>
                             </div>
                         </form>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="col-12 col-sm-12 col-md-6 col-lg-7 form-content">
@@ -734,21 +734,23 @@ include "Home/header.php";
                 <div class="count_student">
                     <div class="single_count">
                         <span class="counter">54000</span>
-                        <span class="department_name">Students</span>
+                        <span class="department_name">All Students</span>
                     </div>                    
                     <div class="single_count">
                         <span class="counter">1650</span>
-                        <span class="department_name">Scholarships</span>
+                        <span class="department_name">All Teachers</span>
                     </div>                    
                     <div class="single_count">
                         <span class="counter">150</span>
-                        <span class="department_name">Courses</span>
+                        <span class="department_name">All Subject</span>
                     </div>
                 </div>  
             </div>
         </div>
     </div>
-</section><!-- ./ End Register Area section -->
+</section
+>
+<!-- ./ End Register Area section -->
 
 
 
@@ -771,14 +773,64 @@ include "Home/header.php";
                         </div>
                         <figcaption>
                             <div class="member-name">
-                                <h4><a href="#" title="">Jonson Park</a></h4>
-                                <span>Professor</span>
+                                <h4><a href="#" title="">Michael Mesele</a></h4>
+                                <span>Admin</span>
                             </div>                            
                         </figcaption>
                     </figure>
                 </div>
             </div>
-            
+             <div class="single-wrappe col-12 col-sm-6 col-md-4 col-lg-4">
+                <div class="team-single-item">
+                    <figure>
+                        <div class="member-img">
+                            <div class="teachars_pro">
+                                <img src="Home/images/team/team_1.jpg" alt="member img" class="img-fluid">
+                            </div>
+                        </div>
+                        <figcaption>
+                            <div class="member-name">
+                                <h4><a href="#" title="">Michael Mesele</a></h4>
+                                <span>Admin</span>
+                            </div>                            
+                        </figcaption>
+                    </figure>
+                </div>
+            </div>
+             <div class="single-wrappe col-12 col-sm-6 col-md-4 col-lg-4">
+                <div class="team-single-item">
+                    <figure>
+                        <div class="member-img">
+                            <div class="teachars_pro">
+                                <img src="Home/images/team/team_1.jpg" alt="member img" class="img-fluid">
+                            </div>
+                        </div>
+                        <figcaption>
+                            <div class="member-name">
+                                <h4><a href="#" title="">Michael Mesele</a></h4>
+                                <span>Admin</span>
+                            </div>                            
+                        </figcaption>
+                    </figure>
+                </div>
+            </div>
+             <div class="single-wrappe col-12 col-sm-6 col-md-4 col-lg-4">
+                <div class="team-single-item">
+                    <figure>
+                        <div class="member-img">
+                            <div class="teachars_pro">
+                                <img src="Home/images/team/team_1.jpg" alt="member img" class="img-fluid">
+                            </div>
+                        </div>
+                        <figcaption>
+                            <div class="member-name">
+                                <h4><a href="#" title="">Michael Mesele</a></h4>
+                                <span>Admin</span>
+                            </div>                            
+                        </figcaption>
+                    </figure>
+                </div>
+            </div>
             <div class="single-wrapper col-12 col-sm-6 col-md-4 col-lg-4">
                 <div class="team-single-item">
                     <figure>
@@ -789,8 +841,8 @@ include "Home/header.php";
                         </div>
                         <figcaption>
                             <div class="member-name">
-                                <h4><a href="#" title="">Teymoni</a></h4>
-                                <span>Lecturer</span>
+                                <h4><a href="#" title="">Fikru Esrael</a></h4>
+                                <span>Director</span>
                             </div>                            
                         </figcaption>
                     </figure>
@@ -807,8 +859,8 @@ include "Home/header.php";
                         </div>
                         <figcaption>
                             <div class="member-name">
-                                <h4><a href="#" title="">Jonathon Smith</a></h4>
-                                <span>Coordinator</span>
+                                <h4><a href="#" title="">Fikru..</a></h4>
+                                <span>Second Director</span>
                             </div>                            
                         </figcaption>
                     </figure>
@@ -825,7 +877,7 @@ include "Home/header.php";
                         </div>
                         <figcaption>
                             <div class="member-name">
-                                <h4><a href="#" title="">Monki parki</a></h4>
+                                <h4><a href="#" title="">Elas</a></h4>
                                 <span>Assistant</span>
                             </div>                            
                         </figcaption>
@@ -842,7 +894,7 @@ include "Home/header.php";
                         </div>
                         <figcaption>
                             <div class="member-name">
-                                <h4><a href="#" title="">Yakailo Mim</a></h4>
+                                <h4><a href="#" title="">Mangistu Matosal</a></h4>
                                 <span>Teacher</span>
                             </div>                            
                         </figcaption>
@@ -921,7 +973,8 @@ include "Home/header.php";
         <img src="Home/images/shapes/testimonial_2_shpe_3.png" alt="" class="shape_2">        
         <img src="Home/images/shapes/testimonial_2_shpe_1.png" alt="" class="shape_3">
     </div>
-</section><!-- End Testimonial -->
+</section>
+<!-- End Testimonial -->
 
 
 
@@ -935,7 +988,7 @@ include "Home/header.php";
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 p-0"> 
                 <div class="teamgroup_info_wrapper">
                     <h2>Start now and turn your knowledge into a profitable online course</h2>
-                    <a href="#" title="" class="srtarte_btn">Get Started Now</a>
+                    <!-- <a href="#" title="" class="srtarte_btn">Get Started Now</a> -->
                 </div>   
                 <div class="teamgroup_info_banner">
                     <img src="Home/images/banner/teamgroup.png" alt="" class="img-fluid">

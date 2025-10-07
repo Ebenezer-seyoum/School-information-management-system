@@ -17,12 +17,6 @@ include "Home/contactheader.php";
         </div> 
     </div> 
 </header> <!-- End Header -->
-
-
-
-
-
-
 <section class="contact_info_wrapper">
      <div class="container">  
         <div class="row">  
