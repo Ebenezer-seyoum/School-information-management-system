@@ -1,5 +1,5 @@
 <?php
-include '../School-Information-Management-System/login/loginHeader.php';
+include __DIR__ . '/login/loginHeader.php';
 ?>
 <?php
 $username = $password = "";
@@ -120,5 +120,5 @@ if (isset($_POST["login"]) and ($_SERVER["REQUEST_METHOD"] == "POST")) {
 </div>
 </div>
 <?php
-include '../School-Information-Management-System/login/loginFooter.php';
+include __DIR__ . '/login/loginFooter.php';
 ?>
