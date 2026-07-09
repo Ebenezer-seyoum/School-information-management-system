@@ -7,7 +7,22 @@
     <meta name="keywords" content="HTML,CSS,XML,JavaScript">
     <meta name="author" content="Ecology Theme">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Balela Secondary School</title>
+    <!-- 1. Primary SEO Tags -->
+<title>Balela Secondary School | Official Home Page</title>
+<meta name="description" content="Welcome to the official public portal of Balela Secondary School. Discover our courses, school announcements, and educational community.">
+<meta name="keywords" content="Balela Secondary School, Balela School, high school Ethiopia, best school">
+<link rel="canonical" href="https://balelasecondaryschool.et">
+
+<!-- 2. Public Visibility Rule (Allows Google to index this specific page) -->
+<meta name="robots" content="index, follow">
+
+<!-- 3. Social Media Previews (For WhatsApp, Telegram, and Facebook shares) -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://balelasecondaryschool.et">
+<meta property="og:title" content="Balela Secondary School | Official Home Page">
+<meta property="og:description" content="Discover Balela Secondary School. Explore our public programs, view our teachers, and reach out to our administration.">
+<meta property="og:image" content="https://balelasecondaryschool.etlogin/assets/img/icon.png">
+
     <link rel="shortcut icon" href="Home/images/favicon.ico" type="image/x-icon">
     <!-- Goole Font -->
     <link href="https://fonts.googleapis.com/css?family=Rubik:400,500,700" rel="stylesheet">
