@@ -1,9 +1,9 @@
-  <?php
-  session_start();
-  //error_reporting(0);
-  include __DIR__ . '/../connection/connection.php';
-  include __DIR__ . '/../connection/function.php';
-  ?>
+<?php
+session_start();
+//error_reporting(0);
+include __DIR__ . '/../connection/connection.php';
+include __DIR__ . '/../connection/function.php';
+?>
 <!doctype html>
 <html lang="en">
 <head>
