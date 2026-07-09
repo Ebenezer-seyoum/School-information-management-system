@@ -1714,7 +1714,3 @@ function getWoredas() {
     }
     return $woredas;
 }
-?>
-
-
-
