@@ -72,6 +72,9 @@ while($y = mysqli_fetch_assoc($yrsRes)) $assignYears[] = $y['academic_year'];
               <th>#</th>
               <th>Subject</th>
               <th>Mark</th>
+              <th>Grade</th>
+              <th>Point</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody id="classSubjectsTableBody"></tbody>
@@ -162,7 +165,7 @@ $(function(){
       function(res){
         let rows = '';
         if(!res || res.length === 0){
-          rows = '<tr><td colspan="3" class="text-center">No subjects found.</td></tr>';
+          rows = '<tr><td colspan="6" class="text-center">No subjects found.</td></tr>';
         } else {
           res.forEach((item, idx)=>{
             rows += `
@@ -170,6 +173,9 @@ $(function(){
                 <td>${idx+1}</td>
                 <td>${item.subject_name}</td>
                 <td>${item.marks}</td>
+                <td>${item.grade}</td>
+                <td>${item.point}</td>
+                <td>${item.status}</td>
               </tr>`;
           });
         }

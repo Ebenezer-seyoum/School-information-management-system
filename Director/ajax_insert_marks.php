@@ -46,6 +46,10 @@ while($row = mysqli_fetch_assoc($student_res)){
 
     if($markVal===null || trim($markVal)==='') continue;
     $mark = (int)trim($markVal);
+    if($mark < 0 || $mark > 100){
+        $errors[] = "Invalid mark for student $sid. Marks must be between 0 and 100.";
+        continue;
+    }
 
     // Check if mark exists
     $check_sql = "SELECT mid FROM marks

@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('../connection/connection.php');
+include('../connection/function.php');
 
 $student_school_id = $_SESSION['sid'] ?? ''; // school ID string
 $academic_year     = mysqli_real_escape_string($conn, $_POST['academic_year'] ?? '');
@@ -59,10 +60,14 @@ if($section_id && $academic_year){
         $q = mysqli_query($conn, $sql) or die(mysqli_error($conn));
 
         while($row = mysqli_fetch_assoc($q)){
+            $details = getAcademicGradeDetails($row['marks']);
             $response[] = [
                 'subject_id'   => $row['suid'],
                 'subject_name' => $row['subject_name'],
                 'marks'        => $row['marks'],
+                'grade'        => $details['grade'],
+                'point'        => $details['point'],
+                'status'       => $details['status'],
             ];
         }
     }

@@ -1,5 +1,6 @@
 <?php
 include('../connection/connection.php'); // DB connection
+include('../connection/function.php');
 require __DIR__ . '/../vendor/autoload.php'; // Composer autoload
 
 use Mpdf\Mpdf;
@@ -397,6 +398,7 @@ if ($semesterSel === 'all' || $semesterSel === '1' || $semesterSel === '2') {
 
 // --- Page 2: Marks Table ---
 $rowsHtml = ''; $yearlyAvgSum = 0; $yearlyAvgCount = 0;
+$rowsSem1 = ''; $rowsSem2 = '';
 // Map common English subject names to Amharic; fallback to original
 $amharicMap = array(
     'Mathematics' => 'ሒሳብ',
@@ -422,6 +424,8 @@ foreach ($allSubjects as $suid => $subName) {
     $subEn = $subName;
     $mark1 = $marksMap[$suid][1] ?? '-';
     $mark2 = $marksMap[$suid][2] ?? '-';
+    $grade1 = getAcademicGradeDetails($mark1);
+    $grade2 = getAcademicGradeDetails($mark2);
     // Determine what to show based on selection
     if ($semesterSel === '1') {
         $s1 = $mark1;
@@ -438,10 +442,22 @@ foreach ($allSubjects as $suid => $subName) {
         if ($avg !== '-' && $avg !== '') { $yearlyAvgSum += $avg; $yearlyAvgCount++; }
         $avgCell = $avg;
     }
+    $rowsSem1 .= "<tr>
+        <td><span>$subEn</span> / <span style='font-weight:normal;'>$subAm</span></td>
+        <td align='center'>$mark1</td>
+        <td align='center'>{$grade1['grade']}</td>
+        <td align='center'>{$grade1['point']}</td>
+    </tr>";
+    $rowsSem2 .= "<tr>
+        <td><span>$subEn</span> / <span style='font-weight:normal;'>$subAm</span></td>
+        <td align='center'>$mark2</td>
+        <td align='center'>{$grade2['grade']}</td>
+        <td align='center'>{$grade2['point']}</td>
+    </tr>";
     $rowsHtml .= "<tr>
         <td><span>$subEn</span> / <span style='font-weight:normal;'>$subAm</span></td>
-        <td align='center'>$s1</td>
-        <td align='center'>$s2</td>
+        <td align='center'>$s1</td><td align='center'>{$grade1['grade']}</td><td align='center'>{$grade1['point']}</td>
+        <td align='center'>$s2</td><td align='center'>{$grade2['grade']}</td><td align='center'>{$grade2['point']}</td>
         <td align='center'>$avgCell</td>
     </tr>";
 }
@@ -454,18 +470,15 @@ if ($semesterSel === '1') {
   <table border='1' cellpadding='4' width='100%'>
         <tr>
             <th><div>Subject</div><div style='font-weight:normal;'>ትምህርት</div></th>
-            <th><div>1st Semester</div><div style='font-weight:normal;'>1ኛ መ/ዓ/ት</div></th>
+            <th>Mark</th><th>Grade</th><th>Point</th>
         </tr>
     ";
-    $html2 .= str_replace([
-      "<td align='center'>$s2</td>",
-      "<td align='center'>$avg</td>"
-    ], '', $rowsHtml);
+    $html2 .= $rowsSem1;
     $html2 .= "
-    <tr><td>Absence / የቀረበት ቀን</td><td align='center'>$sem1AbsentTotal</td></tr>
-    <tr><td>Total / ጠቅላላ ነጥብ</td><td align='center'>$sem1Sum</td></tr>
-    <tr><td>Average / አማካኝ</td><td align='center'>$sem1Avg</td></tr>
-    <tr><td>Rank / ደረጃ</td><td align='center'>" . ($sem1Rank === '-' ? '-' : ($sem1Rank . '/' . $sem1Total)) . "</td></tr>
+    <tr><td colspan='2'>Absence / የቀረበት ቀን</td><td align='center' colspan='2'>$sem1AbsentTotal</td></tr>
+    <tr><td colspan='2'>Total / ጠቅላላ ነጥብ</td><td align='center' colspan='2'>$sem1Sum</td></tr>
+    <tr><td colspan='2'>Average / አማካኝ</td><td align='center' colspan='2'>$sem1Avg</td></tr>
+    <tr><td colspan='2'>Rank / ደረጃ</td><td align='center' colspan='2'>" . ($sem1Rank === '-' ? '-' : ($sem1Rank . '/' . $sem1Total)) . "</td></tr>
     </table>
     </div>";
 } elseif ($semesterSel === '2') {
@@ -474,26 +487,15 @@ if ($semesterSel === '1') {
   <table border='1' cellpadding='4' width='100%'>
         <tr>
             <th><div>Subject</div><div style='font-weight:normal;'>ትምህርት</div></th>
-            <th><div>2nd Semester</div><div style='font-weight:normal;'>2ኛ መ/ዓ/ት</div></th>
+            <th>Mark</th><th>Grade</th><th>Point</th>
         </tr>
     ";
-    // Build rows for only 2nd semester values
-        $rows2 = '';
-    foreach ($allSubjects as $suid => $subName) {
-        $s2 = $marksMap[$suid][2] ?? '-';
-        $subAm = $amharicMap[$subName] ?? $subName;
-        $subEn = $subName;
-                $rows2 .= "<tr>
-                    <td><span>$subEn</span> / <span style='font-weight:normal;'>$subAm</span></td>
-                    <td align='center'>$s2</td>
-                </tr>";
-    }
-    $html2 .= $rows2;
+    $html2 .= $rowsSem2;
     $html2 .= "
-    <tr><td>Absence / የቀረበት ቀን</td><td align='center'>$sem2AbsentTotal</td></tr>
-    <tr><td>Total / ጠቅላላ ነጥብ</td><td align='center'>$sem2Sum</td></tr>
-    <tr><td>Average / አማካኝ</td><td align='center'>$sem2Avg</td></tr>
-    <tr><td>Rank / ደረጃ</td><td align='center'>" . ($sem2Rank === '-' ? '-' : ($sem2Rank . '/' . $sem2Total)) . "</td></tr>
+    <tr><td colspan='2'>Absence / የቀረበት ቀን</td><td align='center' colspan='2'>$sem2AbsentTotal</td></tr>
+    <tr><td colspan='2'>Total / ጠቅላላ ነጥብ</td><td align='center' colspan='2'>$sem2Sum</td></tr>
+    <tr><td colspan='2'>Average / አማካኝ</td><td align='center' colspan='2'>$sem2Avg</td></tr>
+    <tr><td colspan='2'>Rank / ደረጃ</td><td align='center' colspan='2'>" . ($sem2Rank === '-' ? '-' : ($sem2Rank . '/' . $sem2Total)) . "</td></tr>
     </table>
     </div>";
 } else { // all
@@ -503,8 +505,8 @@ if ($semesterSel === '1') {
   <table border='1' cellpadding='4' width='100%'>
         <tr>
             <th><div>Subject</div><div style='font-weight:normal;'>ትምህርት</div></th>
-            <th><div>1st Semester</div><div style='font-weight:normal;'>1ኛ መ/ዓ/ት</div></th>
-            <th><div>2nd Semester</div><div style='font-weight:normal;'>2ኛ መ/ዓ/ት</div></th>
+            <th colspan='3'><div>1st Semester</div><div style='font-weight:normal;'>1ኛ መ/ዓ/ት</div></th>
+            <th colspan='3'><div>2nd Semester</div><div style='font-weight:normal;'>2ኛ መ/ዓ/ት</div></th>
             <th><div>Average</div><div style='font-weight:normal;'>አማካኝ</div></th>
         </tr>
     $rowsHtml
@@ -526,10 +528,10 @@ if ($semesterSel === '1') {
         ";
     } else {
         $html2 .= "
-        <tr><td>Absence / የቀረበት ቀን</td><td align='center'>$sem1AbsentTotal</td><td align='center'>$sem2AbsentTotal</td><td>-</td></tr>
-        <tr><td>Total / ጠቅላላ ነጥብ</td><td align='center'>$sem1Sum</td><td align='center'>$sem2Sum</td><td>-</td></tr>
-        <tr><td>Average / አማካኝ</td><td align='center'>$sem1Avg</td><td align='center'>$sem2Avg</td><td>$yearAvg</td></tr>
-        <tr><td>Rank / ደረጃ</td><td align='center'>" . ($sem1Rank === '-' ? '-' : ($sem1Rank . '/' . $sem1Total)) . "</td><td align='center'>" . ($sem2Rank === '-' ? '-' : ($sem2Rank . '/' . $sem2Total)) . "</td><td>-</td></tr>
+        <tr><td>Absence / የቀረበት ቀን</td><td align='center'>$sem1AbsentTotal</td><td></td><td></td><td align='center'>$sem2AbsentTotal</td><td></td><td></td><td>-</td></tr>
+        <tr><td>Total / ጠቅላላ ነጥብ</td><td align='center'>$sem1Sum</td><td></td><td></td><td align='center'>$sem2Sum</td><td></td><td></td><td>-</td></tr>
+        <tr><td>Average / አማካኝ</td><td align='center'>$sem1Avg</td><td></td><td></td><td align='center'>$sem2Avg</td><td></td><td></td><td>$yearAvg</td></tr>
+        <tr><td>Rank / ደረጃ</td><td align='center'>" . ($sem1Rank === '-' ? '-' : ($sem1Rank . '/' . $sem1Total)) . "</td><td></td><td></td><td align='center'>" . ($sem2Rank === '-' ? '-' : ($sem2Rank . '/' . $sem2Total)) . "</td><td></td><td></td><td>-</td></tr>
         ";
     }
     $html2 .= "</table></div>";

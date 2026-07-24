@@ -1714,3 +1714,29 @@ function getWoredas() {
     }
     return $woredas;
 }
+
+/**
+ * Convert an academic mark to the school's displayed letter grade and point.
+ * Keep this in one place so student views, reports and PDFs use the same rule.
+ * The scale can later be moved to a database settings table without changing callers.
+ */
+function getAcademicGradeDetails($mark): array {
+    if ($mark === null || $mark === '' || !is_numeric($mark)) {
+        return ['grade' => '-', 'point' => '-', 'status' => '-'];
+    }
+
+    $mark = max(0, min(100, (float)$mark));
+    if ($mark >= 90)      $grade = 'A+';
+    elseif ($mark >= 80)  $grade = 'A';
+    elseif ($mark >= 70)  $grade = 'B';
+    elseif ($mark >= 60)  $grade = 'C';
+    elseif ($mark >= 50)  $grade = 'D';
+    else                  $grade = 'F';
+
+    $points = ['A+' => 4.0, 'A' => 4.0, 'B' => 3.0, 'C' => 2.0, 'D' => 1.0, 'F' => 0.0];
+    return [
+        'grade' => $grade,
+        'point' => number_format($points[$grade], 1, '.', ''),
+        'status' => $mark >= 50 ? 'Pass' : 'Fail'
+    ];
+}

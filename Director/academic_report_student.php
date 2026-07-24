@@ -138,7 +138,10 @@ $academic_year = $_GET['academic_year'] ?? '';
                 <th>Class Type</th>
                 <th>Academic Year</th>
                 <th>Semester</th>
-                <th>Result</th>
+                <th>Mark</th>
+                <th>Grade</th>
+                <th>Point</th>
+                <th>Status</th>
               </tr>
             </thead>
             <tbody>
@@ -161,6 +164,7 @@ if($academic_year) $sql.=" AND r.academic_year='".mysqli_real_escape_string($con
 
 $res=mysqli_query($conn,$sql);
 while($r=mysqli_fetch_assoc($res)){
+    $details = getAcademicGradeDetails($r['result']);
     echo "<tr>
             <td>".$no++."</td>
             <td>".htmlspecialchars($r['student_name'])."</td>
@@ -169,7 +173,10 @@ while($r=mysqli_fetch_assoc($res)){
             <td>".htmlspecialchars($r['class_type'])."</td>
             <td>".htmlspecialchars($r['academic_year'])."</td>
             <td>".htmlspecialchars($r['semester'])."</td>
-            <td>".htmlspecialchars($r['result'])." </td>
+            <td>".htmlspecialchars($r['result'])."</td>
+            <td>".htmlspecialchars($details['grade'])."</td>
+            <td>".htmlspecialchars($details['point'])."</td>
+            <td>".htmlspecialchars($details['status'])."</td>
           </tr>";
 }
 
@@ -195,7 +202,7 @@ $(function(){
     $tbl.DataTable({
       dom: 'Bfrtip',
       pageLength: 25,
-      columns: [null,null,null,null,null,null,null,null],
+      columns: [null,null,null,null,null,null,null,null,null,null,null],
       language: { emptyTable: 'No academic records found' },
       buttons: [
         { extend: 'copyHtml5', text: 'Copy', className: 'btn btn-sm btn-secondary', exportOptions: { columns: ':visible', modifier: { page: 'all' } } },
